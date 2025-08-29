@@ -14,43 +14,43 @@ const events: EventType[] = [
     id: 1,
     title: "HackForge",
     description: "Hackathon",
-    image: "/sample.png",
-    classes: "bg-red-400 rotate-6 left-[5%] top-[15%]",
+    image: "/hackforge.jpg",
+    classes: "bg-red-400 rotate-6 left-5 2xl:left-[5%] top-0 lg:top-[25%]",
   },
   {
     id: 2,
     title: "H42",
     description: "Competitive Programming",
     image: "/sample.png",
-    classes: "bg-blue-400 -rotate-6 left-[25%] top-[25%]",
+    classes: "bg-blue-400 -rotate-6 left-[5%] lg:left-[25%] top-[20%] lg:top-[35%]",
   },
   {
     id: 3,
     title: "Sherlocked",
     description: "CTF",
     image: "/sample.png",
-    classes: "bg-red-400 rotate-6 left-[50%] top-[20%]",
+    classes: "bg-red-400 rotate-6 left-[5%] lg:left-[45%] top-[40%] lg:top-[30%]",
   },
   {
     id: 4,
     title: "Pass The Baton",
     description: "Competitive Programming",
     image: "/sample.png",
-    classes: "bg-blue-400 -rotate-6 left-[72%] top-[25%]",
+    classes: "bg-blue-400 -rotate-6 left-[5%] lg:left-[70%] top-[60%] lg:top-[35%]",
   },
 ];
 
 function Card({ event }: { event: EventType }) {
   return (
     <div
-      className={`${event.classes} p-4 rounded-md flex flex-col gap-y-2 absolute uppercase font-jetbrains-mono text-black`}
+      className={`${event.classes} p-4 rounded-md flex flex-col gap-y-2 absolute uppercase text-black scale-75 lg:scale-90 2xl:scale-120`}
     >
       <Image
         src={event.image}
-        height={450}
-        width={450}
+        height={350}
+        width={350}
         alt="Sample Image"
-        className="aspect-video"
+        className="aspect-video object-cover"
       />
       <h2 className="text-3xl font-semibold">
         {event.title}
@@ -64,7 +64,7 @@ function Card({ event }: { event: EventType }) {
 
 function Gallery() {
   return (
-    <div className="w-full min-h-screen sticky bg-gradient-to-b from-transparent via-black to-black drop-shadow-2xl overflow-clip">
+    <div className="w-full min-h-[150vh] lg:min-h-screen bg-gradient-to-b from-transparent via-black to-black drop-shadow-2xl">
       {events.map((e) => (
         <Card event={e} key={e.id} />
       ))}
