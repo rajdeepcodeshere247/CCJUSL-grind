@@ -1,11 +1,11 @@
 type User = {
-    id?: string;
+    id: string;
     createdAt?: Date;
     updatedAt?: Date;
     name: string;
     email: string;
     registrationComplete: boolean;
-    verifiedEmail: boolean;
+    emailVerified: Date | null;
     image: string | null;
     password?: string | null;
     role?: string;
@@ -19,7 +19,7 @@ type SessionUser = {
     email: string;
     image?: string | null;
     role: string;
-    verifiedEmail: boolean;
+    emailVerified: Date | null;
     registrationComplete: boolean;
 }
 

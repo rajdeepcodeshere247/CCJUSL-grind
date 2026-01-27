@@ -5,9 +5,9 @@ import { checkAuthentication } from "@/services/AuthService";
 import React from "react";
 
 async function Page() {
-  const user = await checkAuthentication();
+  const user = await checkAuthentication("/dashboard");
 
-  if(!user.verifiedEmail) return <VerifyEmail email={user.email} />
+  if(!user.emailVerified) return <VerifyEmail email={user.email} />
   if(!user.registrationComplete) return <CompleteRegistration id={user.id} />
   return <Dashboard />
 }

@@ -42,11 +42,12 @@ function SignUpForm() {
     executeInstance()
       .then((hCaptchaToken) => {
         return signup({
+          id: "",
           name: data.name,
           email: data.email,
           password: data.password,
           registrationComplete: false,
-          verifiedEmail: false,
+          emailVerified: null,
           image: null,
         },
         hCaptchaToken??null

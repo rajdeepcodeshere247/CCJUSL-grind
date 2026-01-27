@@ -1,9 +1,20 @@
 "use client";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import React, { Suspense, useState } from "react";
 
 function Page() {
+  return (
+    <Suspense>
+      <SignInForm />
+    </Suspense>
+  );
+}
+
+function SignInForm() {
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect");
   const [data, setData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
@@ -18,7 +29,7 @@ function Page() {
       email: data.email,
       password: data.password,
       redirect: true,
-      redirectTo: "/dashboard",
+      redirectTo: redirectUrl ?? "/dashboard",
     })
       .then((res) => {
         console.log(res);
@@ -80,11 +91,18 @@ function Page() {
       >
         Sign in with Google
       </button>
-      <div className="flex gap-x-8 text-sm justify-between">
+      <div className="flex justify-between gap-x-8 text-sm">
         <p>Don&apos;t have an account?</p>
-        <Link href={"/signup"} className="underline underline-offset-4">Sign Up</Link>
+        <Link href={"/signup"} className="underline underline-offset-4">
+          Sign Up
+        </Link>
       </div>
-      <Link href={"/forgot-password"} className="underline underline-offset-4 text-sm">Forgot Password</Link>
+      <Link
+        href={"/forgot-password"}
+        className="text-sm underline underline-offset-4"
+      >
+        Forgot Password
+      </Link>
     </div>
   );
 }

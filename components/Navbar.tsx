@@ -18,6 +18,7 @@ function Navbar({fromLayout = false}) {
         <nav className="flex items-center gap-2 lg:gap-12 lg:text-2xl uppercase">
           <Link href={"/#events"}>Events</Link>
           <Link href={"/#contact"}>Contact</Link>
+          <Link href={"/signin"}>Sign-in</Link>
         </nav>
       </div>
     </div>

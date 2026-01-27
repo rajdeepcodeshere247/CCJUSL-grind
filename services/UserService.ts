@@ -32,7 +32,8 @@ const matchVerificationCode = async (email: string, code: string) => {
     const userToken = await prisma.user.findFirst({where: {email}, select: {verificationToken: true}});
     const match =  userToken?.verificationToken === code;
 
-    if(match) await prisma.user.update({where: {email}, data: {verifiedEmail: true}});
+    const verifiedAt = new Date();
+    if(match) await prisma.user.update({where: {email}, data: {emailVerified: verifiedAt}});
     return match;
 }
 

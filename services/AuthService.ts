@@ -59,9 +59,9 @@ const signup = async (user: User, hCaptchaToken: string | null) => {
   return {ok: false, message: "Error in signup"};
 }
 
-const checkAuthentication = async () => {
+const checkAuthentication = async (redirectUrl = "") => {
   const session = await auth();
-  if(!session || !session.user || !session.user.id) redirect("/signin");
+  if(!session || !session.user || !session.user.id) redirect(`/signin?redirect=${redirectUrl}`);
 
   return session.user;
 }

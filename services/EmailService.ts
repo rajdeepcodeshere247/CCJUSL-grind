@@ -1,3 +1,5 @@
+'use server';
+
 import nodemailer from "nodemailer";
 import { MailOptions } from "nodemailer/lib/sendmail-transport";
 import ShortUniqueId from "short-unique-id";
