@@ -3,7 +3,7 @@
 import { removeMember, transferTeamLead } from "@/services/EventsService";
 import { Team } from "@/types";
 import React from "react";
-import { useConfirmationDialogContext } from "../../hooks/useConfirmationDialog";
+import { useConfirmationDialogContext } from "@/hooks/useConfirmationDialog";
 
 function MemberControls({
   newLeadId,
