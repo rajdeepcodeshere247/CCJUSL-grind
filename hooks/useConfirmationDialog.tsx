@@ -1,0 +1,75 @@
+"use client";
+
+import { createContext, ReactNode, useContext, useRef, useState } from "react";
+
+type ModalContextType = {
+  showDialog: (dialogText: string, confirmFunction: () => void) => void;
+};
+
+const ConfirmationDialogContext = createContext<ModalContextType>(
+  {} as ModalContextType,
+);
+
+export const ConfirmationDialogContextProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [text, setText] = useState("");
+  const [handleConfirm, setHandleConfirm] = useState(() => () => {});
+
+  const handleShow = (dialogText: string, confirmFunction: () => void) => {
+    setText(dialogText);
+    setHandleConfirm(() => confirmFunction);
+    dialogRef.current?.showModal();
+  };
+
+  const handleCancel = () => {
+    dialogRef.current?.close();
+  };
+
+  return (
+    <ConfirmationDialogContext.Provider value={{ showDialog: handleShow }}>
+      {children}
+      <div className="fixed h-screen w-screen">
+        <dialog
+          ref={dialogRef}
+          className="fixed top-1/2 left-1/2 z-300 rounded-sm backdrop:bg-gray-800/75"
+          style={{
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <div className="font-jetbrains-mono flex flex-col items-center gap-4 px-8 py-3">
+            <h3 className="text-2xl underline underline-offset-4">
+              Confirmation
+            </h3>
+            <p>{text}</p>
+            <div className="flex w-4/5 justify-around border-t border-t-black/60 pt-3 text-white">
+              <button
+                onClick={() => {
+                  handleConfirm();
+                  dialogRef.current?.close();
+                }}
+                className="rounded-xs bg-black px-2 py-1 outline-none"
+              >
+                Yes
+              </button>
+              <button
+                onClick={handleCancel}
+                className="rounded-xs bg-red-500 px-2 py-1 outline-none"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </dialog>
+      </div>
+    </ConfirmationDialogContext.Provider>
+  );
+};
+
+export const useConfirmationDialogContext = (): ModalContextType =>
+  useContext(ConfirmationDialogContext);

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "react-hot-toast";
+import { ConfirmationDialogContextProvider } from "@/hooks/useConfirmationDialog";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +36,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <Navbar fromLayout={true} />
+        <ConfirmationDialogContextProvider>
         {children}
+        </ConfirmationDialogContextProvider>
         <Toaster position="bottom-right" toastOptions={{style: {
           backgroundColor: "#1c1c1c",
           color: "white",
