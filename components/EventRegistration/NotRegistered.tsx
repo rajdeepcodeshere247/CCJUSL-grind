@@ -1,23 +1,39 @@
 "use client";
 
-import { SessionUser, Event } from "@/types";
+import { SessionUser, Event } from "@/utils/types";
 import React, { useState } from "react";
 import { createTeam, joinTeam } from "@/services/EventsService";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 function NotRegistered({ user, event }: { user: SessionUser; event: Event }) {
   const router = useRouter();
   const [teamName, setTeamName] = useState("");
   const [teamCode, setTeamCode] = useState("");
+  const [loading ,setLoading] = useState(false);
 
   const handleCreateTeam = (e: React.FormEvent) => {
     e.preventDefault();
-    createTeam(event, user, teamName).then(() => router.refresh());
+    setLoading(true);
+    createTeam(event, user, teamName)
+    .then((res) => {
+      if(res.ok)
+        router.refresh()
+      else
+        toast.error(res.message);
+  });
+    setLoading(false);
   };
   
   const handleJoinTeam = (e: React.FormEvent) => {
     e.preventDefault();
-    joinTeam(event, user, teamCode).then(() => router.refresh());
+    setLoading(true);
+    joinTeam(event, user, teamCode)
+    .then((res) => {
+      if(res.ok) router.refresh();
+      else toast.error(res.message);
+    });
+    setLoading(false);
   };
 
   return (
@@ -35,7 +51,7 @@ function NotRegistered({ user, event }: { user: SessionUser; event: Event }) {
           className="rounded-sm border px-2 py-1"
         />
         <button
-          onClick={e => {handleCreateTeam(e)}}
+          onClick={e => {handleCreateTeam(e)}} disabled={loading}
           className="rounded-xs bg-white px-2 py-1 text-black transition-colors duration-300 hover:bg-white/90 active:bg-white/60"
         >
           Create Team
@@ -58,7 +74,7 @@ function NotRegistered({ user, event }: { user: SessionUser; event: Event }) {
           className="rounded-sm border px-2 py-1"
         />
         <button
-          onClick={e => {handleJoinTeam(e)}}
+          onClick={e => {handleJoinTeam(e)}} disabled={loading}
           className="rounded-xs bg-white px-2 py-1 text-black transition-colors duration-300 hover:bg-white/90 active:bg-white/60"
         >
           Join Team

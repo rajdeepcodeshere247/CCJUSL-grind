@@ -37,11 +37,11 @@ export const { handlers, signIn, signOut, auth, unstable_update } = NextAuth({
         const email = credentials.email as string;
         const password = credentials.password as string;
 
-        if (!email || !password) throw new Error("Missing credentials");
+        if (!email || !password) return null;
 
         const user = await getUserByEmail(email);
 
-        if (!user) throw new Error("Email not found");
+        if (!user) return null;
 
         const isValid = await validateUser(user, password);
         if (isValid) return user;
@@ -51,7 +51,7 @@ export const { handlers, signIn, signOut, auth, unstable_update } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    async jwt({ token, user, trigger, session, account }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
@@ -63,6 +63,7 @@ export const { handlers, signIn, signOut, auth, unstable_update } = NextAuth({
         token.registrationComplete = regStatus.registrationComplete;
         token.emailVerified = regStatus.emailVerified;
       }
+      if(account?.provider === "google" && trigger !== "update") token.emailVerified = new Date();
       return token;
     },
     session({ session, token }) {

@@ -1,5 +1,5 @@
 type User = {
-    id: string;
+    id?: string;
     createdAt?: Date;
     updatedAt?: Date;
     name: string;
@@ -38,6 +38,7 @@ type Team = {
     leader: string;
     members: User[];
     eventSlug: string;
+    allowResetCode: boolean;
 }
 
 export type {User, SessionUser, Event, Team};

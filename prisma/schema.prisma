@@ -59,15 +59,15 @@ model Account {
 }
 
 model Team {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  eventSlug   String
-  event       Event    @relation(fields: [eventSlug], references: [slug], onDelete: Cascade)
-  memberIds   String[] @db.ObjectId
-  members     User[]   @relation(fields: [memberIds], references: [id])
-  leader      String   @db.ObjectId
-  joiningCode String   @unique
-  complete    Boolean  @default(false)
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  eventSlug      String
+  event          Event    @relation(fields: [eventSlug], references: [slug], onDelete: Cascade)
+  memberIds      String[] @db.ObjectId
+  members        User[]   @relation(fields: [memberIds], references: [id])
+  leader         String   @db.ObjectId
+  joiningCode    String   @unique
+  allowResetCode Boolean  @default(true)
 
   @@map("team")
 }

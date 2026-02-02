@@ -1,4 +1,4 @@
-import { Event, SessionUser, Team } from "@/types";
+import { Event, SessionUser, Team } from "@/utils/types";
 import React from "react";
 import TeamControls from "./TeamControls";
 import NotRegistered from "./NotRegistered";
@@ -17,8 +17,9 @@ function Registered({
   const isTeamLead = team.leader === user.id;
 
   let status: string;
-  if (team.members.length >= event.minMembers) status = "Complete";
-  else status = "Pending";
+  if(team.members.length === event.maxMembers) status = "Team full";
+  else if(team.members.length >= event.minMembers) status = "Valid";
+  else status = "Not enough members";
 
   return (
     <div className="font-jetbrains-mono flex flex-col items-center gap-8 p-12">
@@ -39,13 +40,13 @@ function Registered({
                 {member.name} {member.id === team.leader && "(Team Lead)"}
               </p>
               <p className="justify-self-end">{member.email}</p>
-              {isTeamLead && member.id !== team.leader && <MemberControls newLeadId={member.id} team={team} />}
+              {isTeamLead && member.id !== team.leader && <MemberControls memberId={member.id!} team={team} />}
             </div>
           ))}
         </div>
         <div className="flex w-1/3 flex-col items-center gap-3">
           <h3
-            className={`rounded-xs border ${status === "Pending" ? "border-amber-500 bg-amber-500/30" : "border-green-500 bg-green-500/30"} px-2 py-1`}
+            className={`rounded-xs border ${status === "Not enough members" ? "border-amber-500 bg-amber-500/30" : "border-green-500 bg-green-500/30"} px-2 py-1`}
           >
             Status: {status}
           </h3>

@@ -1,8 +1,11 @@
 "use client";
+import { handleSignin } from "@/services/AuthService";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import React, { Suspense, useState } from "react";
+import toast from "react-hot-toast";
+import z from "zod";
 
 function Page() {
   return (
@@ -11,6 +14,11 @@ function Page() {
     </Suspense>
   );
 }
+
+const SigninSchema = z.object({
+  email: z.email().min(1, "Email is required"),
+  password: z.string().min(1, "Password is required"),
+});
 
 function SignInForm() {
   const searchParams = useSearchParams();
@@ -25,30 +33,30 @@ function SignInForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    signIn("credentials", {
-      email: data.email,
-      password: data.password,
-      redirect: true,
-      redirectTo: redirectUrl ?? "/dashboard",
-    })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-      .finally(() => setLoading(false));
+
+    const isValid = SigninSchema.safeParse(data);
+    if (!isValid.success) {
+      toast.error("Invalid credentials");
+      setLoading(false);
+      return;
+    }
+
+    toast("Submitting...");
+    handleSignin(data.email, data.password).then((res) => {
+      if (!res.ok) toast.error(res.message);
+      else redirect(redirectUrl ?? "/dashboard");
+    });
+    setLoading(false);
   };
 
   const handleSignInWithGoogle = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    signIn("google")
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.error(err);
+    signIn("google", {
+      redirectTo: "/dashboard",
+    })
+      .catch(() => {
+        toast("Error occurred");
       })
       .finally(() => setLoading(false));
   };
