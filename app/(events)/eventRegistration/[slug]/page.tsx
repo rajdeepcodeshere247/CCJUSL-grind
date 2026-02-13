@@ -6,6 +6,8 @@ import {
 import NotRegistered from "@/components/EventRegistration/NotRegistered";
 import Registered from "@/components/EventRegistration/Registered";
 import NotFound from "@/components/NotFound";
+import { RegistrationStatus } from "@/types/events";
+import Pending from "@/components/EventRegistration/Pending";
 
 export default async function Page({
   params,
@@ -20,6 +22,7 @@ export default async function Page({
   const user = await checkAuthentication(`/eventRegistration/${slug}`);
   const registrationStatus = await getRegistrationStatus(user.id, event);
 
-  if (registrationStatus.status) return <Registered user={user} event={event} team={registrationStatus.team} />;
+  if (registrationStatus.status === RegistrationStatus.REGISTERED) return <Registered user={user} event={event} team={registrationStatus.team} />;
+  else if(registrationStatus.status === RegistrationStatus.PENDING) return <Pending teamData={registrationStatus.pendingTeamData} eventName={event.name} userId={user.id} />;
   else return <NotRegistered user={user} event={event} />;
 }

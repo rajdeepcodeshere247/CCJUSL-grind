@@ -5,9 +5,10 @@ import { checkRegistrationStatus, getUserByEmail, validateUser } from "@/service
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/prisma/client";
 import { Adapter } from "next-auth/adapters";
+import { UserRole } from "@prisma/client"
 declare module "next-auth" {
   interface User {
-    role: string;
+    role: UserRole;
     registrationComplete: boolean;
     emailVerified: Date | null;
   }
@@ -16,14 +17,14 @@ declare module "next-auth" {
       id: string;
       name: string;
       email: string;
-      role: string;
+      role: UserRole;
       registrationComplete: boolean;
       emailVerified: Date | null;
     } & DefaultSession["user"];
   }
   interface JWT {
     id: string;
-    role: string;
+    role: UserRole;
     registrationComplete: boolean;
     emailVerified: Date | null;
   }
@@ -68,7 +69,7 @@ export const { handlers, signIn, signOut, auth, unstable_update } = NextAuth({
     },
     session({ session, token }) {
       session.user.id = token.id as string;
-      session.user.role = token.role as string;
+      session.user.role = token.role as UserRole;
       session.user.registrationComplete = token.registrationComplete as boolean;
       session.user.emailVerified = token.emailVerified as Date | null;
       return session;

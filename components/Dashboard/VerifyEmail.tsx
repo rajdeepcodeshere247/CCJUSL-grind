@@ -3,7 +3,7 @@
 import { matchVerificationCode, verifyEmail } from "@/services/UserService";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { User } from "@/utils/types";
+import { User } from "@/types/user";
 import { updateVerification } from "@/services/AuthService";
 import toast from "react-hot-toast";
 
@@ -42,16 +42,16 @@ function VerifyEmail({ user }: { user: User }) {
       })
       .catch(() => {
         toast.dismiss();
-        toast.error("Error occured");
+        toast.error("Error occurred");
       });
   };
 
   return (
-    <div className="font-jetbrains-mono flex flex-col items-center gap-8 p-12">
-      <h1 className="text-5xl font-semibold">Verify your email</h1>
-      <p>An email will be sent to your registered email address with a code.</p>
+    <div className="flex flex-col items-center justify-center gap-8 h-full min-h-[80vh]">
+      <h1 className="text-4xl sm:text-5xl font-semibold text-yellow tracking-wide text-center">Verify your email</h1>
+      <p className="text-center">An email will be sent to your registered email address with a code.</p>
       <button
-        className="rounded-xs bg-white px-2 py-1 text-black transition-colors duration-300 hover:bg-white/90 active:bg-white/60"
+        className=" bg-white text-black hover:bg-white/90 active:bg-white/60"
         onClick={() => handleSendCode()}
         disabled={codeSent}
       >
@@ -63,10 +63,10 @@ function VerifyEmail({ user }: { user: User }) {
         placeholder="Enter Code"
         value={code}
         onChange={(e) => setCode(e.target.value)}
-        className="rounded-sm border px-2 py-1"
+        className="px-5 py-3 border border-yellow/70 rounded-full outline-none w-full sm:w-1/3 2xl:w-1/4"
       />
       <button
-        className="rounded-xs bg-white px-2 py-1 text-black transition-colors duration-300 hover:bg-white/90 active:bg-white/60"
+        className="bg-red hover:bg-red/70 active:bg-red/40"
         onClick={() => handleSubmit()}
       >
         Verify Code

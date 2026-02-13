@@ -13,26 +13,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  USER
+  ADMIN
+  SUPERADMIN
+}
+
 model User {
-  id                   String    @id @default(auto()) @map("_id") @db.ObjectId
-  email                String    @unique
-  name                 String
-  password             String?
-  role                 String    @default("USER")
-  phone                String?
-  college              String?
-  year                 String?
-  department           String?
-  image                String?
-  registrationComplete Boolean   @default(false)
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  email      String   @unique
+  name       String
+  password   String?
+  role       UserRole @default(USER)
+  phone      String?
+  college    String?
+  year       String?
+  department String?
+  image      String?
+  gender     String?
+
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  registrationComplete Boolean              @default(false)
   emailVerified        DateTime?
   verificationToken    String?
-  passwordResetToken   String?
-  accounts             Account[]
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
-  teamIds              String[]  @db.ObjectId
-  teams                Team[]    @relation(fields: [teamIds], references: [id])
+  passwordResetTokens  ResetPasswordToken[]
+
+  accounts       Account[]
+  teamIds        String[]  @db.ObjectId
+  teams          Team[]    @relation("UserTeams", fields: [teamIds], references: [id])
+  pendingTeamIds String[]  @db.ObjectId
+  pendingTeams   Team[]    @relation("UserPendingTeams", fields: [pendingTeamIds], references: [id])
 
   @@map("user")
 }
@@ -58,15 +69,16 @@ model Account {
 }
 
 model Team {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  name           String
-  eventSlug      String
-  event          Event    @relation(fields: [eventSlug], references: [slug], onDelete: Cascade)
-  memberIds      String[] @db.ObjectId
-  members        User[]   @relation(fields: [memberIds], references: [id])
-  leader         String   @db.ObjectId
-  joiningCode    String   @unique
-  allowResetCode Boolean  @default(true)
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  name             String
+  eventSlug        String
+  event            Event    @relation(fields: [eventSlug], references: [slug], onDelete: Cascade)
+  memberIds        String[] @db.ObjectId
+  members          User[]   @relation("UserTeams", fields: [memberIds], references: [id])
+  pendingMemberIds String[] @db.ObjectId
+  pendingMembers   User[]   @relation("UserPendingTeams", fields: [pendingMemberIds], references: [id])
+  leader           String   @db.ObjectId
+  joiningCode      String   @unique
 
   @@map("team")
 }
@@ -87,5 +99,9 @@ model ResetPasswordToken {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   token     String   @unique
   user_id   String   @db.ObjectId
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   expiresAt DateTime
+
+  @@map("reset_password_token")
 }
+

@@ -1,3 +1,5 @@
+import { UserRole } from "@prisma/client";
+
 type User = {
     id?: string;
     createdAt?: Date;
@@ -8,9 +10,16 @@ type User = {
     emailVerified: Date | null;
     image?: string | null;
     password?: string | null;
-    role?: string;
+    role?: UserRole;
     year?: string | null;
     department?: string | null;
+    phone?: string | null;
+    college?: string | null;
+    verificationToken?: string | null;
+    teamIds?: string[];
+    pendingTeamIds?: string[];
+    wishlistedEventIds?: string[];
+    workshopIds?: string[];
 }
 
 type SessionUser = {
@@ -18,27 +27,11 @@ type SessionUser = {
     name: string;
     email: string;
     image?: string | null;
-    role: string;
+    role: UserRole;
     emailVerified: Date | null;
     registrationComplete: boolean;
 }
 
-type Event = {
-    slug: string;
-    id: string;
-    name: string;
-    minMembers: number;
-    maxMembers: number;
-}
 
-type Team = {
-    id: string;
-    name: string;
-    joiningCode: string;
-    leader: string;
-    members: User[];
-    eventSlug: string;
-    allowResetCode: boolean;
-}
 
-export type {User, SessionUser, Event, Team};
+export type {User, SessionUser};

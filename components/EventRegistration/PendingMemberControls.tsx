@@ -1,28 +1,31 @@
 "use client";
 
-import { removeMember, transferTeamLead } from "@/services/EventsService";
+import { acceptPendingMember, rejectPendingMember } from "@/services/EventsService";
 import React from "react";
 import { useConfirmationDialogContext } from "@/hooks/useConfirmationDialog";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { Event } from "@/types/events";
 
-function MemberControls({
+function PendingMemberControls({
   memberId,
   memberName,
   teamId,
+  event
 }: {
   memberId: string;
   memberName: string;
   teamId: string;
+  event: Event
 }) {
   const modalContext = useConfirmationDialogContext();
   const router = useRouter();
 
-  const handleTransferTeamLead = () => {
+  const handleAcceptMember = () => {
     modalContext.showDialog(
-      `Are you sure you want to make ${memberName} team lead?`,
+      `Are you sure you want to accept ${memberName}?`,
       () => {
-        transferTeamLead(teamId, memberId).then((res) => {
+        acceptPendingMember(teamId, memberId, event).then((res) => {
           if(res.ok){
             toast.success(res.message);
             router.refresh();
@@ -33,9 +36,10 @@ function MemberControls({
       },
     );
   };
-  const handleRemoveMember = () => {
-    modalContext.showDialog(`Are you sure you want to remove ${memberName}?`, () => {
-      removeMember(teamId, memberId).then((res) => {
+
+  const handleRejectMember = () => {
+    modalContext.showDialog(`Are you sure you want to reject ${memberName}?`, () => {
+      rejectPendingMember(teamId, memberId).then((res) => {
         if(res.ok){
             toast.success(res.message);
             router.refresh();
@@ -49,18 +53,18 @@ function MemberControls({
     <>
       <button
         className="w-fit rounded-xs bg-white px-2 py-1 text-sm text-black transition-colors duration-300 hover:bg-white/90 active:bg-white/60"
-        onClick={() => handleRemoveMember()}
+        onClick={() => handleAcceptMember()}
       >
-        Remove
+        Accept
       </button>
       <button
         className="w-fit justify-self-end rounded-xs bg-white px-2 py-1 text-sm text-black transition-colors duration-300 hover:bg-white/90 active:bg-white/60"
-        onClick={() => handleTransferTeamLead()}
+        onClick={() => handleRejectMember()}
       >
-        Make Team Lead
+        Reject
       </button>
     </>
   );
 }
 
-export default MemberControls;
+export default PendingMemberControls;
