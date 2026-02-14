@@ -10,7 +10,7 @@ async function Page() {
     const user = await checkAuthentication("/dashboard");
 
     if (!user) {
-        redirect("/login");
+        redirect("/signin");
     }
 
     if (!user.emailVerified)
@@ -23,7 +23,7 @@ async function Page() {
         return <CompleteRegistration id={user.id} />;
 
     const fullUser = await getUserByEmail(user.email);
-    if(!fullUser) redirect("/login");
+    if(!fullUser) redirect("/signin");
 
     return <Dashboard user={fullUser} />;
 }

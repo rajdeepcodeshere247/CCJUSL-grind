@@ -44,31 +44,65 @@ function Pending({
     }
 
     return (
-        <div className="flex flex-col items-center justify-center gap-6 h-full min-h-[80vh] py-6">
-            <h1 className="text-4xl sm:text-5xl font-semibold text-yellow mb-8 text-center">
-                {eventName} Registration
-            </h1>
-            <h2 className="text-center text-3xl">
-                Your Registration is Pending.
-            </h2>
-            <div className="flex flex-col items-center">
-                <h3 className="text-yellow text-2xl">Team Name</h3>
-                <p>{teamData.name}</p>
-            </div>
-            <h4 className="text-center">
-                The Team Lead must accept your application to join the team.
-            </h4>
-            <div className="flex flex-col gap-y-1 border border-gray-300/30 bg-gray-600/30 py-2 px-2 sm:px-8 rounded-sm">
-                <h6 className="text-yellow text-xl text-center">
-                    Team Lead Details
-                </h6>
-                <p>Name: {teamData.leader.name}</p>
-                <p>Email: {teamData.leader.email}</p>
-            </div>
-            <button className="bg-red hover:bg-red/70 active:bg-red/40" onClick={() => handleLeaveTeam()}>
-                Leave Team
-            </button>
+        <div className="flex flex-col items-center justify-center gap-10 h-full min-h-[80vh] py-6 px-4">
+  {/* Header with decoration */}
+  <div className="text-center space-y-6">
+    <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-white">
+      {eventName}
+    </h1>
+
+    <div className="flex items-center justify-center gap-4 text-white/40 text-xs tracking-widest font-mono">
+      <div className="h-px w-16 bg-white/20"></div>
+      <span>REGISTRATION STATUS</span>
+      <div className="h-px w-16 bg-white/20"></div>
+    </div>
+  </div>
+
+  {/* Status Message */}
+  <div className="text-center space-y-4 border border-white/20 p-8 max-w-2xl w-full">
+    <div className="flex items-center justify-center gap-3 mb-2">
+      <h2 className="text-2xl font-bold uppercase tracking-wide text-white">
+        Registration Pending
+      </h2>
+    </div>
+    <p className="text-white/60 font-light leading-relaxed">
+      The Team Lead must accept your application to join the team.
+    </p>
+  </div>
+
+  {/* Team Information */}
+  <div className="flex flex-col items-center gap-8 w-full max-w-md">
+    <div className="w-full border border-white/20 p-6 text-center">
+      <p className="text-xs text-white/50 uppercase mb-3 tracking-widest font-mono">Team Name</p>
+      <p className="text-2xl font-bold text-white">{teamData.name}</p>
+    </div>
+
+    {/* Team Lead Details */}
+    <div className="w-full border border-red-400/30 p-6 space-y-4">
+      <h6 className="text-lg font-bold uppercase tracking-wider text-center text-white border-b border-white/10 pb-3">
+        Team Lead Details
+      </h6>
+      <div className="space-y-3">
+        <div className="flex justify-between items-center border-l-2 border-white/20 pl-4 py-2">
+          <span className="text-white/50 text-sm uppercase tracking-wide font-mono">Name</span>
+          <span className="text-white font-light">{teamData.leader.name}</span>
         </div>
+        <div className="flex justify-between items-center border-l-2 border-white/20 pl-4 py-2">
+          <span className="text-white/50 text-sm uppercase tracking-wide font-mono">Email</span>
+          <span className="text-white font-light text-sm">{teamData.leader.email}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Action Button */}
+  <button 
+    className="border border-red-400 px-10 py-3 text-white hover:bg-red-400 hover:text-black transition-all tracking-widest uppercase text-sm font-bold mt-4" 
+    onClick={() => handleLeaveTeam()}
+  >
+    Leave Team
+  </button>
+</div>
     );
 }
 

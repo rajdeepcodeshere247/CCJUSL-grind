@@ -12,7 +12,7 @@ const getRegistrationStatus = withAuth(
         try {
             if (sessionUserId !== userId) {
                 signOut({
-                    redirectTo: "/login",
+                    redirectTo: "/signin",
                 });
                 throw new Error("Invalid session - id mismatch");
             }

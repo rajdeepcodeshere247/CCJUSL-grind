@@ -7,10 +7,29 @@ import { auth, signIn, unstable_update } from "@/auth";
 import { redirect } from "next/navigation";
 import { CONST } from "@/utils/constants";
 import { AuthError } from "next-auth";
+import { UserRole } from "@prisma/client";
 
 const getUserByEmail = async (email: string | null) => {
   if (!email) return null;
-  const user = await prisma.user.findUnique({ where: { email } });
+  const user = await prisma.user.findUnique({ 
+    where: { email },
+    include: {
+      teams: {
+        select: {
+          name: true,
+          eventSlug: true,
+          event: true
+        }
+      },
+      pendingTeams: {
+        select: {
+          name: true,
+          eventSlug: true,
+          event: true
+        }
+      }
+    }
+   });
   return user;
 };
 
@@ -75,9 +94,17 @@ const signup = async (user: User, hCaptchaToken: string | null) => {
     if (existingUser) return { ok: false, message: "Email already in use" };
 
     const hashedPassword = await bcrypt.hash(user.password, 12);
-    const newUser = {...user, password: hashedPassword}
+    const newUser = {
+      name: user.name,
+      email: user.email,
+      password: hashedPassword,
+      registrationComplete: false,
+      emailVerified: null,
+      image: null,
+      role: UserRole.USER
+    }
 
-    await prisma.user.create({ data: newUser },);
+    await prisma.user.create({ data: newUser });
     
     try{
       await signIn("credentials", {
@@ -101,7 +128,7 @@ const checkAuthentication = async (redirectUrl = "") => {
   let session = await auth();
   const encodedRedirectUrl = encodeURIComponent(redirectUrl);
   if (!session || !session.user || !session.user.id)
-    redirect(`/login?redirect=${encodedRedirectUrl}`);
+    redirect(`/signin?redirect=${encodedRedirectUrl}`);
 
   if(redirectUrl.indexOf("dashboard") !== -1) return session.user;
 
@@ -125,7 +152,7 @@ const checkAdminAuthorization = async () => {
     !session.user.id ||
     session.user.role !== "ADMIN"
   )
-    redirect("/login");
+    redirect("/signin");
 
   return session.user;
 };

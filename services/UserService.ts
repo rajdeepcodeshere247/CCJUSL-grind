@@ -20,7 +20,7 @@ const completeUserRegistration = withAuth(async (sessionUserId: string, data: Re
         try {
             if(sessionUserId !== id){
                 signOut({
-                    redirectTo: "/login"
+                    redirectTo: "/signin"
                 });
                 throw new Error("Invalid session - id mismatch");
             }

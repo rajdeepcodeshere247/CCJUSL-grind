@@ -40,62 +40,70 @@ function NotRegistered({ user, event }: { user: SessionUser; event: Event }) {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center gap-6 h-full min-h-[80vh]">
-            <h1 className="text-4xl sm:text-5xl font-semibold text-yellow mb-8 text-center">
-                {event.name} Registration
-            </h1>
-            <div className="flex flex-col items-center gap-5 w-full">
-                <h4 className="text-xl">Create a new team</h4>
-                <input
-                    type="text"
-                    placeholder="Team Name"
-                    value={teamName}
-                    onChange={(e) => {
-                        setTeamName(e.target.value);
-                    }}
-                    className="px-5 py-3 border border-yellow/70 rounded-full outline-none w-full sm:w-1/3 2xl:w-1/4"
-                />
-                <button
-                    onClick={(e) => {
-                        handleCreateTeam(e);
-                    }}
-                    disabled={loading}
-                    className="bg-red hover:bg-red/70 active:bg-red/40"
-                >
-                    Create Team
-                </button>
-            </div>
-            {   (event.maxMembers > 1) && 
-                <>
-                    <div className="flex w-full sm:w-2/5 items-center justify-between gap-6">
-                        <div className="h-px w-full bg-linear-to-r from-red to-orange"></div>
-                        <p>OR</p>
-                        <div className="h-px w-full bg-linear-to-l from-red to-orange"></div>
-                    </div>
-                    <div className="flex flex-col items-center gap-5 w-full">
-                        <h4 className="text-xl">Join an existing team</h4>
-                        <input
-                            type="text"
-                            placeholder="Joining Code"
-                            value={teamCode}
-                            onChange={(e) => {
-                                setTeamCode(e.target.value);
-                            }}
-                            className="px-5 py-3 border border-yellow/70 rounded-full outline-none w-full sm:w-1/3 2xl:w-1/4"
-                        />
-                        <button
-                            onClick={(e) => {
-                                handleJoinTeam(e);
-                            }}
-                            disabled={loading}
-                            className="bg-red hover:bg-red/70 active:bg-red/40"
-                        >
-                            Join Team
-                        </button>
-                    </div>
-                </>
-            }
-        </div>
+        <div className="flex flex-col items-center justify-center gap-8 h-full min-h-[80vh] p-4">
+
+    <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-white mt-4">
+      {event.name}
+    </h1>
+
+
+  {/* Create Team Section */}
+  <div className="flex flex-col items-center gap-6 w-full border border-white/20 p-8 sm:p-10 max-w-lg">
+    <h4 className="text-lg font-bold uppercase tracking-wider text-white">Create New Team</h4>
+    <input
+      type="text"
+      placeholder="TEAM NAME"
+      value={teamName}
+      onChange={(e) => {
+        setTeamName(e.target.value);
+      }}
+      className="px-6 py-4 border border-white/20 bg-transparent text-white outline-none focus:border-red-400 transition-colors placeholder:text-white/40 font-light w-full"
+    />
+    <button
+      onClick={(e) => {
+        handleCreateTeam(e);
+      }}
+      disabled={loading}
+      className="w-full border border-red-400 px-8 py-3 text-white hover:bg-red-400 hover:text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed tracking-widest uppercase text-sm font-bold"
+    >
+      {loading ? "CREATING..." : "CREATE TEAM"}
+    </button>
+  </div>
+
+  {(event.maxMembers > 1) && (
+    <>
+      {/* Divider */}
+      <div className="flex w-full max-w-lg items-center justify-center gap-6">
+        <div className="h-px flex-1 bg-white/20"></div>
+        <p className="text-white/40 text-sm font-mono tracking-widest">OR</p>
+        <div className="h-px flex-1 bg-white/20"></div>
+      </div>
+
+      {/* Join Team Section */}
+      <div className="flex flex-col items-center gap-6 w-full border border-white/20 p-8 sm:p-10 max-w-lg">
+        <h4 className="text-lg font-bold uppercase tracking-wider text-white">Join Existing Team</h4>
+        <input
+          type="text"
+          placeholder="JOINING CODE"
+          value={teamCode}
+          onChange={(e) => {
+            setTeamCode(e.target.value);
+          }}
+          className="px-6 py-4 border border-white/20 bg-transparent text-white outline-none focus:border-red-400 transition-colors placeholder:text-white/40 font-light w-full"
+        />
+        <button
+          onClick={(e) => {
+            handleJoinTeam(e);
+          }}
+          disabled={loading}
+          className="w-full border border-red-400 px-8 py-3 text-white hover:bg-red-400 hover:text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed tracking-widest uppercase text-sm font-bold"
+        >
+          {loading ? "JOINING..." : "JOIN TEAM"}
+        </button>
+      </div>
+    </>
+  )}
+</div>
     );
 }
 

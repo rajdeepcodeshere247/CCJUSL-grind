@@ -21,7 +21,7 @@ const events: EventType[] = [
     id: 2,
     title: "H42",
     description: "Competitive Programming",
-    image: "/sample.png",
+    image: "/events/h42.webp",
     classes: "bg-blue-400 -rotate-6 left-[5%] sm:left-[50%] lg:left-[25%] top-[20%] sm:top-[27%] lg:top-[35%] z-10 sm:z-0",
   },
   {
@@ -35,7 +35,7 @@ const events: EventType[] = [
     id: 4,
     title: "Pass The Baton",
     description: "Competitive Programming",
-    image: "/sample.png",
+    image: "/events/ptb.jpg",
     classes: "bg-blue-400 -rotate-6 sm:rotate-6 lg:-rotate-6 left-[5%] sm:left-[47%] lg:left-[70%] top-[60%] sm:top-[60%] lg:top-[35%]",
   },
 ];
@@ -64,7 +64,7 @@ function Card({ event }: { event: EventType }) {
 
 function Gallery() {
   return (
-    <div className="w-full min-h-[150vh] sm:min-h-screen bg-gradient-to-b from-transparent via-black to-black drop-shadow-2xl relative">
+    <div className="w-full min-h-[150vh] sm:min-h-screen bg-linear-to-b from-transparent via-black to-black drop-shadow-2xl relative">
       {events.map((e) => (
         <Card event={e} key={e.id} />
       ))}

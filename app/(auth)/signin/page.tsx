@@ -64,7 +64,7 @@ function SignInForm() {
 
     return (
         <div className="flex flex-col items-center justify-center gap-8 h-full min-h-[80vh]">
-            <h1 className="text-5xl font-semibold text-yellow">
+            <h1 className="text-5xl font-semibold">
                 Login
             </h1>
             <input
@@ -73,7 +73,7 @@ function SignInForm() {
                 placeholder="Email Address"
                 value={data.email}
                 onChange={(e) => handleUpdate(e.target.value, "email")}
-                className="px-5 py-3 border border-yellow/70 rounded-full outline-none w-full sm:w-1/3 2xl:w-1/4"
+                className="px-6 py-4 border border-white/20 bg-transparent text-white outline-none focus:border-red-400 transition-colors placeholder:text-white/40 font-light w-full sm:w-1/3 2xl:w-1/4"
             />
 
             <input
@@ -82,19 +82,19 @@ function SignInForm() {
                 placeholder="Password"
                 value={data.password}
                 onChange={(e) => handleUpdate(e.target.value, "password")}
-                className="px-5 py-3 border border-yellow/70 rounded-full outline-none w-full sm:w-1/3 2xl:w-1/4"
+                className="px-6 py-4 border border-white/20 bg-transparent text-white outline-none focus:border-red-400 transition-colors placeholder:text-white/40 font-light w-full sm:w-1/3 2xl:w-1/4"
             />
             <button
                 onClick={(e) => handleSubmit(e)}
                 disabled={loading}
-                className="bg-red hover:bg-red/70 active:bg-red/40 cursor-pointer"
+                className="border border-red-400 px-8 py-3 text-white hover:bg-red-400/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed tracking-wide text-sm"
             >
                 Submit
             </button>
             <div className="flex w-full sm:w-2/5 items-center justify-between gap-6">
-                <div className="h-px w-full bg-linear-to-r from-red to-orange"></div>
+                <div className="h-px w-full bg-red-400"></div>
                 <p>OR</p>
-                <div className="h-px w-full bg-linear-to-l from-red to-orange"></div>
+                <div className="h-px w-full bg-red-400"></div>
             </div>
             <button
                 onClick={(e) => handleSignInWithGoogle(e)}
@@ -132,14 +132,14 @@ function SignInForm() {
                 <p>Don&apos;t have an account?</p>
                 <Link
                     href={"/signup"}
-                    className="underline underline-offset-4 text-yellow"
+                    className="underline underline-offset-4"
                 >
                     Sign Up
                 </Link>
             </div>
             <Link
                 href={"/forgot-password"}
-                className="text-yellow underline underline-offset-4"
+                className="underline underline-offset-4"
             >
                 Forgot Password
             </Link>

@@ -16,6 +16,7 @@ type Team = {
     pendingMembers: User[];
     eventSlug: string;
     joiningCode: string;
+    event?: Event;
 };
 
 enum RegistrationStatus {

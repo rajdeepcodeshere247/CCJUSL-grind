@@ -7,6 +7,7 @@ import React, { Suspense, useState } from "react";
 import toast from "react-hot-toast";
 import z from "zod";
 import Tooltip from "../Tooltip";
+import { Info } from "lucide-react";
 
 const RegistrationSchema = z.object({
     phone: z
@@ -105,7 +106,7 @@ function RegistrationForm({ id }: { id: string }) {
             className="flex flex-col items-center justify-center gap-6 h-full min-h-[80vh]"
             onSubmit={(e) => handleSubmit(e)}
         >
-            <h1 className="text-4xl sm:text-5xl font-semibold text-yellow mb-8 text-center">
+            <h1 className="text-4xl sm:text-5xl font-semibold mb-8 text-center">
                 Complete &nbsp; Registration
             </h1>
             <div className="flex flex-col items-center gap-2 w-full sm:w-1/3 2xl:w-1/4">
@@ -117,7 +118,7 @@ function RegistrationForm({ id }: { id: string }) {
                     onChange={(e) => {
                         handleChange("phone", e.target.value);
                     }}
-                    className="px-5 py-3 border border-yellow/70 rounded-full outline-none w-full"
+                    className="px-6 py-4 border border-white/20 bg-transparent text-white outline-none focus:border-red-400 transition-colors placeholder:text-white/40 font-light w-full"
                 />
                 {errors.phone && (
                     <p className="text-sm text-red-500">{errors.phone}</p>
@@ -132,7 +133,7 @@ function RegistrationForm({ id }: { id: string }) {
                     onChange={(e) => {
                         handleChange("college", e.target.value);
                     }}
-                    className="px-5 py-3 border border-yellow/70 rounded-full outline-none w-full"
+                    className="px-6 py-4 border border-white/20 bg-transparent text-white outline-none focus:border-red-400 transition-colors placeholder:text-white/40 font-light w-full"
                 />
                 {errors.college && (
                     <p className="text-sm text-red-500">{errors.college}</p>
@@ -147,7 +148,7 @@ function RegistrationForm({ id }: { id: string }) {
                     onChange={(e) => {
                         handleChange("department", e.target.value);
                     }}
-                    className="px-5 py-3 border border-yellow/70 rounded-full outline-none w-full"
+                    className="px-6 py-4 border border-white/20 bg-transparent text-white outline-none focus:border-red-400 transition-colors placeholder:text-white/40 font-light w-full"
                 />
                 {errors.department && (
                     <p className="text-sm text-red-500">{errors.department}</p>
@@ -162,7 +163,7 @@ function RegistrationForm({ id }: { id: string }) {
                     onChange={(e) => {
                         handleChange("year", e.target.value);
                     }}
-                    className="px-5 py-3 border border-yellow/70 rounded-full outline-none w-full"
+                    className="px-6 py-4 border border-white/20 bg-transparent text-white outline-none focus:border-red-400 transition-colors placeholder:text-white/40 font-light w-full"
                 />
                 {errors.year && (
                     <p className="text-sm text-red-500">{errors.year}</p>
@@ -171,9 +172,7 @@ function RegistrationForm({ id }: { id: string }) {
             <div className="flex flex-col items-center gap-2 relative w-full sm:w-1/3 2xl:w-1/4">
                 <div className="absolute -right-8 top-1/2 -translate-y-1/2">
                     <Tooltip message="This is an optional field, in case you have a code given by a Campus Ambassador.">
-                        <p className="text-xs py-1 px-2.5 rounded-full bg-gray-300/40">
-                            i
-                        </p>
+                        <Info className="w-6 h-6 rounded-full flex items-center justify-center text-white/60 text-xs hover:text-red-400 transition-colors cursor-help" />
                     </Tooltip>
                 </div>
                 <input
@@ -184,7 +183,7 @@ function RegistrationForm({ id }: { id: string }) {
                     onChange={(e) =>
                         handleChange("referralCode", e.target.value)
                     }
-                    className="px-5 py-3 border border-yellow/70 rounded-full outline-none w-full"
+                    className="px-6 py-4 border border-white/20 bg-transparent text-white outline-none focus:border-red-400 transition-colors placeholder:text-white/40 font-light w-full"
                 />
 
                 {errors.referralCode && (
@@ -196,7 +195,7 @@ function RegistrationForm({ id }: { id: string }) {
             <button
                 type="submit"
                 disabled={loading}
-                className="bg-red hover:bg-red/70 active:bg-red/40"
+                className="border border-red-400 px-8 py-3 text-white hover:bg-red-400/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed tracking-wide"
             >
                 Submit
             </button>

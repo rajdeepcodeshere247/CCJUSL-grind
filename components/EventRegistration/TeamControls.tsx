@@ -49,7 +49,7 @@ function TeamControls({ team, event }: { team: Team; event: Event }) {
                 </div>
             )}
             <button
-                className="bg-red hover:bg-red/70 active:bg-red/40"
+                className="border border-red-400 px-8 py-3 text-white hover:bg-red-400/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed tracking-wide"
                 onClick={() => handleDeleteTeam()}
             >
                 Delete Team

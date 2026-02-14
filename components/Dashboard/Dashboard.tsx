@@ -1,146 +1,182 @@
 "use client";
 
-import { signOut } from 'next-auth/react';
-import React from 'react';
-import { User } from '@/types/user';
+import { signOut } from "next-auth/react";
+import React from "react";
+import { User } from "@/types/user";
+import Image from "next/image";
+import { Team } from "@/types/events";
+import Link from "next/link";
 
 function Dashboard({ user }: { user: User }) {
   const handleLogout = () => {
     signOut({
-      redirectTo: "/login",
+      redirectTo: "/signin",
     });
   };
 
   const SectionHeader = ({ title }: { title: string }) => (
-    <div className="w-full flex items-center gap-4 my-4">
-      <h2 className="text-xl text-yellow whitespace-nowrap">{title}</h2>
-      <div className="h-px w-full bg-yellow/20"></div>
+    <div className="mt-12 mb-8 flex w-full items-center gap-4">
+      <h2 className="text-2xl font-bold tracking-tight whitespace-nowrap text-white uppercase">
+        {title}
+      </h2>
+      <div className="h-px flex-1 bg-white/20"></div>
     </div>
   );
 
   const EmptyState = ({ text }: { text: string }) => (
-    <p className="text-white/30 italic text-sm">{text}</p>
+    <p className="text-sm font-light text-white/50">{text}</p>
   );
 
   return (
-    <div className="relative isolate flex flex-col items-center justify-center gap-10 p-6 md:p-12 min-h-[80vh] h-fit text-white">
+    <div className="relative isolate mx-auto flex min-h-screen max-w-6xl flex-col items-center gap-16 p-6 text-white md:p-12">
+      {/* Timeline Decoration */}
+      <div className="flex w-full items-center justify-center gap-4 pt-8 font-mono text-xs tracking-widest text-white/40">
+        <div className="h-px w-24 bg-white/20"></div>
+        <span>DASHBOARD</span>
+        <div className="h-px w-24 bg-white/20"></div>
+      </div>
 
-      <div className="relative z-10 flex flex-col md:flex-row items-center gap-8 w-full max-w-5xl">
-        <div className="relative group">
-          <div className="w-32 h-32 rounded-full border-2 border-yellow overflow-hidden bg-white/10 flex items-center justify-center">
+      {/* Profile Header */}
+      <div className="flex w-full flex-col items-center gap-8 border-b border-white/10 pb-12 md:flex-row md:items-start">
+        <div className="relative">
+          <div className="flex h-40 w-40 items-center justify-center overflow-hidden border border-white/20 bg-black">
             {user.image ? (
-              <img src={user.image} alt="Profile" className="w-full h-full object-cover" />
+              <Image
+                src={user.image}
+                alt="Profile"
+                className="h-full w-full object-cover"
+              />
             ) : (
-              <span className="text-4xl text-yellow">
-                {user.name ? user.name[0] : "?"}
+              <span className="text-6xl font-light text-white/60">
+                {user.name ? user.name[0].toUpperCase() : "?"}
               </span>
             )}
           </div>
-          <div className="absolute -bottom-2 -right-2 bg-red text-xs px-2 py-1 rounded-full text-white border border-black uppercase">
+          <div className="absolute -right-3 -bottom-3 bg-red-400 px-3 py-1.5 text-xs font-bold tracking-wider text-black uppercase">
             {user.role || "Guest"}
           </div>
         </div>
 
-        <div className="flex-1 text-center md:text-left">
-          <h1 className="text-5xl font-semibold text-yellow mb-2 uppercase tracking-tighter">
+        <div className="flex-1 space-y-3 text-center md:text-left">
+          <h1 className="text-5xl font-bold tracking-tight text-white md:text-6xl">
             {user.name || "Anonymous User"}
           </h1>
-          <p className="text-white/60 font-mono tracking-widest">
+          <p className="font-mono text-base tracking-wide text-white/60">
             {user.email || "No email linked"}
           </p>
+          <div className="pt-2">
+            <p className="mb-1 font-mono text-xs tracking-widest text-white/40 uppercase">
+              Member Since
+            </p>
+            <p className="font-light text-white/80">
+              {user.createdAt
+                ? new Date(user.createdAt).toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })
+                : "Date Unknown"}
+            </p>
+          </div>
         </div>
 
         <button
           onClick={handleLogout}
-          className="bg-red hover:bg-red/70 px-8 py-2 text-sm relative z-20 cursor-pointer"
+          className="cursor-pointer border border-red-400 px-10 py-3 text-sm font-bold tracking-widest uppercase transition-all hover:bg-red-400 hover:text-black"
         >
           Logout
         </button>
       </div>
 
-      <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
-        <div className="md:col-span-2 space-y-8">
-          <section>
-            <SectionHeader title="Academic Information" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
-                <p className="text-xs text-white/40 uppercase mb-1">College</p>
-                <p className="text-lg">{user.college || <EmptyState text="No college specified" />}</p>
-              </div>
-              <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
-                <p className="text-xs text-white/40 uppercase mb-1">Department</p>
-                <p className="text-lg">{user.department || <EmptyState text="No department listed" />}</p>
-              </div>
-              <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
-                <p className="text-xs text-white/40 uppercase mb-1">Graduation Year</p>
-                <p className="text-lg">{user.year || <EmptyState text="N/A" />}</p>
-              </div>
-              <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
-                <p className="text-xs text-white/40 uppercase mb-1">Phone</p>
-                <p className="text-lg">{user.phone || <EmptyState text="No contact added" />}</p>
-              </div>
-            </div>
-          </section>
-
-          <section>
-            <SectionHeader title="Activity" />
-            <div className="space-y-4">
-              {[
-                { label: "My Teams", data: user.teamIds, color: "from-blue-500", empty: "Not part of any teams yet" },
-                { label: "Pending Requests", data: user.pendingTeamIds, color: "from-orange", empty: "No pending invitations" },
-                { label: "Workshops", data: user.workshopIds, color: "from-green-500", empty: "No workshops registered" },
-                { label: "Wishlist", data: user.wishlistedEventIds, color: "from-red", empty: "Your wishlist is empty" }
-              ].map((item, idx) => (
-                <div key={idx} className="p-4 bg-white/5 border-l-4 border-l-yellow rounded-r-xl">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold uppercase tracking-wider">{item.label}</span>
-                    <span className="text-2xl text-yellow">{item.data?.length || 0}</span>
-                  </div>
-                  {(!item.data || item.data.length === 0) && (
-                    <div className="mt-2 text-xs">
-                      <EmptyState text={item.empty} />
-                    </div>
-                  )}
-                  {item.data && item.data.length > 0 && (
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {item.data.map((id: string | number) => (
-                        <span key={id} className="text-[10px] bg-white/10 px-2 py-1 rounded border border-white/5 font-mono">
-                          {id}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
-
-        <aside className="space-y-6">
-          <div className="p-6 bg-white/5 border border-yellow/20 rounded-2xl">
-            <h3 className="text-yellow mb-4 uppercase tracking-widest">Security</h3>
-            <button className="w-full py-2 border border-yellow/50 text-yellow text-xs uppercase hover:bg-yellow hover:text-black transition-all cursor-pointer">
-              Edit Profile
-            </button>
-          </div>
-
-          <div className="p-6 bg-linear-to-br from-red/20 to-orange/20 border border-red/30 rounded-2xl text-center">
-            <p className="text-xs uppercase text-white/60 mb-2">Member Since</p>
-            <p className="text-sm">
-              {user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-GB', {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric'
-              }) : "Date Unknown"}
+      {/* Academic Information */}
+      <div className="w-full">
+        <SectionHeader title="Academic Information" />
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="border border-white/20 p-6">
+            <p className="mb-3 font-mono text-xs tracking-widest text-white/50 uppercase">
+              College
+            </p>
+            <p className="text-lg font-light text-white">
+              {user.college || <EmptyState text="Not specified" />}
             </p>
           </div>
-        </aside>
+          <div className="border border-white/20 p-6">
+            <p className="mb-3 font-mono text-xs tracking-widest text-white/50 uppercase">
+              Department
+            </p>
+            <p className="text-lg font-light text-white">
+              {user.department || <EmptyState text="Not listed" />}
+            </p>
+          </div>
+          <div className="border border-white/20 p-6">
+            <p className="mb-3 font-mono text-xs tracking-widest text-white/50 uppercase">
+              Graduation Year
+            </p>
+            <p className="text-lg font-light text-white">
+              {user.year || <EmptyState text="N/A" />}
+            </p>
+          </div>
+          <div className="border border-white/20 p-6">
+            <p className="mb-3 font-mono text-xs tracking-widest text-white/50 uppercase">
+              Phone
+            </p>
+            <p className="text-lg font-light text-white">
+              {user.phone || <EmptyState text="Not added" />}
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="relative z-10 flex w-full max-w-5xl items-center justify-between gap-6 opacity-30 mt-auto">
-        <div className="h-px w-full bg-linear-to-r from-red to-orange"></div>
-        <p className="text-xs">END</p>
-        <div className="h-px w-full bg-linear-to-l from-red to-orange"></div>
+      {/* Activity Section */}
+      <div className="w-full">
+        <SectionHeader title="Activity Overview" />
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          {[
+            {
+              id: 1,
+              label: "My Teams",
+              data: user.teams,
+              empty: "Not part of any teams yet",
+            },
+            {
+              id: 2,
+              label: "Pending Requests",
+              data: user.pendingTeams,
+              empty: "No pending invitations",
+            },
+          ].map((item) => (
+            <div
+              key={item.id}
+              className="border border-white/20 p-6 transition-colors hover:border-red-400/50"
+            >
+              <div className="mb-4 flex items-start justify-between">
+                <div>
+                  <h3 className="mb-1 text-base font-bold tracking-wider text-white uppercase">
+                    {item.label}
+                  </h3>
+                  {(!item.data || item.data.length === 0) && (
+                    <EmptyState text={item.empty} />
+                  )}
+                </div>
+                <span className="ml-4 text-4xl font-light text-red-400">
+                  {item.data?.length || 0}
+                </span>
+              </div>
+              {item.data && item.data.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2 border-t border-white/10 pt-4">
+                  {item.data.map((team: Team, idx: number) => (
+                    <Link href={`/eventRegistration/${team.eventSlug}`}
+                      key={`${team.id}-${idx}`}
+                      className="border border-white/30 px-3 py-1.5 font-mono text-xs text-white/70 transition-colors hover:border-red-400 hover:text-white"
+                    >
+                      {team.name} ({team.event?.name ?? team.eventSlug})
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

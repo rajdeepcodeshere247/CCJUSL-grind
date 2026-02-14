@@ -1,4 +1,5 @@
 import { UserRole } from "@prisma/client";
+import { Team } from "./events";
 
 type User = {
     id?: string;
@@ -17,7 +18,9 @@ type User = {
     college?: string | null;
     verificationToken?: string | null;
     teamIds?: string[];
+    teams?: Team[];
     pendingTeamIds?: string[];
+    pendingTeams?: Team[];
     wishlistedEventIds?: string[];
     workshopIds?: string[];
 }
