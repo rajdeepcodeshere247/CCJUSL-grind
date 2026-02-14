@@ -1,7 +1,7 @@
 import { SessionUser } from "@/types/user";
 import { Event, Team } from "@/types/events";
 import React from "react";
-import TeamControls from "./TeamControls";
+import { TeamControls, EditTeamName } from "./TeamControls";
 import NotRegistered from "./NotRegistered";
 import MemberControls from "./MemberControls";
 import LeaveTeam from "./LeaveTeam";
@@ -34,10 +34,11 @@ function Registered({
         {/* Left Column - Team Members */}
         <div className="flex flex-1 flex-col">
           {/* Team Name Header */}
-          <div className="mb-3 border border-white/20 p-6">
+          <div className="mb-3 border border-white/20 px-2 py-6 flex justify-between items-center gap-3">
             <h4 className="text-2xl font-bold tracking-tight text-white">
               {team?.name}
             </h4>
+            {isTeamLead && <EditTeamName teamId={team.id} />}
           </div>
 
           {/* Current Members Section */}

@@ -13,7 +13,6 @@ type RegistrationData = {
     college: string;
     year: string;
     department: string;
-    referralCode?: string;
 };
 
 const completeUserRegistration = withAuth(async (sessionUserId: string, data: RegistrationData, id: string) => {

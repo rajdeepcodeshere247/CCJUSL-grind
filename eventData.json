@@ -113,6 +113,7 @@
     "minMembers": 2,
     "maxMembers": 3,
     "eventPoster": "sherlocked.webp",
+    "eventShortDescription": "Embark on the ML adventure in 'OpenAImer'! Unleash your algorithms, analyse data, and spark innovation!",
     "eventDescription": [
       "Welcome to Sherlocked, a thrilling battle of intellect where participants must unravel encrypted secrets, decode perplexing ciphers, and expose concealed truths to solve a gripping murder mystery across 2 intense rounds. This challenge will push your analytical thinking, logical reasoning, and technical expertise to their limits in a world full of digital deception."
     ],
@@ -156,7 +157,7 @@
     ],
     "minMembers": 3,
     "maxMembers": 4,
-    "eventPoster": "hack.webp",
+    "eventPoster": "hackforge.webp",
     "eventShortDescription": "Embark on the ML adventure in 'OpenAImer'! Unleash your algorithms, analyse data, and spark innovation!",
     "eventDescription": [
       "Welcome to HackForge, an electrifying offline hackathon organized by CodeClub JUSL as part of Srijan'25, the annual techno-management fest of Jadavpur University. HackForge is more than just a competition; it’s a place where creativity meets technology, and where participants can push their boundaries, collaborate, and bring groundbreaking ideas to life.",
@@ -200,7 +201,7 @@
     ],
     "minMembers": 3,
     "maxMembers": 4,
-    "eventPoster": "hack.webp",
+    "eventPoster": "hackforge.webp",
     "eventShortDescription": "Embark on the ML adventure in 'OpenAImer'! Unleash your algorithms, analyse data, and spark innovation!",
     "eventDescription": [
       "Welcome to HackForge, an electrifying offline hackathon organized by CodeClub JUSL as part of Srijan'25, the annual techno-management fest of Jadavpur University. HackForge is more than just a competition; it’s a place where creativity meets technology, and where participants can push their boundaries, collaborate, and bring groundbreaking ideas to life.",

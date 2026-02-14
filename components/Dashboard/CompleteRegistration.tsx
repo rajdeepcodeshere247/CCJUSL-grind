@@ -9,21 +9,18 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import z from "zod";
-import Tooltip from "../Tooltip";
-import { Info } from "lucide-react";
 
 const RegistrationSchema = z.object({
   phone: z
     .string()
-    .min(8, "Invalid phone number")
+    .length(10, "Phone number must be 10 digits long")
     .regex(
       /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/,
       "Invalid phone number",
     ),
   college: z.string().min(1, "College is required"),
   year: z.string().min(1, "Year of Study is required"),
-  department: z.string().min(1, "Department is required"),
-  referralCode: z.string(),
+  department: z.string().min(1, "Department is required")
 });
 
 function CompleteRegistration({ id }: { id: string }) {
@@ -39,15 +36,13 @@ function RegistrationForm({ id }: { id: string }) {
     phone: "",
     college: "",
     year: "",
-    department: "",
-    referralCode: "",
+    department: ""
   });
   const [errors, setErrors] = useState({
     phone: "",
     college: "",
     year: "",
-    department: "",
-    referralCode: "",
+    department: ""
   });
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -77,8 +72,7 @@ function RegistrationForm({ id }: { id: string }) {
       phone: "",
       college: "",
       department: "",
-      year: "",
-      referralCode: "",
+      year: ""
     });
     const isValid = RegistrationSchema.safeParse(data);
     if (!isValid.success) {
@@ -178,25 +172,6 @@ function RegistrationForm({ id }: { id: string }) {
           className="w-full border border-white/20 bg-transparent px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
         />
         {errors.year && <p className="text-sm text-red-500">{errors.year}</p>}
-      </div>
-      <div className="relative flex w-full flex-col items-center gap-2 sm:w-1/3 2xl:w-1/4">
-        <div className="absolute top-1/2 -right-8 -translate-y-1/2">
-          <Tooltip message="This is an optional field, in case you have a code given by a Campus Ambassador.">
-            <Info className="flex h-6 w-6 cursor-help items-center justify-center rounded-full text-xs text-white/60 transition-colors hover:text-red-400" />
-          </Tooltip>
-        </div>
-        <input
-          type="text"
-          name="referralCode"
-          placeholder="Referral Code"
-          value={data.referralCode}
-          onChange={(e) => handleChange("referralCode", e.target.value)}
-          className="w-full border border-white/20 bg-transparent px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
-        />
-
-        {errors.referralCode && (
-          <p className="text-sm text-red-500">{errors.referralCode}</p>
-        )}
       </div>
       <button
         type="submit"

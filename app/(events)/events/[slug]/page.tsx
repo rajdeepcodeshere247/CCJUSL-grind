@@ -9,6 +9,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default async function Page({
   params,
@@ -24,38 +25,78 @@ export default async function Page({
     <div className="min-h-screen bg-black">
       {/* Hero Section */}
       <div className="relative overflow-hidden">
-        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="mb-8 text-5xl sm:text-6xl font-bold tracking-tight text-white md:text-8xl">
+            <h1 className="text-5xl font-bold tracking-tight text-white sm:text-6xl md:text-8xl">
               {eventDetails.name}
             </h1>
 
-            <p className="mx-auto mb-10 max-w-4xl text-lg leading-relaxed font-light text-white/80 md:text-xl">
-              {eventDetails.eventShortDescription}
-            </p>
+            <div className="grid sm:grid-cols-2 place-items-center gap-8 py-8">
+              <Image src={`/posters/${eventDetails.eventPoster}`} width={200} height={200} className="h-full w-auto" alt={eventDetails.name} />
+              <div className="flex flex-col items-center gap-10">
+                <p className="mx-auto max-w-4xl text-lg leading-relaxed font-light text-white/80 md:text-xl">
+                  {eventDetails.eventShortDescription}
+                </p>
 
-            {/* Hashtags */}
-            <div className="mb-8 flex flex-wrap justify-center gap-3">
-              {eventDetails.eventHashtags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="inline-flex items-center border border-white/20 px-4 py-2 font-mono text-sm text-white/70 transition-colors hover:border-red-400/50 hover:text-red-400"
-                >
-                  <Hash className="mr-1 h-3 w-3" />
-                  {tag}
-                </span>
-              ))}
-            </div>
+                {/* Hashtags */}
+                <div className="flex flex-wrap justify-center gap-3">
+                  {eventDetails.eventHashtags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="inline-flex items-center border border-white/20 px-4 py-2 font-mono text-sm text-white/70 transition-colors hover:border-red-400/50 hover:text-red-400"
+                    >
+                      <Hash className="mr-1 h-3 w-3" />
+                      {tag}
+                    </span>
+                  ))}
+                </div>
 
-            {/* Registration Status */}
-            {eventDetails.registrationOpen ? (
-              <Link href={`/eventRegistration/${slug}`} className="border border-red-400/30 text-red-400 px-6 py-3">Register</Link>
-            ) : (
-              <div className="inline-flex items-center border border-red-400/30 px-6 py-3 text-sm tracking-wide text-red-400">
-                <AlertCircle className="mr-2 h-4 w-4" />
-                REGISTRATION CLOSED
+                {/* Registration Status */}
+                {eventDetails.registrationOpen ? (
+                  <Link
+                    href={`/eventRegistration/${slug}`}
+                    className="border border-red-400 px-6 py-3 text-xl text-red-400 lg:text-2xl 2xl:text-3xl"
+                  >
+                    Register
+                  </Link>
+                ) : (
+                  <div className="inline-flex items-center border border-red-400/30 px-6 py-3 text-sm tracking-wide text-red-400">
+                    <AlertCircle className="mr-2 h-4 w-4" />
+                    REGISTRATION CLOSED
+                  </div>
+                )}
+                {/* Event Dates */}
+            <div className="border border-white/10 p-6 w-4/5">
+              <h3 className="mb-6 flex items-center text-lg font-bold tracking-wide text-white">
+                <Calendar className="mr-3 h-5 w-5 text-red-400" />
+                EVENT SCHEDULE
+              </h3>
+              <div className="space-y-5">
+                <div>
+                  <p className="mb-3 font-mono text-xs tracking-wider text-red-400">
+                    PRELIMINARIES
+                  </p>
+                  {eventDetails.eventDate.prelims.map((date, index) => (
+                    <p
+                      key={index}
+                      className="border-l-2 border-white/20 py-2 pl-4 text-sm font-light text-white/70"
+                    >
+                      {date}
+                    </p>
+                  ))}
+                </div>
+                <div>
+                  <p className="mb-3 font-mono text-xs tracking-wider text-red-400">
+                    FINALS
+                  </p>
+                  <p className="border-l-2 border-white/20 py-2 pl-4 text-sm font-light text-white/70">
+                    {eventDetails.eventDate.finals}
+                  </p>
+                </div>
               </div>
-            )}
+            </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -99,37 +140,6 @@ export default async function Page({
 
           {/* Right Column - Event Details */}
           <div className="space-y-8">
-            {/* Event Dates */}
-            <div className="border border-white/10 p-6">
-              <h3 className="mb-6 flex items-center text-lg font-bold tracking-wide text-white">
-                <Calendar className="mr-3 h-5 w-5 text-red-400" />
-                EVENT SCHEDULE
-              </h3>
-              <div className="space-y-5">
-                <div>
-                  <p className="mb-3 font-mono text-xs tracking-wider text-red-400">
-                    PRELIMINARIES
-                  </p>
-                  {eventDetails.eventDate.prelims.map((date, index) => (
-                    <p
-                      key={index}
-                      className="border-l-2 border-white/20 py-2 pl-4 text-sm font-light text-white/70"
-                    >
-                      {date}
-                    </p>
-                  ))}
-                </div>
-                <div>
-                  <p className="mb-3 font-mono text-xs tracking-wider text-red-400">
-                    FINALS
-                  </p>
-                  <p className="border-l-2 border-white/20 py-2 pl-4 text-sm font-light text-white/70">
-                    {eventDetails.eventDate.finals}
-                  </p>
-                </div>
-              </div>
-            </div>
-
             {/* Team Size */}
             <div className="border border-white/10 p-6">
               <h3 className="mb-6 flex items-center text-lg font-bold tracking-wide text-white">
@@ -139,7 +149,9 @@ export default async function Page({
               <div className="border-l-2 border-red-400 py-2 pl-6">
                 <p className="text-center text-white">
                   <span className="mb-2 block text-4xl font-bold text-white">
-                    {eventDetails.minMembers === eventDetails.maxMembers ? `${eventDetails.minMembers}` : `${eventDetails.minMembers} - ${eventDetails.maxMembers}`}
+                    {eventDetails.minMembers === eventDetails.maxMembers
+                      ? `${eventDetails.minMembers}`
+                      : `${eventDetails.minMembers} - ${eventDetails.maxMembers}`}
                   </span>
                   <span className="text-sm tracking-wide text-white/60">
                     MEMBER(S) PER TEAM

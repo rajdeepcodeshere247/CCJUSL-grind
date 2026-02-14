@@ -68,6 +68,9 @@ function Dashboard({ user }: { user: DashboardUser }) {
                 src={user.image}
                 alt="Profile"
                 className="h-full w-full object-cover"
+                referrerPolicy="no-referrer"
+                width={100}
+                height={100}
               />
             ) : (
               <span className="text-6xl font-light text-white/60">

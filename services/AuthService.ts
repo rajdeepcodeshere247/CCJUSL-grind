@@ -175,6 +175,11 @@ const updateRegistrationStatus = withAuth(async () => {
   return res;
 });
 
+const getAuthStatus = async () => {
+  const session = await auth();
+  return session?.user;
+}
+
 export {
   getUserByEmail,
   validateUser,
@@ -185,4 +190,5 @@ export {
   checkRegistrationStatus,
   updateVerification,
   updateRegistrationStatus,
+  getAuthStatus
 };
