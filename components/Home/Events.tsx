@@ -35,7 +35,7 @@ function Events() {
       <h1 className="text-6xl sm:text-8xl font-semibold">EVENTS</h1>
       <ul className="flex w-5/6 flex-col lg:w-4/5 2xl:w-3/5 border-b border-b-gray-400/50">
       {eventData.map(event => (
-        <li key={event.slug} className="grid grid-cols-2 w-full items-center gap-6 border-t border-gray-400/50 p-4 transition-colors duration-300 hover:bg-gray-400/20">
+        <li key={event.slug} className="grid grid-cols-2 w-full items-center gap-6 border-t border-gray-400/50 px-2 py-4 transition-colors duration-300 hover:bg-gray-400/20">
           <div className="flex flex-col gap-2">
             <h3 className="text-2xl sm:text-3xl font-semibold">{event.name}</h3>
             <p className="text-red-400">{event.type}</p>

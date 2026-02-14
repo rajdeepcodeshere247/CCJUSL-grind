@@ -26,7 +26,7 @@ export default async function Page({
       <div className="relative overflow-hidden">
         <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="mb-8 text-6xl font-bold tracking-tight text-white md:text-8xl">
+            <h1 className="mb-8 text-5xl sm:text-6xl font-bold tracking-tight text-white md:text-8xl">
               {eventDetails.name}
             </h1>
 
