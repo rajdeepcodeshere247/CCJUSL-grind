@@ -160,6 +160,21 @@ const resetPassword = async (
     }
 };
 
+const editUserDetails = withAuth(async (sessionUserId: string, newDetails: {name: string, college: string, department: string, year: string, phone: string}) => {
+    try{
+        await prisma.user.update({
+            where: {
+                id: sessionUserId
+            },
+            data: newDetails
+        });
+        return {ok: true, message: "Details updated succesfully"};
+    }catch(err){
+        console.error("Error while updating user details - ", err);
+        return {ok: false, message: "Error occurred - failed to edit details"};
+    }
+});
+
 export {
     completeUserRegistration,
     matchVerificationCode,
@@ -167,4 +182,5 @@ export {
     handleForgotPassword,
     verifyPasswordResetToken,
     resetPassword,
+    editUserDetails
 };

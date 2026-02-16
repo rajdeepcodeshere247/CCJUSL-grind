@@ -25,7 +25,7 @@ function Navbar({ fromLayout = false }) {
           <Image
             height={100}
             width={100}
-            src={"/ccjusl-logo.png"}
+            src={"/images/ccjusl-logo.png"}
             alt="CCJUSL Logo"
           />
         </Link>

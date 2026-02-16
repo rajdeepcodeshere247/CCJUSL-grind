@@ -21,7 +21,7 @@ export default async function Page({
   if (!event) return <NotFound />;
 
   const user = await checkAuthentication(`/eventRegistration/${slug}`);
-  const registrationStatus = await getRegistrationStatus(user.id, event);
+  const registrationStatus = await getRegistrationStatus(user.id, event.slug);
 
   if (registrationStatus.status === RegistrationStatus.REGISTERED)
     return (

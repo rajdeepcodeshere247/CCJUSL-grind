@@ -48,44 +48,51 @@ export const ConfirmationDialogContextProvider = ({
   return (
     <ConfirmationDialogContext.Provider value={{ showDialog: handleShow }}>
       {children}
-      <div className="fixed h-screen w-screen -z-10">
+      <div className="fixed -z-10 h-screen w-screen">
         <dialog
-  ref={dialogRef}
-  className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-300 backdrop:bg-black/80 w-full sm:w-1/3 bg-black border border-white/20 p-0"
->
-  <div className="flex flex-col items-center gap-6 px-8 py-8">
-    {/* Header with decoration */}
-    <div className="w-full flex items-center justify-center gap-4 text-white/40 text-xs tracking-widest font-mono">
-      <div className="h-px w-12 bg-white/20"></div>
-      <span>CONFIRM ACTION</span>
-      <div className="h-px w-12 bg-white/20"></div>
-    </div>
-
-    <h3 className="text-2xl font-bold tracking-tight text-white uppercase">
-      Confirmation
-    </h3>
-    
-    <p className="text-white/70 text-center font-light leading-relaxed">{text}</p>
-    
-    <div className="flex w-full gap-4 border-t border-white/10 pt-6">
-      <button
-        onClick={() => {
-          handleConfirm();
-          dialogRef.current?.close();
+          ref={dialogRef} onClick={(e) => {
+          // Close modal when clicking on backdrop
+          if (e.target === dialogRef.current) {
+            dialogRef.current.close();
+          }
         }}
-        className="flex-1 border border-red-400 px-6 py-3 outline-none hover:bg-red-400 hover:text-black transition-all uppercase tracking-wider text-sm font-bold text-white"
-      >
-        Yes
-      </button>
-      <button
-        onClick={handleCancel}
-        className="flex-1 border border-white/30 px-6 py-3 outline-none hover:bg-white/10 transition-all uppercase tracking-wider text-sm font-bold text-white"
-      >
-        Cancel
-      </button>
-    </div>
-  </div>
-</dialog>
+          className="fixed top-1/2 left-1/2 z-300 w-full -translate-x-1/2 -translate-y-1/2 border border-white/20 bg-black p-0 backdrop:bg-black/80 sm:w-1/3"
+        >
+          <div className="flex flex-col items-center gap-6 px-8 py-8">
+            {/* Header with decoration */}
+            <div className="flex w-full items-center justify-center gap-4 font-mono text-xs tracking-widest text-white/40">
+              <div className="h-px w-12 bg-white/20"></div>
+              <span>CONFIRM ACTION</span>
+              <div className="h-px w-12 bg-white/20"></div>
+            </div>
+
+            <h3 className="text-2xl font-bold tracking-tight text-white uppercase">
+              Confirmation
+            </h3>
+
+            <p className="text-center leading-relaxed font-light text-white/70">
+              {text}
+            </p>
+
+            <div className="flex w-full gap-4 border-t border-white/10 pt-6">
+              <button
+                onClick={() => {
+                  handleConfirm();
+                  dialogRef.current?.close();
+                }}
+                className="flex-1 border border-red-400 px-6 py-3 text-sm font-bold tracking-wider text-white uppercase transition-all outline-none hover:bg-red-400 hover:text-black"
+              >
+                Yes
+              </button>
+              <button
+                onClick={handleCancel}
+                className="flex-1 border border-white/30 px-6 py-3 text-sm font-bold tracking-wider text-white uppercase transition-all outline-none hover:bg-white/10"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </dialog>
       </div>
     </ConfirmationDialogContext.Provider>
   );

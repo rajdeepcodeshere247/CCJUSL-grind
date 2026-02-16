@@ -8,7 +8,7 @@ import { withAuth } from "@/utils/withAuth";
 import { signOut } from "@/auth";
 
 const getRegistrationStatus = withAuth(
-  async (sessionUserId: string, userId: string, event: Event) => {
+  async (sessionUserId: string, userId: string, eventSlug: string) => {
     try {
       if (sessionUserId !== userId) {
         signOut({
@@ -19,7 +19,7 @@ const getRegistrationStatus = withAuth(
 
       const team = await prisma.team.findFirst({
         where: {
-          eventSlug: event.slug,
+          eventSlug,
           memberIds: {
             has: userId,
           },
@@ -43,7 +43,7 @@ const getRegistrationStatus = withAuth(
 
       const pendingTeam = await prisma.team.findFirst({
         where: {
-          eventSlug: event.slug,
+          eventSlug,
           pendingMemberIds: {
             has: userId,
           },

@@ -6,10 +6,10 @@ import {
   Trophy,
   Hash,
   Phone,
-  AlertCircle,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import RegistrationButton from "@/components/Events/RegistrationButton";
 
 export default async function Page({
   params,
@@ -32,7 +32,7 @@ export default async function Page({
             </h1>
 
             <div className="grid sm:grid-cols-2 place-items-center gap-8 py-8">
-              <Image src={`/posters/${eventDetails.eventPoster}`} width={200} height={200} className="h-full w-auto" alt={eventDetails.name} />
+              <Image src={`/images/posters/${eventDetails.eventPoster}`} width={200} height={200} className="h-full w-auto" alt={eventDetails.name} />
               <div className="flex flex-col items-center gap-10">
                 <p className="mx-auto max-w-4xl text-lg leading-relaxed font-light text-white/80 md:text-xl">
                   {eventDetails.eventShortDescription}
@@ -51,21 +51,8 @@ export default async function Page({
                   ))}
                 </div>
 
-                {/* Registration Status */}
-                {eventDetails.registrationOpen ? (
-                  <Link
-                    href={`/eventRegistration/${slug}`}
-                    className="border border-red-400 px-6 py-3 text-xl text-red-400 lg:text-2xl 2xl:text-3xl"
-                  >
-                    Register
-                  </Link>
-                ) : (
-                  <div className="inline-flex items-center border border-red-400/30 px-6 py-3 text-sm tracking-wide text-red-400">
-                    <AlertCircle className="mr-2 h-4 w-4" />
-                    REGISTRATION CLOSED
-                  </div>
-                )}
-                {/* Event Dates */}
+                <RegistrationButton registrationOpen={eventDetails.registrationOpen} slug={slug} />
+
             <div className="border border-white/10 p-6 w-4/5">
               <h3 className="mb-6 flex items-center text-lg font-bold tracking-wide text-white">
                 <Calendar className="mr-3 h-5 w-5 text-red-400" />

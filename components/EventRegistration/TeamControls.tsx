@@ -95,7 +95,12 @@ function EditTeamName({ teamId }: { teamId: string }) {
         Edit Team Name
       </button>
       <dialog
-        ref={dialogRef}
+        ref={dialogRef} onClick={(e) => {
+          // Close modal when clicking on backdrop
+          if (e.target === dialogRef.current) {
+            dialogRef.current.close();
+          }
+        }}
         className="fixed top-1/2 left-1/2 z-300 w-full -translate-x-1/2 -translate-y-1/2 border border-white/20 bg-black p-0 backdrop:bg-black/80 sm:w-1/3"
       >
         <div className="flex flex-col items-center gap-4 p-6 text-white">
