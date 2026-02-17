@@ -14,7 +14,7 @@ async function RegistrationButton({
 }) {
   const user = await getAuthStatus();
   const registrationStatus = user
-    ? await getRegistrationStatus(user.id, slug)
+    ? (await getRegistrationStatus(user.id, slug)).status
     : RegistrationStatus.NOT_REGISTERED;
 
   if (registrationStatus !== RegistrationStatus.NOT_REGISTERED)
