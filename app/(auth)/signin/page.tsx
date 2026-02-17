@@ -63,7 +63,7 @@ function SignInForm() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center gap-8 h-full min-h-[80vh] py-8">
+        <div className="flex flex-col items-center justify-center gap-8 h-full min-h-[80vh] p-8">
             <h1 className="text-5xl font-semibold">
                 Login
             </h1>
@@ -128,7 +128,7 @@ function SignInForm() {
                 </svg>
                 <span>Sign in with Google</span>
             </button>
-            <div className="flex justify-between gap-x-8">
+            <div className="flex justify-between gap-x-8 text-sm sm:text-base">
                 <p>Don&apos;t have an account?</p>
                 <Link
                     href={"/signup"}

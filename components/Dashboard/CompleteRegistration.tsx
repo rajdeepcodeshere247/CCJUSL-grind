@@ -9,6 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import z from "zod";
+import Loading from "../Loading";
 
 const RegistrationSchema = z.object({
   phone: z
@@ -45,6 +46,7 @@ function RegistrationForm({ id }: { id: string }) {
     department: ""
   });
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get("redirect");
@@ -57,6 +59,8 @@ function RegistrationForm({ id }: { id: string }) {
           else router.refresh();
         });
       }
+    }).finally(() => {
+      setFetching(false);
     });
   }, [id, redirectUrl, router]);
 
@@ -109,9 +113,11 @@ function RegistrationForm({ id }: { id: string }) {
     setLoading(false);
   };
 
+  if(fetching) return <Loading />
+
   return (
     <form
-      className="flex h-full min-h-[80vh] flex-col items-center justify-center gap-6 py-8"
+      className="flex h-full min-h-[80vh] flex-col items-center justify-center gap-6 py-8 px-10"
       onSubmit={(e) => handleSubmit(e)}
     >
       <h1 className="mb-8 text-center text-4xl font-semibold sm:text-5xl">

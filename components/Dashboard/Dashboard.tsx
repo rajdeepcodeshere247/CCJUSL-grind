@@ -10,6 +10,7 @@ import { SERVER_URL } from "@/utils/constants";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { editUserDetails } from "@/services/UserService";
+import EditProfileDialog from "./EditProfileDialog";
 
 type DashboardTeam = {
   id: string;
@@ -47,68 +48,14 @@ const EmptyState = ({ text }: { text: string }) => (
 );
 
 function Dashboard({ user }: { user: DashboardUser }) {
-  const [isLoading, setIsLoading] = useState(false);
-  const dialogRef = useRef<HTMLDialogElement>(null);
   const router = useRouter();
 
   const handleLogout = () => {
     signOut({
-      redirectTo: `${SERVER_URL}/signin`,
-    });
-  };
-
-  // Form state
-  const [formData, setFormData] = useState({
-    name: user.name || "",
-    college: user.college || "",
-    department: user.department || "",
-    year: user.year || "",
-    phone: user.phone || "",
-  });
-
-  const openEditModal = () => {
-    dialogRef.current?.showModal();
-  };
-
-  const closeEditModal = () => {
-    dialogRef.current?.close();
-    setFormData({
-      name: user.name || "",
-      college: user.college || "",
-      department: user.department || "",
-      year: user.year || "",
-      phone: user.phone || "",
-    });
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      const response = await editUserDetails(formData);
-
-      if (!response.ok) {
-        toast.error("Failed to update profile");
-      }else{
-        toast.success("Profile updated successfully!");
-        router.refresh();
-      }
-
-      closeEditModal();
-    } catch{
-      toast.error("Failed to update profile. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+      redirect: false
+    })
+    .then(() => router.push("/signin"))
+    .catch(() => toast.error("Error occurred - failed to sign out"));
   };
 
   return (
@@ -174,12 +121,15 @@ function Dashboard({ user }: { user: DashboardUser }) {
           >
             Logout
           </button>
-          <button
-            onClick={openEditModal}
-            className="cursor-pointer border border-red-400 px-10 py-3 text-sm font-bold tracking-widest whitespace-nowrap uppercase transition-all hover:bg-red-400 hover:text-black"
-          >
-            Edit Profile
-          </button>
+          <EditProfileDialog
+            initialData={{
+              name: user.name || "",
+              college: user.college || "",
+              department: user.department || "",
+              year: user.year || "",
+              phone: user.phone || "",
+            }}
+          />
         </div>
       </div>
 
@@ -274,147 +224,6 @@ function Dashboard({ user }: { user: DashboardUser }) {
           ))}
         </div>
       </div>
-    
-      <dialog
-        ref={dialogRef}
-        className="fixed top-1/2 left-1/2 z-300 m-0 w-full max-w-2xl -translate-x-1/2 -translate-y-1/2 border border-white/20 bg-black p-0 backdrop:bg-black/80"
-        onClick={(e) => {
-          // Close modal when clicking on backdrop
-          if (e.target === dialogRef.current) {
-            closeEditModal();
-          }
-        }}
-      >
-        <div className="flex flex-col gap-8 px-8 py-8">
-          {/* Header */}
-          <div className="flex w-full items-center justify-center gap-4 font-mono text-xs tracking-widest text-white/40">
-            <div className="h-px w-12 bg-white/20"></div>
-            <span>EDIT PROFILE</span>
-            <div className="h-px w-12 bg-white/20"></div>
-          </div>
-
-          <h3 className="text-center text-2xl font-bold tracking-tight text-white uppercase">
-            Update Information
-          </h3>
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-4">
-              <div>
-                <label
-                  htmlFor="name"
-                  className="mb-2 block font-mono text-xs tracking-widest text-white/50 uppercase"
-                >
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="w-full border border-white/20 bg-transparent px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
-                  placeholder="ENTER YOUR NAME"
-                />
-              </div>
-              {/* College */}
-              <div>
-                <label
-                  htmlFor="college"
-                  className="mb-2 block font-mono text-xs tracking-widest text-white/50 uppercase"
-                >
-                  College
-                </label>
-                <input
-                  type="text"
-                  id="college"
-                  name="college"
-                  value={formData.college}
-                  onChange={handleInputChange}
-                  className="w-full border border-white/20 bg-transparent px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
-                  placeholder="ENTER COLLEGE NAME"
-                />
-              </div>
-
-              {/* Department */}
-              <div>
-                <label
-                  htmlFor="department"
-                  className="mb-2 block font-mono text-xs tracking-widest text-white/50 uppercase"
-                >
-                  Department
-                </label>
-                <input
-                  type="text"
-                  id="department"
-                  name="department"
-                  value={formData.department}
-                  onChange={handleInputChange}
-                  className="w-full border border-white/20 bg-transparent px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
-                  placeholder="ENTER DEPARTMENT"
-                />
-              </div>
-
-              {/* Year */}
-              <div>
-                <label
-                  htmlFor="year"
-                  className="mb-2 block font-mono text-xs tracking-widest text-white/50 uppercase"
-                >
-                  Graduation Year
-                </label>
-                <input
-                  type="text"
-                  id="year"
-                  name="year"
-                  value={formData.year}
-                  onChange={handleInputChange}
-                  className="w-full border border-white/20 bg-transparent px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
-                  placeholder="ENTER YEAR (e.g., 2025)"
-                />
-              </div>
-
-              {/* Phone */}
-              <div>
-                <label
-                  htmlFor="phone"
-                  className="mb-2 block font-mono text-xs tracking-widest text-white/50 uppercase"
-                >
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className="w-full border border-white/20 bg-transparent px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
-                  placeholder="ENTER PHONE NUMBER"
-                />
-              </div>
-            </div>
-
-            {/* Buttons */}
-            <div className="flex gap-4 border-t border-white/10 pt-6">
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="flex-1 border border-red-400 px-6 py-3 text-sm font-bold tracking-wider text-white uppercase transition-all outline-none hover:bg-red-400 hover:text-black disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {isLoading ? "SAVING..." : "SAVE CHANGES"}
-              </button>
-              <button
-                type="button"
-                onClick={closeEditModal}
-                disabled={isLoading}
-                className="flex-1 border border-white/30 px-6 py-3 text-sm font-bold tracking-wider text-white uppercase transition-all outline-none hover:bg-white/10 disabled:opacity-50"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      </dialog>
     </div>
   );
 }

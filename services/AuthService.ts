@@ -9,10 +9,11 @@ import { CONST, SERVER_URL } from "@/utils/constants";
 import { AuthError } from "next-auth";
 import { UserRole } from "@prisma/client";
 import { withAuth } from "@/utils/withAuth";
+import z from "zod";
 
 const getUserByEmail = async (email: string | null) => {
   if (!email) return null;
-  const user = await prisma.user.findUnique({ 
+  const user = await prisma.user.findUnique({
     where: { email },
     include: {
       teams: {
@@ -20,23 +21,26 @@ const getUserByEmail = async (email: string | null) => {
           id: true,
           name: true,
           eventSlug: true,
-          event: true
-        }
+          event: true,
+        },
       },
       pendingTeams: {
         select: {
           id: true,
           name: true,
           eventSlug: true,
-          event: true
-        }
-      }
-    }
-   });
+          event: true,
+        },
+      },
+    },
+  });
   return user;
 };
 
-const validateUser = async (existingPassword: string | null, password: string) => {
+const validateUser = async (
+  existingPassword: string | null,
+  password: string,
+) => {
   if (!existingPassword) return false;
 
   const passwordMatch = await bcrypt.compare(password, existingPassword);
@@ -46,48 +50,77 @@ const validateUser = async (existingPassword: string | null, password: string) =
 };
 
 const handleSignin = async (email: string, password: string) => {
-  if(!email || !password) return {ok: false, message: "Email and password required"};
-  try{
-    await signIn("credentials",{
+  if (!email || !password)
+    return { ok: false, message: "Email and password required" };
+  try {
+    await signIn("credentials", {
       email,
       password,
-      redirect: false
+      redirect: false,
     });
-    return {ok: true, message: "Login successful"};
-  }catch(err){
+    return { ok: true, message: "Login successful" };
+  } catch (err) {
     console.error(err);
-    if(err instanceof AuthError && err.type === "CredentialsSignin")
-      return {ok: false, message: "Invalid credentials"};
-    else
-      return {ok: false, message: "Error in login"};
+    if (err instanceof AuthError && err.type === "CredentialsSignin")
+      return { ok: false, message: "Invalid credentials" };
+    else return { ok: false, message: "Error in login" };
+  }
+};
+
+interface TurnstileResponse {
+  success: boolean;
+  "error-codes"?: string[];
+  challenge_ts?: string;
+  hostname?: string;
+  action?: string;
+}
+
+const verifyTurnstileToken = async (token: string) => {
+  if(!token) return false;
+  try{
+    const response = await fetch(CONST.turnstile.VERIFICATION_URL, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        secret: CONST.turnstile.SECRET,
+        response: token
+      })
+    });
+    const data = await response.json() as TurnstileResponse;
+    if(!data.success) console.error("Error while validatin turnstile token: ", data["error-codes"]);
+    if(data.hostname !== SERVER_URL){
+      console.error("Invalid turnstile hostname: ", data.hostname);
+      return false;
+    }
+    return data.success;
+  }catch(err){
+    console.error("Error while validating turnstile token: ", err);
   }
 }
 
-const verifyCaptchaToken = async (token: string | null) => {
-  if (!token) return false;
-
-  const captchaBody = new URLSearchParams([
-    ["secret", CONST.hcaptcha.SECRET || ""],
-    ["response", token],
-    ["sitekey", CONST.hcaptcha.SITEKEY || ""],
-  ]);
-
-  const captchaResponse = await fetch(CONST.hcaptcha.VERIFICATION_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: captchaBody.toString(),
-  });
-
-  if(!captchaResponse.ok) return false;
-  const captchaStatus = await captchaResponse.json();
-  return captchaStatus.success;
-};
-
-const signup = async (user: User, hCaptchaToken: string | null) => {
+const signup = async (user: User, turnstileToken: string) => {
   try {
-    const validCaptcha = await verifyCaptchaToken(hCaptchaToken);
+    const UserSchema = z
+      .object({
+        name: z.string().min(1, "Name is required"),
+        email: z.email("Invalid email"),
+        password: z
+          .string()
+          .regex(
+            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+            "Weak Password",
+          ),
+        confirmPassword: z.string(),
+        
+      })
+      .refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords don't match",
+        path: ["confirmPassword"],
+      });
+    const isValid = UserSchema.safeParse(user);
+    if (!isValid) return { ok: false, message: "Invalid data" };
+
+    const validCaptcha = await verifyTurnstileToken(turnstileToken);
     if (!validCaptcha)
       return { ok: false, message: "Captcha Verification Failed" };
 
@@ -104,22 +137,25 @@ const signup = async (user: User, hCaptchaToken: string | null) => {
       registrationComplete: false,
       emailVerified: null,
       image: null,
-      role: UserRole.USER
-    }
+      role: UserRole.USER,
+    };
 
     await prisma.user.create({ data: newUser });
-    
-    try{
+
+    try {
       await signIn("credentials", {
         email: user.email,
         password: user.password,
-        redirect: false
+        redirect: false,
       });
-    }catch(err){
+    } catch (err) {
       console.error(err);
-      return {ok: false, message: "Error in login after signup, please login manually"};
+      return {
+        ok: false,
+        message: "Error in login after signup, please login manually",
+      };
     }
-  
+
     return { ok: true, message: "Signup successful" };
   } catch (err) {
     console.error(err);
@@ -133,11 +169,10 @@ const checkAuthentication = async (redirectUrl = "") => {
   if (!session || !session.user || !session.user.id)
     redirect(`/signin?redirect=${encodedRedirectUrl}`);
 
-  if(redirectUrl.indexOf("dashboard") !== -1) return session.user;
+  if (redirectUrl.indexOf("dashboard") !== -1) return session.user;
 
-  if(!session.user.emailVerified || !session.user.registrationComplete)
-      redirect(`/dashboard?redirect=${encodedRedirectUrl}`);
-  
+  if (!session.user.emailVerified || !session.user.registrationComplete)
+    redirect(`/dashboard?redirect=${encodedRedirectUrl}`);
 
   return session.user;
 };
@@ -178,17 +213,18 @@ const updateRegistrationStatus = withAuth(async () => {
 const getAuthStatus = async () => {
   const session = await auth();
   return session?.user;
-}
+};
 
 export {
   getUserByEmail,
   validateUser,
   handleSignin,
+  verifyTurnstileToken,
   signup,
   checkAuthentication,
   checkAdminAuthorization,
   checkRegistrationStatus,
   updateVerification,
   updateRegistrationStatus,
-  getAuthStatus
+  getAuthStatus,
 };

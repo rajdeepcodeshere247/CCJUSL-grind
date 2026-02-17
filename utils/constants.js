@@ -1,10 +1,10 @@
 export const SERVER_URL = process.env.SERVER_URL ?? "http://localhost:3000";
 
 export const CONST = {
-    hcaptcha: {
-        SITEKEY: process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY,
-        SECRET: process.env.HCAPTCHA_SECRET,
-        VERIFICATION_URL: "https://api.hcaptcha.com/siteverify"
+    turnstile: {
+        SITEKEY: process.env.NEXT_PUBLIC_TURNSTILE_SITEKEY,
+        SECRET: process.env.TURNSTILE_SECRET,
+        VERIFICATION_URL: "https://challenges.cloudflare.com/turnstile/v0/siteverify"
     },
     email: {
         USER: process.env.SMTP_USER,

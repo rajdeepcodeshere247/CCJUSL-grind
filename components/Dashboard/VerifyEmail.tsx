@@ -6,11 +6,13 @@ import React, { useEffect, useState } from "react";
 import { User } from "@/types/user";
 import { checkRegistrationStatus, updateVerification } from "@/services/AuthService";
 import toast from "react-hot-toast";
+import Loading from "../Loading";
 
 function VerifyEmail({ user }: { user: User }) {
   const email = user.email;
   const [code, setCode] = useState("");
   const [codeSent, setCodeSent] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -20,7 +22,7 @@ function VerifyEmail({ user }: { user: User }) {
           router.refresh();
         });
       }
-    });
+    }).finally(() => setFetching(false));
   }, [user.id, router]);
 
   const handleSubmit = () => {
@@ -56,8 +58,10 @@ function VerifyEmail({ user }: { user: User }) {
       });
   };
 
+  if(fetching) return <Loading />
+
   return (
-    <div className="flex flex-col items-center justify-center gap-8 h-full min-h-[80vh]">
+    <div className="flex flex-col items-center justify-center gap-8 h-full min-h-[80vh] px-10">
       <div className="flex items-center justify-center gap-4 text-white/40 text-xs tracking-widest font-mono">
           <div className="h-px w-16 bg-white/20"></div>
           <span>EMAIL VERIFICATION</span>

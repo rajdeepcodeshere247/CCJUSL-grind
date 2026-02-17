@@ -774,13 +774,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hcaptcha/react-hcaptcha@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@hcaptcha/react-hcaptcha@npm:2.0.2"
-  checksum: 10c0/f817109ae388022c56ad9bfb64176d3443db8965a344c2d6112f9c8e3e1855667a2d6b0b32f634cafdb1f950a92c73712b690447d0c3a19968721afb1a505d59
-  languageName: node
-  linkType: hard
-
 "@humanfs/core@npm:^0.19.1":
   version: 0.19.1
   resolution: "@humanfs/core@npm:0.19.1"
@@ -2652,7 +2645,6 @@ __metadata:
   dependencies:
     "@auth/prisma-adapter": "npm:^2.11.1"
     "@eslint/eslintrc": "npm:^3"
-    "@hcaptcha/react-hcaptcha": "npm:^2.0.2"
     "@prisma/client": "npm:6.19"
     "@tailwindcss/postcss": "npm:^4.1.18"
     "@types/node": "npm:^20"

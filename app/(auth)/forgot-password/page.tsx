@@ -2,8 +2,9 @@
 
 import Tooltip from "@/components/Tooltip";
 import { handleForgotPassword } from "@/services/UserService";
+import { CONST } from "@/utils/constants";
 import { Info } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import z from "zod";
 
@@ -11,8 +12,32 @@ function Page() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    script.async = true;
+    document.head.appendChild(script);
+
+    return () => {
+      const existingScript = document.querySelector(
+        'script[src="https://challenges.cloudflare.com/turnstile/v0/api.js"]',
+      );
+      if (existingScript) document.head.removeChild(existingScript);
+    };
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const token = formData.get("cf-turnstile-response");
+
+    if (!token) {
+      toast.error("Captcha Verification failed");
+      return;
+    }
+
     const emailSchema = z.email();
     const isValid = emailSchema.safeParse(email);
     if (!isValid.success) {
@@ -20,7 +45,7 @@ function Page() {
       setLoading(false);
       return;
     }
-    handleForgotPassword(email)
+    handleForgotPassword(email, token as string)
       .then(() => {
         toast("Please check your email for further instructions");
         setTimeout(
@@ -35,7 +60,10 @@ function Page() {
       });
   };
   return (
-    <div className="flex h-full min-h-[80vh] flex-col items-center justify-center gap-10 px-4">
+    <form
+      className="flex h-full min-h-[80vh] flex-col items-center justify-center gap-10 px-4"
+      onSubmit={(e) => handleSubmit(e)}
+    >
       {/* Title with timeline decoration */}
       <div className="space-y-6 text-center">
         <div className="flex items-center justify-center gap-4 font-mono text-xs tracking-widest text-white/40">
@@ -67,11 +95,19 @@ function Page() {
         />
       </div>
 
+      <div
+        className="cf-turnstile"
+        data-sitekey={CONST.turnstile.SITEKEY}
+        data-theme="dark"
+        data-size="normal"
+        data-callback="handleCaptchaVerification"
+      ></div>
+
       {/* Submit Button */}
       <div className="relative">
         <button
+          type="submit"
           className="border border-red-400 px-8 py-3 text-sm tracking-wide text-white transition-colors hover:bg-red-400/30 disabled:cursor-not-allowed disabled:opacity-50"
-          onClick={() => handleSubmit()}
           disabled={loading}
         >
           {loading ? "SENDING..." : "SEND EMAIL"}
@@ -85,7 +121,7 @@ function Page() {
           </div>
         )}
       </div>
-    </div>
+    </form>
   );
 }
 

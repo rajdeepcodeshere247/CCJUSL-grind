@@ -1,23 +1,15 @@
 "use client";
 import { signup } from "@/services/AuthService";
-import { HCaptchaProvider, useHCaptcha } from "@hcaptcha/react-hcaptcha/hooks";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
 import { CONST } from "@/utils/constants";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import z from "zod";
 import Tooltip from "@/components/Tooltip";
 import { Info } from "lucide-react";
-
-function Page() {
-  return (
-    <HCaptchaProvider sitekey={CONST.hcaptcha.SITEKEY} size="invisible">
-      <SignUpForm />
-    </HCaptchaProvider>
-  );
-}
 
 const UserSchema = z
   .object({
@@ -36,7 +28,7 @@ const UserSchema = z
     path: ["confirmPassword"],
   });
 
-function SignUpForm() {
+function Page() {
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -50,17 +42,39 @@ function SignUpForm() {
     confirmPassword: "",
   });
   const [loading, setLoading] = useState<boolean>();
-  const { executeInstance } = useHCaptcha();
   const router = useRouter();
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    script.async = true;
+    document.head.appendChild(script);
+
+    return () => {
+      const existingScript = document.querySelector(
+        'script[src="https://challenges.cloudflare.com/turnstile/v0/api.js"]',
+      );
+      if (existingScript) document.head.removeChild(existingScript);
+    };
+  }, []);
 
   const handleUpdate = (value: string, field: string) => {
     setData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setErrors({ name: "", email: "", password: "", confirmPassword: "" });
+
+    const formData = new FormData(e.currentTarget);
+    const token = formData.get("cf-turnstile-response");
+
+    if(!token){
+      toast.error("Captcha Verification failed");
+      return;
+    }
+
     const isValid = UserSchema.safeParse(data);
 
     if (!isValid.success) {
@@ -78,20 +92,15 @@ function SignUpForm() {
     toast.loading("Submitting...");
     setLoading(true);
 
-    executeInstance()
-      .then((hCaptchaToken) => {
-        return signup(
-          {
-            name: data.name,
-            email: data.email,
-            password: data.password,
-            registrationComplete: false,
-            emailVerified: null,
-            image: null,
-          },
-          hCaptchaToken ?? null,
-        );
-      })
+    signup({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        registrationComplete: false,
+        emailVerified: null,
+      },
+      token as string,
+    )
       .then((res) => {
         toast.dismiss();
         if (res.ok) {
@@ -121,9 +130,9 @@ function SignUpForm() {
   };
 
   return (
-    <div className="flex h-full min-h-[80vh] flex-col items-center justify-center gap-8 py-8">
+    <div className="flex h-full min-h-[80vh] flex-col items-center justify-center gap-8 px-10 py-8">
       <h1 className="text-5xl font-semibold">Sign Up</h1>
-      <div className="flex w-full flex-col items-center gap-4">
+      <form className="flex w-full flex-col items-center gap-4" onSubmit={(e) => handleSubmit(e)}>
         <div className="flex w-full flex-col items-center gap-2">
           <input
             type="text"
@@ -176,15 +185,21 @@ function SignUpForm() {
 
           <p className="text-sm text-red-500">{errors.confirmPassword}</p>
         </div>
+        <div
+          className="cf-turnstile"
+          data-sitekey={CONST.turnstile.SITEKEY}
+          data-theme="dark"
+          data-size="normal"
+          data-callback="handleCaptchaVerification"
+        ></div>
         <button
           type="submit"
-          onClick={(e) => handleSubmit(e)}
           className="border border-red-400 px-8 py-3 tracking-wide text-white transition-colors hover:bg-red-400/30 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={loading}
         >
           Sign Up
         </button>
-      </div>
+      </form>
       <div className="flex w-full items-center justify-between gap-6 sm:w-2/5">
         <div className="h-px w-full bg-red-400"></div>
         <p>OR</p>
@@ -224,7 +239,7 @@ function SignUpForm() {
         </svg>
         <span>Sign up with Google</span>
       </button>
-      <div className="flex justify-between gap-x-8">
+      <div className="flex justify-between gap-x-8 text-sm sm:text-base">
         <p>Already have an account?</p>
         <Link href={"/signin"} className="underline underline-offset-4">
           Sign In
@@ -232,6 +247,12 @@ function SignUpForm() {
       </div>
     </div>
   );
+}
+
+export function PreloadResources() {
+  ReactDOM.preconnect("https://challenges.cloudflare.com");
+
+  return "...";
 }
 
 export default Page;
