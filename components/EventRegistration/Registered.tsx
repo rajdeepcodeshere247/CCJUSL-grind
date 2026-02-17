@@ -38,7 +38,7 @@ function Registered({
             <h4 className="text-2xl font-bold tracking-tight text-white">
               {team?.name}
             </h4>
-            {isTeamLead && <EditTeamName teamId={team.id} />}
+            {(isTeamLead && event.registrationsOpen) && <EditTeamName teamId={team.id} />}
           </div>
 
           {/* Current Members Section */}
@@ -82,7 +82,7 @@ function Registered({
                     </p>
                   </div>
                 </div>
-                {isTeamLead && member.id !== team.leader && (
+                {(isTeamLead && member.id !== team.leader && event.registrationsOpen) && (
                   <div className="border-t border-white/10 px-4 py-3">
                     <MemberControls
                       memberId={member.id!}
@@ -130,7 +130,7 @@ function Registered({
                       </p>
                     </div>
                   </div>
-                  {isTeamLead && (
+                  {(isTeamLead && event.registrationsOpen) && (
                     <div className="border-t border-white/10 px-4 py-3">
                       <PendingMemberControls
                         memberId={member.id!}
@@ -199,7 +199,7 @@ function Registered({
             {isTeamLead ? (
               <TeamControls team={team} event={event} />
             ) : (
-              <LeaveTeam teamId={team.id} id={user.id} />
+              <LeaveTeam teamId={team.id} id={user.id} registrationsOpen={event.registrationsOpen} />
             )}
           </div>
         </div>

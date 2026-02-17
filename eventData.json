@@ -14,7 +14,7 @@
       "ai",
       "openaimer"
     ],
-    "registrationOpen": false,
+    "registrationOpen": true,
     "eventCoordinators": [
       "John Doe [9898989898]",
       "John Doe [9898989898]",
@@ -56,7 +56,7 @@
       "ai",
       "openaimer"
     ],
-    "registrationOpen": false,
+    "registrationOpen": true,
     "eventCoordinators": [
       "John Doe [9898989898]",
       "John Doe [9898989898]",
@@ -144,7 +144,7 @@
       "ai",
       "openaimer"
     ],
-    "registrationOpen": false,
+    "registrationOpen": true,
     "eventCoordinators": [
       "John Doe [9898989898]",
       "John Doe [9898989898]",
@@ -188,7 +188,7 @@
       "ai",
       "openaimer"
     ],
-    "registrationOpen": false,
+    "registrationOpen": true,
     "eventCoordinators": [
       "John Doe [9898989898]",
       "John Doe [9898989898]",

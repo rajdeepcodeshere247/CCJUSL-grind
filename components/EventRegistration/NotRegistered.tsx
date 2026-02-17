@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { createTeam, joinTeam } from "@/services/EventsService";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 function NotRegistered({ user, event }: { user: SessionUser; event: Event }) {
   const searchParams = useSearchParams();
@@ -40,6 +41,35 @@ function NotRegistered({ user, event }: { user: SessionUser; event: Event }) {
         setLoading(false);
       });
   };
+
+  if (!event.registrationsOpen)
+    return (
+      <div className="flex h-full min-h-[80vh] flex-col items-center justify-center gap-8 p-4">
+        <div className="flex items-center justify-center gap-4 font-mono text-xs tracking-widest text-white/40">
+        <div className="h-px w-16 bg-white/20"></div>
+        <span>REGISTRATIONS CLOSED</span>
+        <div className="h-px w-16 bg-white/20"></div>
+      </div>
+        <h1 className="mt-4 text-4xl font-bold tracking-tight text-white sm:text-6xl">
+          {event.name}
+        </h1>
+        <h2 className="text-center">We are no longer accepting registrations for this event.</h2>
+        <div className="flex flex-col sm:flex-row gap-8 justify-between sm:w-1/3">
+        <Link
+        href={`/events/${event.slug}`}
+        className="mt-4 border border-red-400 px-10 py-3 text-sm font-bold tracking-widest text-white uppercase transition-all hover:bg-red-400 hover:text-black"
+      >
+        Return to event page
+      </Link>
+      <Link
+        href="/#events"
+        className="mt-4 border border-red-400 px-10 py-3 text-sm font-bold tracking-widest text-white uppercase transition-all hover:bg-red-400 hover:text-black"
+      >
+        Explore other events
+      </Link>
+        </div>
+      </div>
+    );
 
   return (
     <div className="flex h-full min-h-[80vh] flex-col items-center justify-center gap-8 p-4">

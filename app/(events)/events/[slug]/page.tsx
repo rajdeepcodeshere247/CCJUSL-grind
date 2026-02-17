@@ -200,7 +200,7 @@ export default async function Page({
           <Link href={"/#events"}>Events</Link>
         </nav>
       </footer>
-      <p className="w-full border-t border-t-gray-300/50 py-3 text-center text-sm uppercase">
+      <p className="w-full border-t border-t-gray-300/50 py-3 text-center text-xs uppercase">
         &copy; 2025 - CodeClub JUSL. All rights reserved.
       </p>
     </div>

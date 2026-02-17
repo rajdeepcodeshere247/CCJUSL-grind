@@ -13,7 +13,8 @@ function TeamControls({ team, event }: { team: Team; event: Event }) {
   const modalContext = useConfirmationDialogContext();
   const router = useRouter();
 
-  const whatsappMessage = encodeURIComponent(`Join me for ${event.name} at Srijan 2026!
+  const whatsappMessage =
+    encodeURIComponent(`Join me for ${event.name} at Srijan 2026!
 
 Go to ${SERVER_URL}/eventRegistration/${event.slug} and use this code - *${team.joiningCode}*
 
@@ -55,17 +56,23 @@ or, click on this link - ${SERVER_URL}/eventRegistration/${event.slug}?joiningCo
               Copy
             </button>
           </div>
-          <Link href={`https://api.whatsapp.com/send?text=${whatsappMessage}`} target="_blank" className="border border-green-400 px-4 py-2 transition-colors duration-300 hover:bg-green-400/30">
+          <Link
+            href={`https://api.whatsapp.com/send?text=${whatsappMessage}`}
+            target="_blank"
+            className="border border-green-400 px-4 py-2 transition-colors duration-300 hover:bg-green-400/30"
+          >
             Share on Whatsapp
           </Link>
         </div>
       )}
-      <button
-        className="border border-red-400 px-8 py-3 tracking-wide text-white transition-colors hover:bg-red-400/30 disabled:cursor-not-allowed disabled:opacity-50"
-        onClick={() => handleDeleteTeam()}
-      >
-        Delete Team
-      </button>
+      {event.registrationsOpen && (
+        <button
+          className="border border-red-400 px-8 py-3 tracking-wide text-white transition-colors hover:bg-red-400/30 disabled:cursor-not-allowed disabled:opacity-50"
+          onClick={() => handleDeleteTeam()}
+        >
+          Delete Team
+        </button>
+      )}
     </div>
   );
 }
@@ -95,7 +102,8 @@ function EditTeamName({ teamId }: { teamId: string }) {
         Edit Team Name
       </button>
       <dialog
-        ref={dialogRef} onClick={(e) => {
+        ref={dialogRef}
+        onClick={(e) => {
           // Close modal when clicking on backdrop
           if (e.target === dialogRef.current) {
             dialogRef.current.close();

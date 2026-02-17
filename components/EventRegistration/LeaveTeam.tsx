@@ -6,10 +6,12 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import toast from "react-hot-toast";
 
-function LeaveTeam({ teamId, id }: { teamId: string; id: string }) {
+function LeaveTeam({ teamId, id, registrationsOpen }: { teamId: string; id: string; registrationsOpen: boolean | undefined }) {
     const modalContext = useConfirmationDialogContext();
     const router = useRouter();
 
+    if(!registrationsOpen) return;
+    
     const handleLeaveTeam = () => {
         modalContext.showDialog("Are you sure you want to leave this team?", () => {
             leaveTeam(teamId, id)

@@ -45,7 +45,7 @@ function Contact() {
           <Link href={"/#events"}>Events</Link>
         </nav>
       </footer>
-        <p className="border-t border-t-gray-300/50 text-center w-full py-3 uppercase text-sm">&copy; 2025 - CodeClub JUSL. All rights reserved.</p>
+        <p className="border-t border-t-gray-300/50 text-center w-full py-3 uppercase text-xs">&copy; 2025 - CodeClub JUSL. All rights reserved.</p>
     </div>
   );
 }

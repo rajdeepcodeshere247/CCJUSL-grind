@@ -89,6 +89,7 @@ model Event {
   name       String
   minMembers Int
   maxMembers Int
+  registrationsOpen Boolean @default(true)
 
   teams Team[]
 

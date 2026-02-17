@@ -103,6 +103,7 @@ const getEventFromSlug = async (slug: string) => {
       slug: true,
       minMembers: true,
       maxMembers: true,
+      registrationsOpen: true,
     },
   });
   return event;
@@ -117,8 +118,23 @@ const createTeam = withAuth(
   ) => {
     try {
       if (!event) return { ok: false, message: "Invalid event" };
+      if (!event.registrationsOpen)
+        return { ok: false, message: "Registrations closed" };
+
       if (sessionUserId !== user.id)
         throw new Error("Invalid session - id mismatch");
+
+      // checking database to make sure registrations are open
+      const eventData = await prisma.event.findUnique({
+        where: {
+          id: event.id,
+        },
+        select: {
+          registrationsOpen: true,
+        },
+      });
+      if(!eventData?.registrationsOpen) return {ok: false, message: "Registrations closed"};
+
       const existingTeam = await prisma.team.findFirst({
         where: {
           eventSlug: event.slug,
@@ -196,6 +212,13 @@ const joinTeam = withAuth(
     try {
       if (sessionUserId !== user.id)
         throw new Error("Invalid session - id mismatch");
+
+      if(!event.registrationsOpen) return {ok: false, message: "Registrations closed"};
+
+      // check db to make sure
+      const eventData = await prisma.event.findUnique({where: {id: event.id}, select: {registrationsOpen: true}});
+      if(!eventData?.registrationsOpen) return {ok: false, message: "Registrations closed"};
+
       const existingTeam = await prisma.team.findFirst({
         where: {
           eventSlug: event.slug,

@@ -31,7 +31,7 @@ export default async function Page({
     return (
       <Pending
         teamData={registrationStatus.pendingTeamData}
-        eventName={event.name}
+        eventName={event.name} registrationsOpen={event.registrationsOpen}
         userId={user.id}
       />
     );
