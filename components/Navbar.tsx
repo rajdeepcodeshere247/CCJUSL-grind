@@ -20,17 +20,19 @@ function Navbar({ fromLayout = false }) {
 
   return (
     <div className="font-jetbrains-mono flex w-full justify-center px-6">
-      <div className="flex w-11/12 items-center justify-between border-b border-b-gray-300/50 py-3">
+      <div className="flex w-11/12 items-center justify-between border-b border-b-gray-300/50 py-8">
         <Link href={"/"} className="text-2xl lg:text-5xl">
           <Image
-            height={100}
-            width={100}
-            src={"/images/ccjusl-logo.png"}
+            height={200}
+            width={200}
+            src={"/images/Secondary-Main-Light.png"}
             alt="CCJUSL Logo"
           />
         </Link>
-        <nav className="flex items-center gap-2 uppercase lg:gap-12 lg:text-2xl">
+        <nav className="flex items-center gap-4 uppercase lg:gap-12 lg:text-2xl">
           <Link href={"/#events"}>Events</Link>
+          <Link href={"/team"}>Team</Link>
+          <Link href={"/gallery"}>Gallery</Link>
           {signedIn ? (
             <Link href={"/dashboard"}>Dashboard</Link>
           ) : (

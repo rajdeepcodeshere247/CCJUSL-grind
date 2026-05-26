@@ -4,17 +4,17 @@ import React from "react";
 function Contact() {
   return (
     <div id="contact" className="absolute flex w-full flex-col items-center bg-black p-12 pb-0">
-      <h1 className="text-6xl lg:text-8xl font-bold uppercase text-center">Contact Us</h1>
+      <h1 className="text-6xl lg:text-8xl font-bold uppercase text-center py-1">Contact Us</h1>
       <div className="grid w-full place-items-center sm:grid-cols-2 gap-x-8">
         <iframe
           style={{
-            borderRadius: "4px",
+            borderRadius: "19px",
             marginBlock: "2rem",
             justifySelf: "center",
           }}
           height="400"
           className="w-full lg:w-[70%]"
-          src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Jadavpur%20University,%20Salt%20Lake%20Campus+(CodeClub%20JUSL)&amp;t=&amp;z=16&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+          src="https://maps.google.com/maps?width=100%25&height=600&hl=en&q=Jadavpur%20University,%20Salt%20Lake%20Campus+(CodeClub%20JUSL)&t=k&z=16&ie=UTF8&iwloc=B&output=embed"
         ></iframe>
 
         <div className="flex w-full lg:w-1/2 flex-col gap-y-4 lg:gap-y-12 mb-4">
@@ -45,7 +45,7 @@ function Contact() {
           <Link href={"/#events"}>Events</Link>
         </nav>
       </footer>
-        <p className="border-t border-t-gray-300/50 text-center w-full py-3 uppercase text-xs">&copy; 2025 - CodeClub JUSL. All rights reserved.</p>
+      <p className="border-t border-t-gray-300/50 text-center w-full py-3 uppercase text-xs">&copy; 2025 - CodeClub JUSL. All rights reserved.</p>
     </div>
   );
 }
