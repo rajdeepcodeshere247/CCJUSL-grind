@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 
@@ -25,6 +26,7 @@ function Hero() {
   const [introActive, setIntroActive] = useState(true); // Default to matching server-render splash
   const [hasCheckedSession, setHasCheckedSession] = useState(false);
   const [playedIntroThisMount, setPlayedIntroThisMount] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
   // Scroll Tracking & Geometry
@@ -33,6 +35,7 @@ function Hero() {
   const [coords, setCoords] = useState({ deltaX: 0, deltaY: 0, scale: 1 });
 
   useEffect(() => {
+    setMounted(true);
     const played = sessionStorage.getItem("ccjusl_intro_played");
     if (played === "true") {
       setIntroActive(false);
@@ -225,7 +228,7 @@ function Hero() {
       </AnimatePresence>
 
       {/* Persistent Scroll-Driven Fixed Logo */}
-      {!introActive && (
+      {!introActive && mounted && createPortal(
         <motion.div
           style={{
             position: "fixed",
@@ -238,7 +241,7 @@ function Hero() {
             translateY: "-50%",
             willChange: "transform",
           }}
-          className="pointer-events-none z-50 flex items-center justify-center"
+          className="pointer-events-none z-[60] flex items-center justify-center"
         >
           {/* Fading Concentric rings as scroll starts */}
           {!shouldReduceMotion && (
@@ -271,7 +274,8 @@ function Hero() {
             className="h-auto w-48 sm:w-60 md:w-72 lg:w-80 select-none drop-shadow-[0_0_32px_rgba(237,27,88,0.55)]"
             draggable={false}
           />
-        </motion.div>
+        </motion.div>,
+        document.body
       )}
 
       {/* Centered spacer to push Hero content below the centered logo */}
