@@ -25,7 +25,8 @@ export interface TeamMember {
   photo: string;
   team: string;
   bio: string;
-  responsibilities: string[];
+  graduationYear: number;
+  achievements?: string[];
   socials: {
     linkedin?: string;
     github?: string;

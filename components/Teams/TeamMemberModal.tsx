@@ -71,13 +71,16 @@ export default function TeamMemberModal({
                 />
               </div>
 
-              {/* Name & Position */}
+              {/* Name, Position & Graduation Year */}
               <div className="text-center">
                 <h2 className="text-xl font-semibold text-white">
                   {member.name}
                 </h2>
                 <p className="mt-1 text-sm uppercase tracking-wider text-red-400">
                   {member.position}
+                </p>
+                <p className="mt-1 text-xs uppercase tracking-wider text-white/30">
+                  Class of {member.graduationYear}
                 </p>
               </div>
 
@@ -86,22 +89,22 @@ export default function TeamMemberModal({
                 {member.bio}
               </p>
 
-              {/* Responsibilities */}
-              <div className="w-full">
-                <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-white/30">
-                  Responsibilities
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {member.responsibilities.map((r, i) => (
-                    <span
-                      key={i}
-                      className="border border-white/10 px-3 py-1 text-xs text-white/50"
-                    >
-                      {r}
-                    </span>
-                  ))}
+              {/* Achievements — optional */}
+              {member.achievements && member.achievements.length > 0 && (
+                <div className="w-full">
+                  <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-white/30">
+                    Achievements
+                  </h3>
+                  <div className="space-y-2">
+                    {member.achievements.map((a, i) => (
+                      <div key={i} className="flex items-start gap-3">
+                        <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-red-400" />
+                        <p className="text-sm text-white/50">{a}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Social Links */}
               <div className="flex gap-4">
