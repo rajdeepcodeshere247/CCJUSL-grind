@@ -46,16 +46,22 @@ export default function AlumniPage() {
 
       <div className="mx-auto w-11/12 max-w-7xl">
         {/* Alumni Grid */}
-        <div className="grid gap-4 sm:gap-6 pb-12 sm:pb-20 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {alumniMembers.map((alumni, i) => (
-            <AlumniCard
-              key={alumni.id}
-              alumni={alumni}
-              index={i}
-              onClick={() => setSelectedAlumni(alumni)}
-            />
-          ))}
-        </div>
+        {alumniMembers.length > 0 ? (
+          <div className="grid gap-4 sm:gap-6 pb-12 sm:pb-20 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {alumniMembers.map((alumni, i) => (
+              <AlumniCard
+                key={alumni.id}
+                alumni={alumni}
+                index={i}
+                onClick={() => setSelectedAlumni(alumni)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="py-20 text-center">
+            <p className="text-lg text-white/50">None yet.</p>
+          </div>
+        )}
       </div>
 
       {/* Alumni Modal */}

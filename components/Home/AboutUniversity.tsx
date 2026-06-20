@@ -54,7 +54,7 @@ export default function AboutUniversity() {
           <AnimatedSection direction="right" delay={0.2}>
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-white/10">
               <Image
-                src="/images/jusl.avif"
+                src="/images/jusl.png"
                 alt="Jadavpur University Salt Lake Campus"
                 fill
                 className="object-cover"

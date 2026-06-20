@@ -65,23 +65,17 @@ export default function GalleryPage() {
               >
                 <button
                   onClick={() => openLightbox(item)}
-                  className="group relative block w-full overflow-hidden rounded-lg border border-white/10 transition-all duration-300 hover:border-red-400/30"
+                  className="relative block w-full overflow-hidden rounded-lg border border-white/10"
                 >
                   <Image
                     src={item.src}
                     alt={item.alt}
                     width={600}
                     height={400}
-                    className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full object-cover"
                     loading="lazy"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   />
-                  <div className="absolute inset-0 bg-black/0 transition-all duration-300 group-hover:bg-black/40" />
-                  {item.caption && (
-                    <div className="absolute inset-x-0 bottom-0 translate-y-full p-3 transition-transform duration-300 group-hover:translate-y-0">
-                      <p className="text-xs text-white/80">{item.caption}</p>
-                    </div>
-                  )}
                 </button>
               </motion.div>
             ))}
