@@ -49,3 +49,17 @@ export interface AlumniMember {
     twitter?: string;
   };
 }
+
+export interface InterviewGuide {
+  id: string;
+  candidateName: string;
+  department: string;
+  yearOfGrad: number;
+  company: string;
+  pdfPath: string;
+  experience: string;
+  prepTips?: string;
+  additionalNotes?: string;
+  selected: boolean;
+}
+
