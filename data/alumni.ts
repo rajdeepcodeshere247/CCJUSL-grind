@@ -8,7 +8,9 @@ export const alumniMembers: AlumniMember[] = [
         graduationYear: 2018,
         company: "Coda Payments",
         role: "SSE",
-        socials: {},
+        socials: {
+            linkedin: "https://www.linkedin.com/in/aboutdevanshu/",
+        },
     },
     {
         id: "alumni-2",
@@ -17,7 +19,9 @@ export const alumniMembers: AlumniMember[] = [
         graduationYear: 2018,
         company: "Microsoft",
         role: "SE-2",
-        socials: {},
+        socials: {
+            linkedin: "https://www.linkedin.com/in/gopalgoel19/",
+        },
     },
     {
         id: "alumni-3",
@@ -26,7 +30,9 @@ export const alumniMembers: AlumniMember[] = [
         graduationYear: 2019,
         company: "Google",
         role: "SWE-3",
-        socials: {},
+        socials: {
+            linkedin: "https://www.linkedin.com/in/debdatta-biswas/",
+        },
     },
     {
         id: "alumni-4",
@@ -35,7 +41,9 @@ export const alumniMembers: AlumniMember[] = [
         graduationYear: 2019,
         company: "Amazon",
         role: "SDE-2",
-        socials: {},
+        socials: {
+            linkedin: "https://www.linkedin.com/in/gautam-agrawal-2a1535125/",
+        },
     },
     {
         id: "alumni-5",
@@ -44,7 +52,9 @@ export const alumniMembers: AlumniMember[] = [
         graduationYear: 2019,
         company: "Goldman Sachs",
         role: "ASD",
-        socials: {},
+        socials: {
+            linkedin: "https://www.linkedin.com/in/rishabh-raj-r2/",
+        },
     },
     {
         id: "alumni-6",
@@ -53,7 +63,9 @@ export const alumniMembers: AlumniMember[] = [
         graduationYear: 2020,
         company: "Flipkart",
         role: "SDE-3",
-        socials: {},
+        socials: {
+            linkedin: "https://www.linkedin.com/in/harshitamoondra/",
+        },
     },
     {
         id: "alumni-7",
@@ -62,7 +74,9 @@ export const alumniMembers: AlumniMember[] = [
         graduationYear: 2020,
         company: "Stealth Startup",
         role: "Product+Engineerinh",
-        socials: {},
+        socials: {
+            linkedin: "https://www.linkedin.com/in/karraansiingh/",
+        },
     },
     {
         id: "alumni-8",
@@ -71,7 +85,10 @@ export const alumniMembers: AlumniMember[] = [
         graduationYear: 2020,
         company: "Google",
         role: "SE",
-        socials: {},
+        socials: {
+            linkedin: "https://www.linkedin.com/in/mr-redible/",
+            github: "https://github.com/Rishav-Agarwal",
+        },
     },
     {
         id: "alumni-9",
@@ -80,7 +97,9 @@ export const alumniMembers: AlumniMember[] = [
         graduationYear: 2020,
         company: "Google",
         role: "SE",
-        socials: {},
+        socials: {
+            linkedin: "https://www.linkedin.com/in/subham301477/",
+        },
     },
     {
         id: "alumni-10",
@@ -89,7 +108,9 @@ export const alumniMembers: AlumniMember[] = [
         graduationYear: 2021,
         company: "Palantir",
         role: "SE",
-        socials: {},
+        socials: {
+            linkedin: "https://www.linkedin.com/in/daipayan-mukherjee/",
+        },
     },
     {
         id: "alumni-11",
@@ -98,7 +119,9 @@ export const alumniMembers: AlumniMember[] = [
         graduationYear: 2021,
         company: "Amazon",
         role: "SDE-2",
-        socials: {},
+        socials: {
+            linkedin: "https://www.linkedin.com/in/gaurav-damani-37081a170/",
+        },
     },
     {
         id: "alumni-12",
@@ -152,7 +175,9 @@ export const alumniMembers: AlumniMember[] = [
         graduationYear: 2023,
         company: "Deutsche Bank",
         role: "SDE-2",
-        socials: {},
+        socials: {
+            linkedin: "https://www.linkedin.com/in/esha-basu-6a84b0209/",
+        },
     },
     {
         id: "alumni-17",
@@ -173,6 +198,7 @@ export const alumniMembers: AlumniMember[] = [
         company: "Amazon",
         role: "SDE-1",
         socials: {
+            linkedin: "https://www.linkedin.com/in/sayak-china-79a58b194/",
             github: "https://github.com/sanam2405",
         },
     },
@@ -219,7 +245,9 @@ export const alumniMembers: AlumniMember[] = [
         graduationYear: 2024,
         company: "Salesforce",
         role: "AMTS",
-        socials: {},
+        socials: {
+            linkedin: "https://www.linkedin.com/in/nidhi-shah-8652b6201/",
+        },
     },
     {
         id: "alumni-23",
