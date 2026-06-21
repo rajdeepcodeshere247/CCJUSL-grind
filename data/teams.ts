@@ -91,7 +91,7 @@ export const teamMembers: TeamMember[] = [
     id: "t27",
     name: "Sree Kertan",
     position: "Design Coordinator",
-    photo: "/member_photos/WhatsApp Image 2026-06-21 at 8.01.33 PM.jpeg", 
+    photo: "/images/ccjusl-logo.png", 
     team: "design",
     graduationYear: 2028,
     bio: "Kaam acha karta hu but late karta hu!",
@@ -294,7 +294,7 @@ export const teamMembers: TeamMember[] = [
     photo: "/member_photos/ansh.jpeg",
     team: "sponsorship",
     graduationYear: 2027,
-    bio: "I am a passionate and hardworking guy who wants to contribute to the growth of code club jusl..about achievements..I have made some frontend pages",
+    bio: "i am a passionate and hardworking guy who wants to contribute to the growth of code club jusl..about achievements..i have made some frontend pages",
     socials: {
       linkedin: "https://www.linkedin.com/in/ansh-kumar-singh-342780290/", github: "https://github.com/AnshKumar299"
     },
