@@ -18,7 +18,7 @@ export default function AboutClub() {
           <AnimatedSection direction="left" delay={0.1}>
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-white/10">
               <Image
-                src="/images/events/hackforge.jpg"
+                src="/images/events/ccabout.webp"
                 alt="CodeClub JUSL members collaborating"
                 fill
                 className="object-cover"
