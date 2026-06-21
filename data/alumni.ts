@@ -10,6 +10,7 @@ export const alumniMembers: AlumniMember[] = [
         role: "SSE",
         socials: {
             linkedin: "https://www.linkedin.com/in/aboutdevanshu/",
+            github: "https://github.com/devanshu0987",
         },
     },
     {
@@ -21,6 +22,7 @@ export const alumniMembers: AlumniMember[] = [
         role: "SE-2",
         socials: {
             linkedin: "https://www.linkedin.com/in/gopalgoel19/",
+            github: "https://github.com/gopalgoel19",
         },
     },
     {
@@ -76,6 +78,7 @@ export const alumniMembers: AlumniMember[] = [
         role: "Product+Engineerinh",
         socials: {
             linkedin: "https://www.linkedin.com/in/karraansiingh/",
+            github: "https://github.com/karansinghgit",
         },
     },
     {
@@ -99,6 +102,7 @@ export const alumniMembers: AlumniMember[] = [
         role: "SE",
         socials: {
             linkedin: "https://www.linkedin.com/in/subham301477/",
+            github: "https://github.com/subham301",
         },
     },
     {
@@ -110,6 +114,7 @@ export const alumniMembers: AlumniMember[] = [
         role: "SE",
         socials: {
             linkedin: "https://www.linkedin.com/in/daipayan-mukherjee/",
+            github: "https://github.com/Satyr09",
         },
     },
     {
@@ -121,6 +126,7 @@ export const alumniMembers: AlumniMember[] = [
         role: "SDE-2",
         socials: {
             linkedin: "https://www.linkedin.com/in/gaurav-damani-37081a170/",
+            github: "https://github.com/gauravllh03",
         },
     },
     {
@@ -144,6 +150,7 @@ export const alumniMembers: AlumniMember[] = [
         role: "SDE-2",
         socials: {
             linkedin: "https://www.linkedin.com/in/lakshya-bengani-369885194/",
+            github: "https://github.com/Lakshy006",
         },
     },
     {
@@ -155,6 +162,7 @@ export const alumniMembers: AlumniMember[] = [
         role: "MBA Candidate",
         socials: {
             linkedin: "https://www.linkedin.com/in/ritwick-raj-299942189/",
+            github: "https://github.com/ritwickraj78",
         },
     },
     {
@@ -177,6 +185,7 @@ export const alumniMembers: AlumniMember[] = [
         role: "SDE-2",
         socials: {
             linkedin: "https://www.linkedin.com/in/esha-basu-6a84b0209/",
+            github: "https://github.com/eshabasu19",
         },
     },
     {
@@ -188,6 +197,7 @@ export const alumniMembers: AlumniMember[] = [
         role: "SWE-3",
         socials: {
             linkedin: "https://www.linkedin.com/in/priyam-raj-ju/",
+            github: "https://github.com/PriyamRaj25",
         },
     },
     {
@@ -247,6 +257,7 @@ export const alumniMembers: AlumniMember[] = [
         role: "AMTS",
         socials: {
             linkedin: "https://www.linkedin.com/in/nidhi-shah-8652b6201/",
+            github: "https://github.com/29nidhishah",
         },
     },
     {
