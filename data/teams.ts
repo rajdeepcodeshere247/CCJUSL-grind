@@ -91,11 +91,11 @@ export const teamMembers: TeamMember[] = [
     id: "t27",
     name: "Sree Kertan",
     position: "Design Coordinator",
-    photo: "/images/ccjusl-logo.png",
+    photo: "/member_photos/WhatsApp Image 2026-06-21 at 8.01.33 PM.jpeg", 
     team: "design",
     graduationYear: 2028,
-    bio: "I am a passionate designer with a strong foundation in UI/UX and branding. I enjoy creating visually appealing and user-friendly digital experiences.",
-    socials: { linkedin: "https://www.linkedin.com/in/satyarth-sanyal-9b8b8b294/", github: "https://github.com/SatyarthSanyal" },
+    bio: "Kaam acha karta hu but late karta hu!",
+    socials: { linkedin: "https://www.linkedin.com/in/sree-keertan-88b820269/", github: "https://github.com/sreekeert4n" },
   },
   {
     id: "t6",
@@ -250,7 +250,7 @@ export const teamMembers: TeamMember[] = [
     photo: "/member_photos/WhatsApp Image 2026-06-21 at 11.24.36 AM.jpeg",
     team: "logistics",
     graduationYear: 2029,
-    bio: "i am a passionate and hardworking guy who wants to contribute to the growth of code club jusl..about achievements..i have made some frontend pages",
+    bio: "I am a passionate and hardworking guy who wants to contribute to the growth of code club jusl..about achievements..I have made some frontend pages",
     socials: {
       linkedin: "https://www.linkedin.com/in/aritra-mondal-6b50353b0/", github: "https://github.com/ARITRA-MONDAL112007"
     },
@@ -291,12 +291,12 @@ export const teamMembers: TeamMember[] = [
     id: "t18",
     name: "Ansh Kumar Singh",
     position: "Sponsorship Lead",
-    photo: "/images/ccjusl-logo.png",
+    photo: "/member_photos/ansh.jpeg",
     team: "sponsorship",
     graduationYear: 2027,
-    bio: "FullStack Web Developer with interest in System Design and Ops",
+    bio: "I am a passionate and hardworking guy who wants to contribute to the growth of code club jusl..about achievements..I have made some frontend pages",
     socials: {
-      linkedin: "https://www.linkedin.com/in/aritra-mondal-6b50353b0/", github: "https://github.com/ARITRA-MONDAL112007"
+      linkedin: "https://www.linkedin.com/in/ansh-kumar-singh-342780290/", github: "https://github.com/AnshKumar299"
     },
   },
   {
