@@ -2,12 +2,12 @@ import { TeamMember } from "@/types";
 
 export const teamCategories = [
   { key: "core", label: "Core Team" },
+  { key: "aiml", label: "AI/ML Team" },
   { key: "cp", label: "CP Team" },
   { key: "development", label: "Development Team" },
-  { key: "aiml", label: "AI/ML Team" },
   { key: "design", label: "Design Team" },
-  { key: "pr", label: "PR Team" },
   { key: "logistics", label: "Logistics Team" },
+  { key: "pr", label: "PR Team" },
   { key: "sponsorship", label: "Sponsorship Team" },
 ] as const;
 
@@ -88,6 +88,16 @@ export const teamMembers: TeamMember[] = [
       " Currently interning at Wells Fargo",
     ],
     socials: { linkedin: "https://www.linkedin.com/in/pramaray", github: "https://github.com/pramaray" },
+  },
+  {
+    id: "t27",
+    name: "Dipayan Sardar",
+    position: "Design Coordinator",
+    photo: "/member_photos/photo - Dipayan Sardar.jpeg",
+    team: "design",
+    graduationYear: 2028,
+    bio: "Second-year B.E. Civil Engineering student at Jadavpur University and BS Data Science student at IIT Madras. Intern at IIT Bombay, selected for AWS 10,000 Aldeas, GSSoC’26 contributor, and design team member at CodeClub JUSL , Core Member at E-Cell JU. Passionate about building AI, cloud, and data-driven solutions for real-world engineering and social-impact problems.",
+    socials: { linkedin: "https://www.linkedin.com/in/dipayan-sardar-a5119a381/", github: "https://github.com/dipayansardar73-decode" },
   },
   {
     id: "t5",
@@ -350,6 +360,18 @@ export const teamMembers: TeamMember[] = [
     bio: "I am a passionate and hardworking guy who wants to contribute to the growth of code club jusl..about achievements..I have made some frontend pages",
     socials: {
       linkedin: "https://www.linkedin.com/in/ansh-kumar-singh-342780290/", github: "https://github.com/AnshKumar299"
+    },
+  },
+  {
+    id: "t20",
+    name: "Debarshi Mondal",
+    position: "Sponsorship Coordinator",
+    photo: "/member_photos/cc-photo-debarshi-mondal.jpeg",
+    team: "sponsorship",
+    graduationYear: 2027,
+    bio: "I am a passionate software developer with a strong interest in algorithms, problem-solving, and ML and DL . I enjoy building scalable applications using modern technologies and tackling complex technical challenges with efficient solutions. My analytical mindset and attention to detail help me approach problems methodically and effectively. I am naturally curious, enjoy learning new concepts, and continuously seek opportunities to expand my knowledge in software engineering and computational science. I am persistent, adaptable, and motivated by creating impactful and well-designed software systems and machine learning models.",
+    socials: {
+      linkedin: "https://www.linkedin.com/in/debarshi-mondal-5567ba2a7/", github: "https://github.com/DebarshiMondal1055"
     },
   },
   {
