@@ -164,7 +164,7 @@ export const teamMembers: TeamMember[] = [
   },
   {
     id: "t24",
-    name: "Sanglap Kundu",
+    name: "Sanglap Das",
     position: "Dev Coordinator",
     photo: "/member_photos/IMG_20250426_142421115_HDR - Sanglap Das.jpg",
     team: "development",
