@@ -246,6 +246,16 @@ export const teamMembers: TeamMember[] = [
     socials: { linkedin: "https://www.linkedin.com/in/neelim-goswami-064919283?utm_source=share_via&utm_content=profile&utm_medium=member_android", github: "https://github.com/goswamineelim" },
   },
   {
+    id: "t29",
+    name: "Aditya Goel",
+    position: "CP Coordinator", 
+    photo: "/member_photos/Photo-AdityaGoel - Aditya Goel.jpeg",
+    team: "cp",
+    graduationYear: 2028,
+    bio: "Competitive programmer passionate about algorithms and problem solving. LeetCode Knight, Codeforces Specialist, with 1000+ solved problems.",
+    socials: { linkedin: "https://www.linkedin.com/in/aditya-goel-692534344/", github: "https://github.com/goeladi-3" }
+  },
+  {
     id: "t13",
     name: "Monidip Das",
     position: "CP Coordinator", 
