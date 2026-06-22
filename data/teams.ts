@@ -383,7 +383,7 @@ export const teamMembers: TeamMember[] = [
     socials: { linkedin: "https://www.linkedin.com/in/md-mirajul-seikh-undefined-325b03370?utm_source=share_via&utm_content=profile&utm_medium=member_android", github: "https://github.com/mdmirajulseikh91-oss" },
   },
 
-  Core Team
+  //Core Team
   {
     id: "t25",
     name: "Aritra Mondal",
