@@ -87,24 +87,21 @@ export default function GalleryPage() {
     return () => { document.body.style.overflow = ""; };
   }, [lightboxItem]);
 
-  return (
+ return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 font-sans">
+      
       {/* Header */}
-      <div ref={headerRef} className="pb-6 pt-12 sm:pb-8 sm:pt-16 lg:pt-20 text-center">
+      <div ref={headerRef} className="pb-12 pt-12 text-center">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
-          className="text-4xl font-black uppercase tracking-wider bg-gradient-to-r from-red-400 to-white bg-clip-text text-transparent sm:text-5xl md:text-6xl"
+          className="text-4xl font-jetbrains-mono font-semibold uppercase tracking-tight text-white sm:text-5xl md:text-6xl cursor-default"
         >
-          Gallery
+          Gall<span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-rose-300">ery</span>
         </motion.h1>
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={isInView ? { scaleX: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mx-auto mt-4 h-1 w-20 origin-center rounded-full bg-gradient-to-r from-red-400 to-white"
-        />
+        
+        {/* Placed inside the header div so it flows normally */}
         <p className="mt-4 text-neutral-400 max-w-md mx-auto text-xs sm:text-sm px-4">
           Glimpses of hackathons, coding showdowns, and technical milestones at CodeClub JUSL.
         </p>
@@ -117,9 +114,9 @@ export default function GalleryPage() {
             <button
               key={category.key}
               onClick={() => setActiveCategory(category.key)}
-              className={`px-4 py-2 rounded-xl text-xs font-medium tracking-wide transition-all duration-300 uppercase ${
+              className={`px-4 py-2 rounded-xl text-xs font-jetbrains-mono font-medium tracking-widest transition-all duration-300 uppercase ${
                 activeCategory === category.key
-                  ? "bg-gradient-to-r from-red-500 to-red-400 text-white shadow-lg shadow-red-500/20 font-semibold"
+                  ? "bg-gradient-to-r from-rose-500 to-rose-300 text-white shadow-lg shadow-rose-500/20 font-semibold"
                   : "text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/50"
               }`}
             >
@@ -127,7 +124,6 @@ export default function GalleryPage() {
             </button>
           ))}
         </div>
-
         {/* Improved Masonry Grid Display Matrix */}
         <AnimatePresence mode="wait">
           <motion.div
@@ -167,13 +163,13 @@ export default function GalleryPage() {
 
                 {/* Elegant Smooth Overlay Slide & Reveal */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                  <p className="text-xs font-semibold tracking-wide text-neutral-400 uppercase mb-1 flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <p className="text-xs font-jetbrains-mono font-semibold tracking-widest text-neutral-400 uppercase mb-1 flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/xl" className="h-3 w-3 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5-5-5m5 5v-4m0 4h-4" />
                     </svg>
                     Expand Image
                   </p>
-                  <p className="text-sm font-medium leading-snug text-white/95 translate-y-3 group-hover:translate-y-0 transition-transform duration-300">
+                  <p className="text-sm font-jetbrains-mono font-semibold leading-snug translate-y-3 group-hover:translate-y-0 transition-transform duration-300 text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-rose-300">
                     {item.caption}
                   </p>
                 </div>

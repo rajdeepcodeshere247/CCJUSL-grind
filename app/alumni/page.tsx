@@ -18,21 +18,15 @@ export default function AlumniPage() {
   return (
     <div className="min-h-screen bg-black">
       {/* Header */}
-      <div ref={headerRef} className="pb-6 pt-10 sm:pb-8 sm:pt-12 lg:pt-16">
+      <div ref={headerRef} className="text-center pb-6 pt-12">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
-          className="text-center text-4xl font-semibold uppercase tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
+          className="text-4xl font-jetbrains-mono font-semibold uppercase tracking-tight text-white sm:text-5xl md:text-6xl cursor-default"
         >
-          Alumni
+          Alu<span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-rose-300">mni</span>
         </motion.h1>
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={isInView ? { scaleX: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mx-auto mt-4 h-px w-24 origin-center bg-red-400"
-        />
         <motion.p
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
