@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import Link from "next/link";
+import MagicRings from "../MagicRings";
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -139,13 +140,45 @@ function Hero() {
 
   return (
     <section className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-4">
+      {/* Magic Rings background */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={!introActive ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 1.0, ease: "easeOut" }}
+        className="pointer-events-none absolute inset-0 z-0"
+      >
+        <MagicRings
+          color="#f87171"
+          colorTwo="#ffffff"
+          ringCount={6}
+          speed={1}
+          attenuation={10}
+          lineThickness={2}
+          baseRadius={0.35}
+          radiusStep={0.1}
+          scaleRate={0.1}
+          opacity={1}
+          blur={0}
+          noiseAmount={0.1}
+          rotation={0}
+          ringGap={1.5}
+          fadeIn={0.7}
+          fadeOut={0.5}
+          followMouse={false}
+          mouseInfluence={0.2}
+          hoverScale={1.2}
+          parallax={0.05}
+          clickBurst={false}
+        />
+      </motion.div>
+
       {/* Subtle grid backdrop */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={!introActive ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 1.0, ease: "easeOut" }}
         aria-hidden
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 z-10"
         style={{
           backgroundImage:
             "linear-gradient(rgba(237,27,88,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(237,27,88,0.04) 1px, transparent 1px)",

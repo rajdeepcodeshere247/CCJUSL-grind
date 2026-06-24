@@ -95,7 +95,7 @@ export default function GalleryPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
-          className="text-4xl font-black uppercase tracking-wider bg-gradient-to-r from-red-500 via-orange-400 to-yellow-500 bg-clip-text text-transparent sm:text-5xl md:text-6xl"
+          className="text-4xl font-black uppercase tracking-wider bg-gradient-to-r from-red-400 to-white bg-clip-text text-transparent sm:text-5xl md:text-6xl"
         >
           Gallery
         </motion.h1>
@@ -103,7 +103,7 @@ export default function GalleryPage() {
           initial={{ scaleX: 0 }}
           animate={isInView ? { scaleX: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mx-auto mt-4 h-1 w-20 origin-center rounded-full bg-gradient-to-r from-red-500 to-orange-500"
+          className="mx-auto mt-4 h-1 w-20 origin-center rounded-full bg-gradient-to-r from-red-400 to-white"
         />
         <p className="mt-4 text-neutral-400 max-w-md mx-auto text-xs sm:text-sm px-4">
           Glimpses of hackathons, coding showdowns, and technical milestones at CodeClub JUSL.
@@ -119,7 +119,7 @@ export default function GalleryPage() {
               onClick={() => setActiveCategory(category.key)}
               className={`px-4 py-2 rounded-xl text-xs font-medium tracking-wide transition-all duration-300 uppercase ${
                 activeCategory === category.key
-                  ? "bg-gradient-to-r from-red-600 to-orange-500 text-white shadow-lg shadow-orange-900/30 font-semibold"
+                  ? "bg-gradient-to-r from-red-500 to-red-400 text-white shadow-lg shadow-red-500/20 font-semibold"
                   : "text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/50"
               }`}
             >
@@ -161,7 +161,7 @@ export default function GalleryPage() {
                 </div>
 
                 {/* Contextual Category Tag badge */}
-                <span className="absolute top-3 left-3 bg-neutral-950/80 backdrop-blur-md border border-neutral-800 px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase text-orange-400 shadow-sm">
+                <span className="absolute top-3 left-3 bg-neutral-950/80 backdrop-blur-md border border-neutral-800 px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase text-red-400 shadow-sm">
                   {item.category.replace("-", " ")}
                 </span>
 
@@ -283,7 +283,7 @@ export default function GalleryPage() {
 
               {/* Data Text Meta Display Footer */}
               <div className="bg-neutral-900/90 border-t border-neutral-800/80 px-6 py-5 backdrop-blur-md">
-                <p className="text-sm font-semibold text-orange-400 tracking-wide uppercase mb-1 text-[10px]">
+                <p className="text-sm font-semibold text-red-400 tracking-wide uppercase mb-1 text-[10px]">
                   {lightboxItem.category.replace("-", " ")}
                 </p>
                 <p className="text-sm leading-relaxed text-neutral-200 font-medium">
