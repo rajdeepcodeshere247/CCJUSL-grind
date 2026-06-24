@@ -145,7 +145,7 @@ function Navbar() {
   return (
     <>
       {/* Fixed, always-black navbar — no scroll-dependent styling */}
-      <header className="font-jetbrains-mono fixed top-0 left-0 right-0 z-50 w-full bg-black border-b border-white/10">
+      <header className="font-jetbrains-mono fixed top-0 left-0 right-0 z-50 w-full bg-black/50 backdrop-blur-md saturate-150 border-b border-white/10">
         <div className="mx-auto flex w-11/12 max-w-7xl items-center justify-between py-4 lg:py-6">
           {/* Logo */}
           <Link href="/" className="flex items-center">
