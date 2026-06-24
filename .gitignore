@@ -44,5 +44,8 @@ next-env.d.ts
 /db_data
 
 # PDF extraction scratch outputs
-/public/guides/extracted_text.json
-/public/guides/all_text.txt
+**/extracted_text.json
+**/all_text.txt
+
+# AI agent configuration and directives
+/CONTEXT.md

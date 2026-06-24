@@ -3,176 +3,296 @@
 import React, { useState, useMemo, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { interviewGuides } from "@/data/guides";
-import { FEATURES } from "@/config/features";
-import NotFound from "@/components/NotFound";
-
-import { 
-  Search, 
-  FileText, 
-  Briefcase, 
-  GraduationCap, 
-  CheckCircle, 
-  X, 
-  BookOpen, 
+import {
+  Search,
+  FileText,
+  Briefcase,
+  X,
   ChevronRight,
-  Download,
-  Building
+  ArrowLeft
 } from "lucide-react";
 import Footer from "@/components/Footer";
-import type { InterviewGuide } from "@/types";
+import { FEATURES } from "@/config/features";
+import NotFound from "@/components/NotFound";
+import DecryptText from "@/components/ui/DecryptText";
+import ShinyText from "@/components/ui/ShinyText";
+import Magnet from "@/components/ui/Magnet";
+import FolderCard from "@/components/ui/FolderCard";
 
-const FormattedText: React.FC<{ text: string }> = ({ text }) => {
-  if (!text) return null;
-  const lines = text.split("\n");
-
-  return (
-    <div className="space-y-2">
-      {lines.map((line, idx) => {
-        const trimmed = line.trim();
-        if (!trimmed) return <div key={idx} className="h-2" />;
-
-        // Check if heading
-        const isHeading = 
-          trimmed.endsWith(":") || 
-          /^(Technical Round|Online Assessment|HR Round|Round \d|Section \d|S\d:|Q\d\)|OA)/i.test(trimmed);
-
-        // Check list items
-        const isBullet = trimmed.startsWith("•") || trimmed.startsWith("-") || trimmed.startsWith("*");
-        const isNumbered = /^\d+(\.|\s)/.test(trimmed) || /^(Q\d\)|S\d:)/i.test(trimmed);
-
-        let content = trimmed;
-        if (isBullet) {
-          content = trimmed.replace(/^[•\-\*]\s*/, "");
-        }
-
-        const renderFormattedLine = (str: string) => {
-          let labelText = "";
-          let restText = str;
-          
-          const labelMatch = str.match(/^([^:\–\—]+)([:\–\—])(.*)$/);
-          if (labelMatch && !isHeading && labelMatch[1].trim().length < 25) {
-            labelText = labelMatch[1].trim() + labelMatch[2];
-            restText = labelMatch[3];
-          }
-
-          const formatText = (textVal: string) => {
-            const parts = textVal.split(/\*\*([^*]+)\*\*/g);
-            return parts.map((part, i) => {
-              if (i % 2 === 1) {
-                return <strong key={i} className="text-white font-bold">{part}</strong>;
-              }
-              const subparts = part.split(/\*([^*]+)\*/g);
-              return subparts.map((subpart, j) => {
-                if (j % 2 === 1) {
-                  return <em key={j} className="text-white/90 italic">{subpart}</em>;
-                }
-                return subpart;
-              });
-            });
-          };
-
-          if (labelText) {
-            return (
-              <span>
-                <strong className="text-red-400 font-semibold">{labelText} </strong>
-                {formatText(restText)}
-              </span>
-            );
-          }
-          return <span>{formatText(str)}</span>;
-        };
-
-        if (isHeading) {
-          return (
-            <h5 
-              key={idx} 
-              className="text-white font-bold text-sm tracking-wide mt-4 border-b border-white/5 pb-1 uppercase text-red-400"
-            >
-              <u>{content}</u>
-            </h5>
-          );
-        }
-
-        if (isBullet) {
-          return (
-            <div key={idx} className="flex gap-2 pl-4 text-sm leading-relaxed text-white/70">
-              <span className="text-red-500 font-bold">•</span>
-              <span className="flex-1">{renderFormattedLine(content)}</span>
-            </div>
-          );
-        }
-
-        if (isNumbered) {
-          const numberPart = trimmed.split(/[.\s]/)[0];
-          const restText = trimmed.substring(trimmed.indexOf(numberPart) + numberPart.length).trim();
-          return (
-            <div key={idx} className="flex gap-2 pl-2 text-sm leading-relaxed text-white/70">
-              <span className="text-red-400 font-semibold">{numberPart}</span>
-              <span className="flex-1">{renderFormattedLine(restText)}</span>
-            </div>
-          );
-        }
-
-        return (
-          <p key={idx} className="text-sm leading-relaxed text-white/70">
-            {renderFormattedLine(trimmed)}
-          </p>
-        );
-      })}
-    </div>
-  );
+// Brand-specific metadata for dynamic, premium styling
+const companyMetadata: Record<string, {
+  color: string;
+  bgGlow: string;
+  gradientLine: string;
+  buttonClass: string;
+  initial: string;
+}> = {
+  "Google": {
+    color: "text-blue-400",
+    bgGlow: "rgba(96, 165, 250, 0.12)",
+    gradientLine: "from-blue-400/50 via-blue-500/50 to-transparent",
+    buttonClass: "border-blue-500/30 hover:border-blue-400 hover:bg-blue-500/10",
+    initial: "G"
+  },
+  "D.E. Shaw": {
+    color: "text-rose-500",
+    bgGlow: "rgba(244, 63, 94, 0.12)",
+    gradientLine: "from-rose-400/50 via-rose-500/50 to-transparent",
+    buttonClass: "border-rose-500/30 hover:border-rose-400 hover:bg-rose-500/10",
+    initial: "D"
+  },
+  "JPMC": {
+    color: "text-amber-400",
+    bgGlow: "rgba(251, 191, 36, 0.12)",
+    gradientLine: "from-amber-400/50 via-amber-500/50 to-transparent",
+    buttonClass: "border-amber-500/30 hover:border-amber-400 hover:bg-amber-500/10",
+    initial: "J"
+  },
+  "Salesforce": {
+    color: "text-cyan-400",
+    bgGlow: "rgba(34, 211, 238, 0.15)",
+    gradientLine: "from-cyan-400/50 via-cyan-500/50 to-transparent",
+    buttonClass: "border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-500/10",
+    initial: "S"
+  },
+  "Sprinklr": {
+    color: "text-orange-500",
+    bgGlow: "rgba(249, 115, 22, 0.12)",
+    gradientLine: "from-orange-400/50 via-orange-500/50 to-transparent",
+    buttonClass: "border-orange-500/30 hover:border-orange-400 hover:bg-orange-500/10",
+    initial: "S"
+  },
+  "Visa": {
+    color: "text-indigo-400",
+    bgGlow: "rgba(129, 140, 248, 0.12)",
+    gradientLine: "from-indigo-400/50 via-indigo-500/50 to-transparent",
+    buttonClass: "border-indigo-500/30 hover:border-indigo-400 hover:bg-indigo-500/10",
+    initial: "V"
+  },
+  "Wells Fargo": {
+    color: "text-emerald-400",
+    bgGlow: "rgba(52, 211, 153, 0.12)",
+    gradientLine: "from-emerald-400/50 via-emerald-500/50 to-transparent",
+    buttonClass: "border-emerald-500/30 hover:border-emerald-400 hover:bg-emerald-500/10",
+    initial: "W"
+  }
 };
+
+const defaultMeta = {
+  color: "text-rose-500",
+  bgGlow: "rgba(244, 63, 94, 0.12)",
+  gradientLine: "from-rose-400/50 via-rose-500/50 to-transparent",
+  buttonClass: "border-rose-500/30 hover:border-rose-400 hover:bg-rose-500/10",
+  initial: "C"
+};
+
+// Animation Variants for Split/Division effect
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      staggerChildren: 0.05,
+      staggerDirection: -1,
+    },
+  },
+} as const;
+
+const itemVariants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.35,
+    y: 70,
+    rotate: -12,
+    rotateX: 18,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    rotate: 0,
+    rotateX: 0,
+    transition: {
+      type: "spring",
+      stiffness: 80,
+      damping: 13,
+    },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.8,
+    y: 30,
+    rotate: 5,
+    transition: {
+      duration: 0.25,
+      ease: "easeOut",
+    },
+  },
+} as const;
+
+const batchContainerVariants = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 15,
+    },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.9,
+    transition: {
+      duration: 0.2,
+    },
+  },
+} as const;
 
 export default function GuidesPage() {
   const [searchQuery, setSearchQuery] = useState("");
-
-  const [selectedCompany, setSelectedCompany] = useState("All");
-  const [selectedDept, setSelectedDept] = useState("All");
-  const [selectedGuide, setSelectedGuide] = useState<InterviewGuide | null>(null);
-
+  const [selectedBatch, setSelectedBatch] = useState<string | null>(null);
+  const [splittingBatch, setSplittingBatch] = useState<string | null>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const isHeaderInView = useInView(headerRef, { once: true });
 
-  // Get unique companies list
-  const companies = useMemo(() => {
-    const set = new Set(interviewGuides.map((g) => g.company));
-    return ["All", ...Array.from(set)];
+  const handleBatchClick = (batchName: string) => {
+    setSplittingBatch(batchName);
+    setSelectedBatch(batchName);
+    setTimeout(() => {
+      setSplittingBatch(null);
+    }, 600);
+  };
+
+  // Group all guides dynamically by batch
+  const batches = useMemo(() => {
+    const batchMap = new Map<string, {
+      year: number;
+      name: string;
+      guides: typeof interviewGuides;
+      companiesCount: number;
+      contributors: string[];
+    }>();
+
+    interviewGuides.forEach((guide) => {
+      const year = guide.yearOfGrad;
+      const batchName = `${year % 100} Batch Interview Experiences`;
+      const name = guide.candidateName;
+
+      let b = batchMap.get(batchName);
+      if (!b) {
+        b = {
+          year,
+          name: batchName,
+          guides: [],
+          companiesCount: 0,
+          contributors: []
+        };
+        batchMap.set(batchName, b);
+      }
+      b.guides.push(guide);
+      if (!b.contributors.includes(name)) {
+        b.contributors.push(name);
+      }
+    });
+
+    return Array.from(batchMap.values()).map((b) => {
+      const uniqueCompanies = new Set(b.guides.map((g) => g.company));
+      return {
+        ...b,
+        companiesCount: uniqueCompanies.size,
+      };
+    });
   }, []);
 
-  // Filter guides
-  const filteredGuides = useMemo(() => {
-    return interviewGuides.filter((guide) => {
-      const matchesSearch = 
-        guide.candidateName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        guide.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        guide.experience.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (guide.prepTips && guide.prepTips.toLowerCase().includes(searchQuery.toLowerCase()));
-      
-      const matchesCompany = selectedCompany === "All" || guide.company === selectedCompany;
-      const matchesDept = selectedDept === "All" || guide.department === selectedDept;
+  const selectedBatchData = useMemo(() => {
+    if (!selectedBatch) return null;
+    return batches.find((b) => b.name === selectedBatch) || null;
+  }, [batches, selectedBatch]);
 
-      return matchesSearch && matchesCompany && matchesDept;
+  const companyGuidesForSelectedBatch = useMemo(() => {
+    if (!selectedBatchData) return [];
+    const map = new Map<string, { pdfPath: string; count: number; contributors: string[] }>();
+    selectedBatchData.guides.forEach((guide) => {
+      const existing = map.get(guide.company);
+      const name = guide.candidateName;
+      if (existing) {
+        existing.count += 1;
+        if (!existing.contributors.includes(name)) existing.contributors.push(name);
+      } else {
+        map.set(guide.company, { pdfPath: guide.pdfPath, count: 1, contributors: [name] });
+      }
     });
-  }, [searchQuery, selectedCompany, selectedDept]);
+    return Array.from(map.entries()).map(([company, data]) => ({ company, ...data }));
+  }, [selectedBatchData]);
 
-  if (!FEATURES.enableGuides) {
-    return <NotFound />;
-  }
+  // List of all company guides across all batches for direct search
+  const allCompanyGuides = useMemo(() => {
+    const map = new Map<string, { pdfPath: string; count: number; contributors: string[]; batchName: string }>();
+    interviewGuides.forEach((guide) => {
+      const key = `${guide.company} (${guide.yearOfGrad % 100} Batch)`;
+      const name = guide.candidateName;
+      const existing = map.get(key);
+      if (existing) {
+        existing.count += 1;
+        if (!existing.contributors.includes(name)) existing.contributors.push(name);
+      } else {
+        map.set(key, { 
+          pdfPath: guide.pdfPath, 
+          count: 1, 
+          contributors: [name], 
+          batchName: `${guide.yearOfGrad % 100} Batch` 
+        });
+      }
+    });
+    return Array.from(map.entries()).map(([key, data]) => {
+      const company = key.substring(0, key.indexOf(" ("));
+      return { key, company, ...data };
+    });
+  }, []);
+
+  const filteredCompanyGuides = useMemo(() => {
+    if (!searchQuery) return [];
+    return allCompanyGuides.filter((guide) =>
+      guide.company.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [allCompanyGuides, searchQuery]);
+
+  if (!FEATURES.enableGuides) return <NotFound />;
+
+  // Default meta for batch cards
+  const batchMeta = {
+    color: "text-rose-500",
+    bgGlow: "rgba(244, 63, 94, 0.12)",
+    gradientLine: "from-rose-400/50 via-rose-500/50 to-transparent",
+    buttonClass: "border-rose-500/30 hover:border-rose-400 hover:bg-rose-500/10",
+    initial: "27",
+  };
 
   return (
-    <div className="min-h-screen bg-black text-white font-jetbrains-mono selection:bg-red-500/30 selection:text-red-200">
-      {/* Background Subtle Mesh / Grid */}
-      <div 
+    <div className="min-h-screen bg-black text-[#ededed] font-jetbrains-mono selection:bg-rose-500/30 selection:text-rose-200 relative overflow-hidden">
+      {/* Premium Dot Pattern Background */}
+      <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 z-0"
+        className="pointer-events-none absolute top-0 left-0 w-full h-[550px] opacity-35 z-0"
         style={{
-          backgroundImage:
-            "linear-gradient(rgba(237,27,88,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(237,27,88,0.02) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
+          backgroundImage: "radial-gradient(rgba(255,255,255,0.08) 1.2px, transparent 1.2px)",
+          backgroundSize: "24px 24px",
+          maskImage: "radial-gradient(ellipse 60% 60% at 50% 0%, #000 70%, transparent 100%)",
+          WebkitMaskImage: "radial-gradient(ellipse 60% 60% at 50% 0%, #000 70%, transparent 100%)",
         }}
       />
-      <div className="absolute top-0 left-1/4 h-[500px] w-[500px] rounded-full bg-red-950/10 blur-[150px] pointer-events-none" />
-      
+      {/* Dual Gradient Glow Background */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[380px] w-full max-w-7xl bg-gradient-to-b from-rose-500/10 via-rose-500/5 to-transparent blur-[100px] pointer-events-none z-0" />
+
       <div className="relative z-10 mx-auto w-11/12 max-w-7xl pt-12 pb-24">
         
         {/* Header Section */}
@@ -181,338 +301,253 @@ export default function GuidesPage() {
             initial={{ opacity: 0, y: -10 }}
             animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.4 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-red-500/35 bg-red-950/20 mb-6 shadow-[0_2px_15px_rgba(237,27,88,0.15)] hover:border-red-500/60 hover:bg-red-950/30 transition-all duration-300 select-none cursor-default"
+            whileHover={{ scale: 1.015 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] mb-6 backdrop-blur-md cursor-default transition-all duration-300"
           >
-            <Briefcase size={14} className="text-red-400" />
-            <span className="text-xs font-semibold uppercase tracking-widest text-red-200">Ace Your Placement & Internships</span>
+            <Briefcase size={13} className="text-rose-500" />
+            <ShinyText text="Ace Your Placement & Internships" className="text-[10px] font-mono font-medium uppercase tracking-[0.15em] text-white/80" />
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5 }}
-            className="text-4xl font-semibold uppercase tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
+            className="text-4xl font-semibold uppercase tracking-tight text-white sm:text-5xl md:text-6xl cursor-default"
           >
-            Interview <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-red-500 to-orange-400">Guides</span>
+            <DecryptText text="Interview" animateOnHover speed={40} />{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-rose-300">
+              <DecryptText text="Guides" animateOnHover speed={40} delay={150} />
+            </span>
           </motion.h1>
-          
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={isHeaderInView ? { scaleX: 1 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mx-auto mt-4 h-[2px] w-24 origin-center bg-red-400"
-          />
 
-          <motion.p
+          <motion.div
             initial={{ opacity: 0 }}
             animate={isHeaderInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="mx-auto mt-6 max-w-2xl text-sm leading-relaxed text-white/50 sm:text-base"
+            className="mx-auto mt-6 max-w-2xl text-xs sm:text-sm leading-relaxed text-white/50"
           >
-            Real interview experiences, prep recommendations, and advice shared by Jadavpur University Information Technology 
-            and Computer Science & Engineering students who successfully cracked major tech companies.
-          </motion.p>
+            Download official, compiled company interview guides. Read about preparation strategies, online assessment questions, and technical/HR round experiences shared by students.
+          </motion.div>
         </div>
 
-        {/* Stats Grid */}
-        {/* Purpose Taglines Section */}
-        <motion.div 
-          initial={{ opacity: 0, y: 15 }}
-          animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="grid grid-cols-1 gap-6 md:grid-cols-3 mb-12 border border-white/5 bg-white/[0.02] p-6 rounded-2xl backdrop-blur-md"
-        >
-          <div className="flex flex-col p-4 border-b md:border-b-0 md:border-r border-white/5 last:border-0">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-red-400 mb-2">Simplify Placements</h3>
-            <p className="text-xs leading-relaxed text-white/60">
-              Demystifying the tech recruitment timeline and rounds to make the overall internship and placement hiring process easier for you to navigate.
-            </p>
-          </div>
-          <div className="flex flex-col p-4 border-b md:border-b-0 md:border-r border-white/5 last:border-0">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white mb-2">Study Real Patterns</h3>
-            <p className="text-xs leading-relaxed text-white/60">
-              Equip yourself by studying exact interview experiences, coding problems, puzzles, and core questions asked of your seniors.
-            </p>
-          </div>
-          <div className="flex flex-col p-4 last:border-0">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-red-400 mb-2">By Students, For Students</h3>
-            <p className="text-xs leading-relaxed text-white/60">
-              The true core purpose of CodeClub JUSL is to help, share, and support our student community in cracking their dream roles.
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Filters Section */}
-        <div className="flex flex-col gap-6 md:flex-row md:items-center justify-between pb-8 border-b border-white/10 mb-10">
-          
-          {/* Company Chips Filter */}
-          <div className="flex flex-nowrap items-center gap-2 max-w-full overflow-x-auto py-1.5 scrollbar-thin select-none pr-4">
-            {companies.map((company) => (
-              <button
-                key={company}
-                suppressHydrationWarning={true}
-                onClick={() => setSelectedCompany(company)}
-                className={`px-4 py-2 rounded-lg text-xs uppercase tracking-wider border transition-all duration-300 font-semibold ${
-                  selectedCompany === company
-                    ? "bg-red-500 border-red-500 text-white shadow-lg shadow-red-500/20"
-                    : "bg-white/[0.03] border-white/10 text-white/70 hover:border-white/30 hover:text-white"
-                }`}
-              >
-                {company}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 items-center w-full md:w-auto">
-            {/* Search Input */}
-            <div className="relative w-full sm:w-72">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" size={16} />
-              <input
-                type="text"
-                suppressHydrationWarning={true}
-                placeholder="Search name, key topics..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 text-sm bg-white/[0.03] border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-red-500/60 focus:bg-white/[0.05] transition-all"
-              />
-              {searchQuery && (
-                <button 
-                  onClick={() => setSearchQuery("")} 
-                  suppressHydrationWarning={true}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white"
-                >
-                  <X size={14} />
-                </button>
+        {/* Filters & Search Section */}
+        <div className="flex flex-col sm:flex-row items-center justify-between pb-6 border-b border-white/10 mb-10 gap-4">
+          <div className="flex items-center gap-2.5">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+            </span>
+            <h2 className="text-xs font-mono font-semibold uppercase tracking-[0.15em] text-neutral-300">
+              {selectedBatch && !searchQuery ? (
+                <div className="flex items-center gap-1.5">
+                  <button 
+                    onClick={() => setSelectedBatch(null)} 
+                    className="hover:text-white text-neutral-400 transition-colors flex items-center gap-1 font-semibold"
+                  >
+                    Guides
+                  </button>
+                  <ChevronRight size={10} className="text-neutral-500" />
+                  <span className="text-white">{selectedBatch}</span>
+                </div>
+              ) : searchQuery ? (
+                "Search Results"
+              ) : (
+                "Prepare with Precision"
               )}
-            </div>
-
-            {/* Department Dropdown */}
-            <select
-              value={selectedDept}
-              suppressHydrationWarning={true}
-              onChange={(e) => setSelectedDept(e.target.value)}
-              className="w-full sm:w-auto px-4 py-2 text-sm bg-black border border-white/10 rounded-lg text-white/80 focus:outline-none focus:border-red-500/60 cursor-pointer"
-            >
-              <option value="All">All Departments</option>
-              <option value="Information Technology">Information Technology</option>
-              <option value="Computer Science & Engineering">Computer Science & Eng.</option>
-            </select>
+            </h2>
           </div>
 
+          <div className="flex items-center gap-4 w-full sm:w-auto">
+            {selectedBatch && !searchQuery && (
+              <motion.button
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                onClick={() => setSelectedBatch(null)}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-white/10 bg-white/[0.02] text-xs font-mono hover:bg-white/[0.06] hover:text-white transition-all text-neutral-400"
+              >
+                <ArrowLeft size={13} />
+                Back to Batches
+              </motion.button>
+            )}
+
+            <div className="relative w-full sm:w-80 group">
+              {/* Outer shadow glow layer on focus */}
+              <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-r from-rose-500 to-white opacity-0 group-hover:opacity-20 group-focus-within:opacity-100 blur-[2px] transition duration-500 pointer-events-none" />
+              
+              <div className="relative w-full flex items-center bg-[#070707] border border-white/10 rounded-xl overflow-hidden focus-within:border-transparent transition-all duration-300">
+                <Search className="absolute left-4 text-white/30 group-focus-within:text-white transition-colors duration-300" size={15} />
+                <input
+                  type="text"
+                  placeholder="Search company..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-12 pr-10 py-3 text-xs font-mono bg-transparent text-white placeholder-white/30 outline-none"
+                />
+                {searchQuery && (
+                  <Magnet className="absolute right-3 flex items-center justify-center" magnetStrength={0.25}>
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="text-white/30 hover:text-white transition-colors cursor-pointer p-1"
+                    >
+                      <X size={13} />
+                    </button>
+                  </Magnet>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Guides Grid */}
-        <AnimatePresence mode="popLayout">
-          {filteredGuides.length > 0 ? (
-            <motion.div 
-              layout
-              className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-            >
-              {filteredGuides.map((guide, idx) => (
-                <motion.div
-                  layout
-                  key={guide.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.4, delay: Math.min(idx * 0.05, 0.3) }}
-                  onClick={() => setSelectedGuide(guide)}
-                  className="group relative cursor-pointer border border-white/5 hover:border-red-500/30 bg-white/[0.01] hover:bg-white/[0.03] p-6 rounded-xl hover:shadow-[0_12px_24px_rgba(237,27,88,0.05)] transition-all duration-300 flex flex-col justify-between"
-                >
-                  {/* Glowing tag border effect on hover */}
-                  <div className="absolute top-0 left-0 w-[2px] h-0 bg-red-500 group-hover:h-full transition-all duration-300 rounded-l-xl" />
-                  
-                  <div>
-                    {/* Header elements */}
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-white/[0.04] border border-white/5 text-[10px] font-bold uppercase tracking-wider text-white/60">
-                        <Building size={10} className="text-red-400" />
-                        {guide.company}
-                      </span>
-                      
-                      {guide.selected && (
-                        <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-green-400 bg-green-950/20 px-2 py-0.5 rounded border border-green-500/20">
-                          <CheckCircle size={10} />
-                          Selected
-                        </span>
-                      )}
-                    </div>
-
-                    <h3 className="text-lg font-semibold text-white group-hover:text-red-400 transition-colors">
-                      {guide.candidateName}
-                    </h3>
-                    
-                    <div className="flex items-center gap-4 mt-2 text-xs text-white/50">
-                      <span className="flex items-center gap-1">
-                        <GraduationCap size={12} />
-                        {guide.department === "Computer Science & Engineering" ? "CSE" : "IT"}
-                      </span>
-                      <span>•</span>
-                      <span>Class of {guide.yearOfGrad}</span>
-                    </div>
-
-                    {/* Preview Snippet */}
-                    <p className="text-xs text-white/40 leading-relaxed mt-4 line-clamp-3">
-                      {guide.experience}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between mt-6 pt-4 border-t border-white/5 text-[11px] text-white/50 group-hover:text-white transition-colors">
-                    <span className="flex items-center gap-1 font-semibold text-red-400/90 group-hover:text-red-400">
-                      Read Experience <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
-                    </span>
-                    <a
-                      href={guide.pdfPath}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="p-1.5 rounded hover:bg-white/5 text-white/40 hover:text-white transition-colors"
-                      title="Open Original PDF"
+        {/* Guides Grid / Batch View with Split Animation */}
+        <div className="relative min-h-[400px]">
+          <AnimatePresence mode="wait">
+            {searchQuery ? (
+              // Search view: bypass hierarchy
+              <motion.div
+                key="search-view"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="grid gap-6 gap-y-16 lg:gap-y-20 sm:grid-cols-2 lg:grid-cols-3"
+              >
+                {filteredCompanyGuides.length > 0 ? (
+                  filteredCompanyGuides.map((guide) => {
+                    const meta = companyMetadata[guide.company] || defaultMeta;
+                    return (
+                      <motion.div
+                        key={guide.key}
+                        variants={itemVariants}
+                        className="z-10"
+                      >
+                        <FolderCard
+                          company={guide.company}
+                          count={guide.count}
+                          contributors={guide.contributors}
+                          pdfPath={guide.pdfPath}
+                          meta={meta}
+                          badgeText={`${guide.count} ${guide.count === 1 ? "Exp" : "Exps"} (${guide.batchName})`}
+                          isParent={false}
+                        />
+                      </motion.div>
+                    );
+                  })
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="col-span-full py-24 text-center border border-dashed border-white/10 rounded-2xl bg-white/[0.01]"
+                  >
+                    <FileText size={48} className="mx-auto text-white/10 mb-4" />
+                    <h3 className="text-lg font-semibold tracking-wide text-white/80">No Guides Found</h3>
+                    <p className="text-sm text-white/40 mt-1 font-light">Try searching for a different company name.</p>
+                  </motion.div>
+                )}
+              </motion.div>
+            ) : selectedBatch ? (
+              // Batch specific view: company folders
+              <motion.div
+                key={`batch-companies-${selectedBatch}`}
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="grid gap-6 gap-y-16 lg:gap-y-20 sm:grid-cols-2 lg:grid-cols-3"
+              >
+                {companyGuidesForSelectedBatch.map((guide) => {
+                  const meta = companyMetadata[guide.company] || defaultMeta;
+                  return (
+                    <motion.div
+                      key={guide.company}
+                      variants={itemVariants}
+                      className="z-10"
                     >
-                      <Download size={14} />
-                    </a>
-                  </div>
+                      <FolderCard
+                        company={guide.company}
+                        count={guide.count}
+                        contributors={guide.contributors}
+                        pdfPath={guide.pdfPath}
+                        meta={meta}
+                        isParent={false}
+                      />
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            ) : (
+              // Root view: Batch Folders
+              <motion.div
+                key="batch-list"
+                variants={batchContainerVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="flex justify-center"
+              >
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 w-full justify-center">
+                  {batches.map((batch) => {
+                    const customMeta = {
+                      ...batchMeta,
+                      initial: String(batch.year % 100),
+                    };
 
-                </motion.div>
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="py-24 text-center border border-dashed border-white/10 rounded-2xl"
-            >
-              <FileText size={48} className="mx-auto text-white/20 mb-4" />
-              <h3 className="text-lg font-semibold">No Guides Found</h3>
-              <p className="text-sm text-white/40 mt-1">Try tweaking your filters or search keywords.</p>
-            </motion.div>
+                    const isThisSplitting = splittingBatch === batch.name;
+                    const isAnySplitting = splittingBatch !== null;
+
+                    return (
+                      <motion.div
+                        key={batch.name}
+                        className="z-10"
+                        animate={{
+                          opacity: isAnySplitting && !isThisSplitting ? 0 : 1,
+                          scale: isAnySplitting && !isThisSplitting ? 0.92 : 1,
+                        }}
+                        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                      >
+                        <FolderCard
+                          company={batch.name}
+                          count={batch.companiesCount}
+                          contributors={batch.contributors}
+                          meta={customMeta}
+                          onClick={() => handleBatchClick(batch.name)}
+                          buttonText="Open Batch Folder"
+                          customDescription={`Explore the detailed, compiled company-wise interview experiences shared by students of the graduating batch of ${batch.year}.`}
+                          badgeText={`${batch.companiesCount} ${batch.companiesCount === 1 ? "Company" : "Companies"}`}
+                          isParent={true}
+                          isSplitting={isThisSplitting}
+                        />
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Fixed Splitting Overlay Card (3D Division Animation) */}
+          {splittingBatch && (
+            <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-[999] overflow-hidden bg-black/10 backdrop-blur-[1px]">
+              <div className="w-[340px] h-[370px] relative">
+                <FolderCard
+                  company={splittingBatch}
+                  count={batches.find(b => b.name === splittingBatch)?.companiesCount || 0}
+                  contributors={[]}
+                  meta={{
+                    color: "text-rose-500",
+                    bgGlow: "rgba(244, 63, 94, 0.12)",
+                    gradientLine: "from-rose-400/50 via-rose-500/50 to-transparent",
+                    buttonClass: "border-rose-500/30 hover:border-rose-400 hover:bg-rose-500/10",
+                    initial: batches.find(b => b.name === splittingBatch) ? String(batches.find(b => b.name === splittingBatch)!.year % 100) : "27",
+                  }}
+                  isParent={true}
+                  isSplitting={true}
+                />
+              </div>
+            </div>
           )}
-        </AnimatePresence>
+        </div>
 
       </div>
-
-      {/* Detail Modal Overlay */}
-      <AnimatePresence>
-        {selectedGuide && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
-            onClick={() => setSelectedGuide(null)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-4xl max-h-[85vh] overflow-y-auto bg-[#0a0a0a] border border-white/10 p-6 md:p-8 rounded-2xl flex flex-col justify-between scrollbar-thin shadow-[0_24px_48px_rgba(0,0,0,0.5)]"
-            >
-              
-              {/* Close Button */}
-              <button
-                onClick={() => setSelectedGuide(null)}
-                className="absolute right-4 top-4 p-2 text-white/50 hover:text-white hover:bg-white/5 rounded-full transition-colors"
-              >
-                <X size={20} />
-              </button>
-
-              {/* Modal Content */}
-              <div>
-                <div className="flex flex-wrap items-center gap-3 mb-4">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-white/[0.04] border border-white/5 text-xs font-bold uppercase tracking-wider text-white">
-                    <Building size={12} className="text-red-400" />
-                    {selectedGuide.company}
-                  </span>
-                  
-                  {selectedGuide.selected && (
-                    <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-green-400 bg-green-950/20 px-2.5 py-0.5 rounded border border-green-500/20">
-                      <CheckCircle size={11} />
-                      Selected
-                    </span>
-                  )}
-                </div>
-
-                <h2 className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-white mb-2">
-                  {selectedGuide.candidateName}
-                </h2>
-
-                <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/60 mb-8 border-b border-white/5 pb-4">
-                  <div className="flex items-center gap-1.5">
-                    <GraduationCap size={16} className="text-red-400/80" />
-                    <span>Department of {selectedGuide.department}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <BookOpen size={16} className="text-red-400/80" />
-                    <span>Class of {selectedGuide.yearOfGrad}</span>
-                  </div>
-                </div>
-
-                {/* Grid for details */}
-                <div className="space-y-6 text-sm md:text-base leading-relaxed text-white/80">
-                  
-                  {/* Experience Section */}
-                  <div>
-                    <h4 className="text-xs uppercase tracking-widest text-red-400 font-bold mb-3 flex items-center gap-2">
-                      <Briefcase size={14} />
-                      Interview Experience
-                    </h4>
-                    <div className="bg-white/[0.01] border border-white/5 p-5 rounded-xl text-white/70 text-sm leading-relaxed">
-                      <FormattedText text={selectedGuide.experience} />
-                    </div>
-                  </div>
-
-                  {/* Preparation Tips Section */}
-                  {selectedGuide.prepTips && (
-                    <div>
-                      <h4 className="text-xs uppercase tracking-widest text-red-400 font-bold mb-3 flex items-center gap-2">
-                        <CheckCircle size={14} />
-                        Preparation Tips
-                      </h4>
-                    <div className="bg-white/[0.01] border border-white/5 p-5 rounded-xl text-white/70 text-sm leading-relaxed">
-                      <FormattedText text={selectedGuide.prepTips} />
-                    </div>
-                    </div>
-                  )}
-
-                  {/* Additional Notes Section */}
-                  {selectedGuide.additionalNotes && (
-                    <div>
-                      <h4 className="text-xs uppercase tracking-widest text-red-400 font-bold mb-3 flex items-center gap-2">
-                        <FileText size={14} />
-                        Additional Notes
-                      </h4>
-                    <div className="bg-white/[0.01] border border-white/5 p-5 rounded-xl text-white/70 text-sm leading-relaxed">
-                      <FormattedText text={selectedGuide.additionalNotes} />
-                    </div>
-                    </div>
-                  )}
-
-                </div>
-              </div>
-
-              {/* Actions Footer */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 justify-between mt-8 pt-6 border-t border-white/5">
-                <span className="text-xs text-white/40">
-                  Source Document: {selectedGuide.pdfPath.split('/').pop()}
-                </span>
-                
-                <a
-                  href={selectedGuide.pdfPath}
-                  download={selectedGuide.pdfPath.split('/').pop()}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg border border-red-500/40 hover:border-red-500 bg-red-500/10 hover:bg-red-500 text-sm font-semibold uppercase tracking-wider text-white transition-all shadow-lg hover:shadow-red-500/15"
-                >
-                  <Download size={14} />
-                  Download Original PDF
-                </a>
-              </div>
-
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       <Footer />
     </div>
   );

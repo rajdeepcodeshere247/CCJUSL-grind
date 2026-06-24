@@ -1,13 +1,15 @@
 @import "tailwindcss";
 
+
 /* ── Custom breakpoint: xs = 400px ───────────────────────────────────────── */
 @theme {
   --breakpoint-xs: 400px;
 }
 
+/* Defaulting to the dark scheme for the premium tech look */
 :root {
-  --background: #ededed;
-  --foreground: #000000;
+  --background: #000000;
+  --foreground: #ededed;
 }
 
 @theme inline {
@@ -29,14 +31,16 @@
 
 html {
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "JetBrains Mono", Arial, Helvetica, sans-serif;
+  font-family: var(--font-jetbrains-mono), Arial, Helvetica, sans-serif;
   overflow-x: hidden;
   overscroll-behavior-x: none;
+  -webkit-font-smoothing: antialiased;
 }
 
 button {
@@ -74,11 +78,25 @@ button {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ef4444; /* red-500 hover */
+  background: #ed1b58; /* CodeClub Crimson hover */
 }
 
 /* Firefox scrollbar styles */
 * {
   scrollbar-width: thin;
   scrollbar-color: #262626 #000000;
-}
+}
+
+/* ── Shiny Text sweep effect ── */
+@keyframes shine {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+@utility animate-shine {
+  animation: shine 6s linear infinite;
+}
