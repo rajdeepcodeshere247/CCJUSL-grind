@@ -14,7 +14,6 @@ import { FEATURES } from "@/config/features";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/events", label: "Events" },
-  { href: "/gallery", label: "Gallery" },
   { href: "/teams", label: "Teams" },
   { href: "/alumni", label: "Alumni" },
   { href: "/guides", label: "Guides" },
