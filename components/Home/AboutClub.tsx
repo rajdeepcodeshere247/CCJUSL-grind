@@ -10,7 +10,7 @@ export default function AboutClub() {
     <section className="w-full bg-black py-14 sm:py-20 lg:py-28">
       <div className="mx-auto w-11/12 max-w-7xl">
         <SectionHeading className="mb-8 sm:mb-12 lg:mb-16">
-          About <span className="text-[#ed1b58]">Code</span>Club
+          About Code Club
         </SectionHeading>
 
         <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-16">

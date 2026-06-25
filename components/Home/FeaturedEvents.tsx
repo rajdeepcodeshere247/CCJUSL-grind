@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import SectionHeading from "@/components/ui/SectionHeading";
 import EventCard from "@/components/Events/EventCard";
+import EventCardTouch from "@/components/Events/EventCardTouch";
 import { flagshipEvents } from "@/data/events";
 
 export default function FeaturedEvents() {
@@ -24,9 +25,12 @@ export default function FeaturedEvents() {
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-16 gap-x-12">
-            {preview.map((event, i) => (
-              <EventCard key={event.id} event={event} index={i} />
+          <div className="flex flex-wrap gap-8 items-center justify-center w-full">
+            {preview.map((event) => (
+              <React.Fragment key={event.id}>
+                <EventCard event={event} />
+                <EventCardTouch event={event} />
+              </React.Fragment>
             ))}
           </div>
         </motion.div>

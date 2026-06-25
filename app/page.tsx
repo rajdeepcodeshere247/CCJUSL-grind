@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import DomeGallery from "@/components/DomeGallery";
 import TextType from "@/components/TextType";
 import { galleryItems } from "@/data/gallery";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 const domeImages = galleryItems.map((item) => ({
   src: item.src,
@@ -28,10 +29,7 @@ export default function HomePage() {
         {/* Gallery Section */}
         <section className="w-full bg-black py-16 sm:py-24 border-b border-white/5 flex flex-col items-center justify-center">
           <div className="mx-auto w-11/12 max-w-7xl text-center mb-8">
-            <h2 className="text-3xl font-semibold uppercase tracking-tight xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4">
-              Our <span className="text-red-400">Gallery</span>
-            </h2>
-            <div className="h-px w-24 origin-center bg-red-400 mx-auto mb-6" />
+            <SectionHeading className="mb-6">Our Gallery</SectionHeading>
             <div className="h-12 text-sm sm:text-base md:text-lg font-semibold tracking-wider text-white/70">
               <TextType
                 text={[

@@ -1,119 +1,204 @@
-// ─── Event Data ───────────────────────────────────────────────────────────────
-// To add or edit events, modify only this file.
-// Images live in /public/images/events/
+import { Event } from "@/components/Events/types/events";
 
 export type EventCategory = "exclusive" | "seasonal" | "flagship";
 
-export interface EventItem {
-  id: string;
-  title: string;
-  category: EventCategory;
-  image: string;
-  description?: string;
-  ribbonText?: string;
-}
-
-export const events: EventItem[] = [
+export const events: Event[] = [
   // ── Exclusive Events (empty — Coming Soon) ──────────────────────────────────
 
   // ── Seasonal Events ─────────────────────────────────────────────────────────
   {
     id: "push-to-prod",
+    slug: "push-to-prod",
     title: "Push to Prod and Pray",
     category: "seasonal",
     image: "/images/events/push-to-prod.webp",
     description: "Introductory session on modern Web Development and Technologies. Focused towards beginners trying to learn and get into Full Stack Web Applications.",
-    ribbonText: "Web Development"
+    status: "Closed",
+    tags: ["WEB", "DEV"],
+    finalsDate: "TBD",
+    lastDate: "TBD",
+    teamSize: "1",
+    prizePool: "N/A",
+    format: "Onsite",
+    color: "#ef4444",
   },
   {
     id: "include-cp",
+    slug: "include-cp",
     title: "#include<CP.h>",
     category: "seasonal",
     image: "/images/events/include-cp.webp",
-    description: "Introductory session on Competetive Programming. Aims to introduce to the world of competitive programming and help beginners get started.",
-    ribbonText: "Competetive Programming"
+    description: "Introductory session on Competitive Programming. Aims to introduce to the world of competitive programming and help beginners get started.",
+    status: "Closed",
+    tags: ["CP", "CODING"],
+    finalsDate: "TBD",
+    lastDate: "TBD",
+    teamSize: "1",
+    prizePool: "N/A",
+    format: "Onsite",
+    color: "#3b82f6",
   },
   {
     id: "array-tricks",
+    slug: "array-tricks",
     title: "Array Tricks",
     category: "seasonal",
     image: "/images/events/array-tricks.webp",
-    description: "Event on Array tricks used for Competetive programming and Contests",
-    ribbonText: "Competetive Programming"
+    description: "Event on Array tricks used for Competitive programming and Contests",
+    status: "Closed",
+    tags: ["CP", "ALGORITHMS"],
+    finalsDate: "TBD",
+    lastDate: "TBD",
+    teamSize: "1",
+    prizePool: "N/A",
+    format: "Onsite",
+    color: "#10b981",
   },
   {
     id: "sybau",
+    slug: "sybau",
     title: "SYBAU",
     category: "seasonal",
     image: "/images/events/sybau.webp",
     description: "Introductory Event for the students to Machine Learning and Artificial Intelligence. Students learn about the growing field of Machine Learning and improve their understanding of AI",
-    ribbonText: "Machine Learning & AI"
+    status: "Closed",
+    tags: ["ML", "AI"],
+    finalsDate: "TBD",
+    lastDate: "TBD",
+    teamSize: "1",
+    prizePool: "N/A",
+    format: "Onsite",
+    color: "#8b5cf6",
   },
   {
     id: "prarambh",
+    slug: "prarambh",
     title: "Prarambh",
     category: "seasonal",
     image: "/images/events/prarambh.webp",
     description: "Orientation of the First Year students into Code Club JUSL. Imparting them with technical knowledge and skills to get started with coding",
-    ribbonText: "Orientation"
+    status: "Closed",
+    tags: ["INTRO", "ORIENTATION"],
+    finalsDate: "TBD",
+    lastDate: "TBD",
+    teamSize: "1",
+    prizePool: "N/A",
+    format: "Onsite",
+    color: "#f59e0b",
   },
   {
     id: "valentines",
+    slug: "valentines",
     title: "Valentine's Coding Challenge",
     category: "seasonal",
     image: "/images/events/valentines-coding-challenge.webp",
     description: "A Coding Contests for those who prefer logic over love.",
-    ribbonText: "Special Challenge"
+    status: "Closed",
+    tags: ["CP", "CONTEST"],
+    finalsDate: "TBD",
+    lastDate: "TBD",
+    teamSize: "1",
+    prizePool: "TBD",
+    format: "Online",
+    color: "#ec4899",
   },
 
   // ── Flagship Events ─────────────────────────────────────────────────────────
   {
     id: "hackforge",
+    slug: "hackforge",
     title: "HackForge",
     category: "flagship",
     image: "/images/events/hackforge.webp",
     description: "Flagship of Srijan. A 24 hour hackathon aiming to solve real world problems using new and existing technologies to provide real solutions to them. Topics range from Blockchain, Web Development to Machine Learning and AI",
-    ribbonText: "24 hour Hackathon"
+    status: "Open",
+    tags: ["HACKATHON", "DEV"],
+    finalsDate: "30 Mar 2025",
+    lastDate: "25 Mar 2025",
+    teamSize: "3-4",
+    prizePool: "₹ 8,500",
+    format: "Onsite",
+    color: "#ea580c",
   },
   {
     id: "h42",
+    slug: "h42",
     title: "h42",
     category: "flagship",
     image: "/images/events/h42.webp",
-    description: "Flagship of Srijan. An ICPC style Competetive Programming Coding contest with team of 3 members each",
-    ribbonText: "Competetive Programming"
+    description: "Flagship of Srijan. An ICPC style Competitive Programming Coding contest with team of 3 members each",
+    status: "Closed",
+    tags: ["CP", "CODING"],
+    finalsDate: "20th April",
+    lastDate: "15th April",
+    teamSize: "1-3",
+    prizePool: "TBD",
+    format: "Online/Onsite",
+    color: "#06b6d4",
   },
   {
     id: "ptb",
+    slug: "ptb",
     title: "Pass the Baton",
     category: "flagship",
     image: "/images/events/pass-the-baton.webp",
     description: "Flagship of Srijan. A Relay Programming Contest where teams of 3 members each have to solve the problems in a relay format to score points.",
-    ribbonText: "Competetive Programming"
+    status: "Open",
+    tags: ["CP", "RELAY"],
+    finalsDate: "19th April 2025",
+    lastDate: "14th April 2025",
+    teamSize: "3",
+    prizePool: "₹ 9,000",
+    format: "Onsite",
+    color: "#eab308",
   },
   {
     id: "sherlocked",
+    slug: "sherlocked",
     title: "Sherlocked",
     category: "flagship",
     image: "/images/events/sherlocked.webp",
     description: "Flagship of Srijan. A Capture the Flag Contest where teams must uncover the mysteries by solving problems and puzzles. Puzzles may range from basic SQL to Cybersecurity fundamentals",
-    ribbonText: "Capture the Flag"
+    status: "Open",
+    tags: ["CTF", "PUZZLES"],
+    finalsDate: "19th April 2025",
+    lastDate: "16th April 2025",
+    teamSize: "2-3",
+    prizePool: "TBD",
+    format: "Online/Onsite",
+    color: "#a855f7",
   },
   {
     id: "epochalypse",
+    slug: "epochalypse",
     title: "Epochalypse",
     category: "flagship",
     image: "/images/events/epochalypse.webp",
-    description: "Flagship of Srijan. Build real world solutions using Machine Learning and Deep Learning approaches by training models to give the best possible outcomes to a persisent real world problem.",
-    ribbonText: "Machine Learning"
+    description: "Flagship of Srijan. Build real world solutions using Machine Learning and Deep Learning approaches by training models to give the best possible outcomes to a persistent real world problem.",
+    status: "Closed",
+    tags: ["ML", "AI"],
+    finalsDate: "30 Mar 2025",
+    lastDate: "25 Mar 2025",
+    teamSize: "3-4",
+    prizePool: "₹ 8,500",
+    format: "Online/Onsite",
+    color: "#10b981",
   },
   {
     id: "snap-syntax",
+    slug: "snap-syntax",
     title: "Snap Syntax",
     category: "flagship",
     image: "/images/events/snap-syntax.webp",
     description: "Flagship of Srijan. In Collaboration with ACM Student Chapter JU. Make the best looking working design of a website in a fixed provided time",
-    ribbonText: "Web Design and Development"
+    status: "Open",
+    tags: ["UI/UX", "DESIGN"],
+    finalsDate: "TBD",
+    lastDate: "TBD",
+    teamSize: "1-2",
+    prizePool: "TBD",
+    format: "Onsite",
+    color: "#f97316",
   },
 ];
 

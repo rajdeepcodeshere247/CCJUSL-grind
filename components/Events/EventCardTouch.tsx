@@ -7,10 +7,10 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Calendar, Users, Trophy, MapPin, Info } from "lucide-react";
 import { Event } from "@/components/Events/types/events";
-import {
-  CLIP_PATH,
-  CARD_DIMENSIONS,
-  CARD_OUTLINE_DIMENSIONS,
+import { 
+  CLIP_PATH, 
+  CARD_DIMENSIONS, 
+  CARD_OUTLINE_DIMENSIONS 
 } from "./constants/events";
 import ShareButton from "./ShareButton";
 import Image from "next/image";
@@ -37,11 +37,14 @@ const stripMarkdown = (text: string): string =>
     .replace(/^>\s+/gm, "")          // > blockquotes
     .trim();
 
-interface EventCardProps {
+interface EventCardTouchProps {
   event: Event;
 }
 
-const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
+const EventCardTouch: React.FC<EventCardTouchProps> = memo(({ event }) => {
+  // Use refs for state to completely bypass React re-rendering on toggle
+  const isOpen = useRef(false);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -51,22 +54,24 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
   const entryLayerRef = useRef<HTMLDivElement>(null);
   const outLineRef = useRef<SVGSVGElement>(null);
 
-  const hoverTl = useRef<gsap.core.Timeline | null>(null);
+  // Store the timeline in a ref so it's built once and reused
+  const touchTl = useRef<gsap.core.Timeline | null>(null);
 
   const { contextSafe } = useGSAP({ scope: containerRef });
 
   // --- ANIMATION INITIALIZATION ---
   useGSAP(() => {
-    hoverTl.current = gsap
+    touchTl.current = gsap
       .timeline({ paused: true })
-      .set(imageRef.current, { filter: "blur(0px) brightness(1)" })
+      .set(imageRef.current, { filter: "brightness(1)" })
       .to(
         imageRef.current,
         {
           scale: 1.1,
-          filter: "blur(2px) brightness(0.5)",
+          filter: "brightness(0.5)",
           duration: 0.5,
           ease: "power2.inOut",
+          force3D: true,
         },
         0,
       )
@@ -91,6 +96,7 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
         hiddenContentRef.current,
         {
           height: "auto",
+          autoAlpha: 1,
           duration: 0.4,
           ease: "power2.inOut",
         },
@@ -119,46 +125,46 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
             observer.disconnect();
           }
         },
-        { threshold: 0.4 },
+        { threshold: 0.3 },
       );
 
       observer.observe(containerRef.current);
+
       return () => observer.disconnect();
     }
-  }, [event.id]);
+  }, [event.slug]);
 
   // --- OPTIMIZED EVENT HANDLERS ---
-  const handleMouseEnter = contextSafe(() => {
-    hoverTl.current?.play();
-  });
+  const toggleCard = contextSafe((e: React.MouseEvent) => {
+    e.preventDefault();
+    isOpen.current = !isOpen.current;
 
-  const handleMouseLeave = contextSafe(() => {
-    hoverTl.current?.reverse();
-  });
-
-  const handleActionClick = contextSafe(() => {
-    hoverTl.current?.reverse();
+    if (isOpen.current) {
+      touchTl.current?.play();
+    } else {
+      touchTl.current?.reverse();
+    }
   });
 
   return (
-    <div
-      className="relative hidden lg:block"
-      style={{
-        width: CARD_OUTLINE_DIMENSIONS.w,
-        height: CARD_OUTLINE_DIMENSIONS.h,
+    <div 
+      className="relative block lg:hidden"
+      style={{ 
+        width: CARD_OUTLINE_DIMENSIONS.w, 
+        height: CARD_OUTLINE_DIMENSIONS.h 
       }}
     >
       <div
         ref={containerRef}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        onClick={toggleCard}
         style={{
           width: CARD_DIMENSIONS.w,
           height: CARD_DIMENSIONS.h,
           clipPath:
             "polygon(37.2px 0%, 100% 0%, 100% calc(100% - 37.2px), calc(100% - 37.2px) 100%, 0% 100%, 0% 37.2px)",
+          touchAction: "pan-y",
         }}
-        className="relative top-1/2 left-1/2 -translate-1/2 z-10 bg-[#121212] overflow-hidden cursor-pointer will-change-transform"
+        className="relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-[#121212] overflow-hidden cursor-pointer tap-highlight-transparent will-change-transform"
       >
         {/* Entry animation layer */}
         <div
@@ -172,17 +178,17 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
         </div>
 
         {/* 1. BACKGROUND IMAGE LAYER */}
-        <div className="absolute inset-0 z-0 w-full h-full">
+        <div className="absolute inset-0 z-0 w-full h-full pointer-events-none">
           <Image
             ref={imageRef}
             src={event.image}
             alt={event.title}
             fill
-            className="w-full h-full object-cover object-top will-change-[transform,filter]"
+            className="w-full h-full object-cover object-top will-change-[transform,filter] backface-hidden"
           />
           <div
             ref={overlayRef}
-            className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent pointer-events-none"
+            className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"
           />
         </div>
 
@@ -191,9 +197,9 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
           {/* -- ALWAYS VISIBLE PART (Title & Tags) -- */}
           <div
             ref={titleTagsRef}
-            className="flex flex-col gap-2 relative z-20 pointer-events-auto"
+            className="flex flex-col gap-2 relative z-20 pointer-events-none"
           >
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 pointer-events-auto">
               {event.tags.slice(0, 2).map((tag) => (
                 <span
                   key={tag}
@@ -206,7 +212,7 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
 
             <h3
               ref={titleRef}
-              className="font-elnath text-2xl font-bold text-white uppercase will-change-[color]"
+              className="font-elnath text-2xl font-bold text-white uppercase will-change-[color] pointer-events-auto"
             >
               {event.title}
             </h3>
@@ -215,17 +221,17 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
           {/* -- HIDDEN PART (Description, Meta, Buttons) -- */}
           <div
             ref={hiddenContentRef}
-            className="h-0 overflow-hidden flex flex-col gap-4 pointer-events-auto will-change-[height]"
+            className="h-0 opacity-0 overflow-hidden flex flex-col gap-4 will-change-[height,opacity,visibility] pointer-events-auto"
             style={{ display: "none" }}
           >
-            <div className="flex">
+            <div className="flex pointer-events-none">
               <p className="font-euclid text-gray-300 text-xs leading-relaxed line-clamp-2 pt-2">
                 {stripMarkdown(event.description)}
               </p>
             </div>
 
             {/* Metadata Grid */}
-            <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-[11px] text-white/80 font-euclid border-t border-white/10 pt-3">
+            <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-[11px] text-white/80 font-euclid border-t border-white/10 pt-3 pointer-events-none">
               <div className="flex items-center gap-2">
                 <Calendar className="w-3 h-3 text-white" />
                 <span>{event.finalsDate || event.lastDate || "TBD"}</span>
@@ -244,16 +250,16 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
               </div>
             </div>
 
-            {/* Buttons */}
+            {/* Buttons Container */}
             <div
-              className="flex flex-col gap-2 pb-1"
-              onClickCapture={handleActionClick}
+              className="flex flex-col gap-2 pb-1 relative z-30"
+              onClick={(e) => e.stopPropagation()}
             >
               <Link
                 href={`/events/${event.slug}`}
                 prefetch={false}
                 style={{ clipPath: CLIP_PATH }}
-                className="font-euclid text-xs uppercase font-bold flex items-center justify-center py-2 gap-2 rounded bg-white hover:bg-white/80 active:bg-gray-200 duration-200 transition-all text-black"
+                className="font-euclid text-xs uppercase font-bold flex items-center justify-center py-2 gap-2 rounded bg-white hover:bg-white/80 active:bg-gray-200 duration-150 transition-all text-black"
                 title="More Info"
               >
                 <p>More Info</p>
@@ -276,13 +282,15 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
           </div>
         </div>
       </div>
+
+      {/* Dynamic Outline */}
       <svg
         ref={outLineRef}
         viewBox={`0 0 ${CARD_OUTLINE_DIMENSIONS.w} ${CARD_OUTLINE_DIMENSIONS.h}`}
         className="absolute z-10 top-0 left-0 pointer-events-none opacity-0 will-change-[opacity]"
-        style={{
-          width: CARD_OUTLINE_DIMENSIONS.w,
-          height: CARD_OUTLINE_DIMENSIONS.h,
+        style={{ 
+          width: CARD_OUTLINE_DIMENSIONS.w, 
+          height: CARD_OUTLINE_DIMENSIONS.h 
         }}
       >
         <path
@@ -296,6 +304,6 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
   );
 });
 
-EventCard.displayName = "EventCard";
+EventCardTouch.displayName = "EventCardTouch";
 
-export default EventCard;
+export default EventCardTouch;
