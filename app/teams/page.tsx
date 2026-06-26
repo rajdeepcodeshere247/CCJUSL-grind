@@ -24,7 +24,6 @@ export default function TeamsPage() {
 
   return (
     <div className="min-h-screen bg-black">
-      {/* Header */}
       <div ref={headerRef} className="text-center pb-12 pt-10 sm:pt-12 lg:pt-16">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -60,7 +59,6 @@ export default function TeamsPage() {
       </div>
 
       <div className="mx-auto w-11/12 max-w-7xl">
-        {/* Category Selector */}
         <div className="mb-12">
           <TeamCategorySelector
             categories={teamCategories}
@@ -69,7 +67,6 @@ export default function TeamsPage() {
           />
         </div>
 
-        {/* Category Label */}
         <AnimatePresence mode="wait">
           <motion.h2
             key={activeCategory}
@@ -83,7 +80,6 @@ export default function TeamsPage() {
           </motion.h2>
         </AnimatePresence>
 
-        {/* Member Grid */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeCategory}
@@ -105,7 +101,6 @@ export default function TeamsPage() {
         </AnimatePresence>
       </div>
 
-      {/* Member Modal */}
       <TeamMemberModal
         member={selectedMember}
         onClose={() => setSelectedMember(null)}

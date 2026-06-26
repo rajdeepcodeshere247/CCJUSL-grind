@@ -12,7 +12,6 @@ export const teamCategories = [
 ] as const;
 
 export const teamMembers: TeamMember[] = [
-  // PR Team
   {
     id: "t4",
     name: "Kaustav Mondal",
@@ -75,7 +74,6 @@ export const teamMembers: TeamMember[] = [
     ],
     socials: { linkedin: "https://www.linkedin.com/in/md-arsalan-0b6315371?utm_source=share_via&utm_content=profile&utm_medium=member_android", github: "https://github.com/mdarsalanmahtab1-dotcom" },
   },
-  // Design Team
   {
     id: "t26",
     name: "Prama Ray",
@@ -137,8 +135,6 @@ export const teamMembers: TeamMember[] = [
     ],
     socials: { linkedin: "https://www.linkedin.com/in/anik-acharya-99a349399?utm_source=share_via&utm_content=profile&utm_medium=member_android", github: "https://github.com/anikacharya07" },
   },
-
-  // Development Team
   {
     id: "t9",
     name: "Somnath Chattaraj",
@@ -192,8 +188,6 @@ export const teamMembers: TeamMember[] = [
     bio: "I am passionate about coding, problem-solving, and building useful projects. I have achieved a LeetCode rating of 1845, Codeforces Specialist status, and have been a finalist in multiple national-level hackathons. I enjoy learning new technologies, working in teams, and taking on new challenges.",
     socials: { linkedin: "https://www.linkedin.com/in/saptarshi-upadhyay/", github: "https://github.com/saptarshiUpadhyay2006" },
   },
-
-  // AI/ML Team
   {
     id: "t11",
     name: "Daniyal Anis",
@@ -218,8 +212,6 @@ export const teamMembers: TeamMember[] = [
     bio: "As a research-driven science enthusiast and technology aficionado, I take a deep interest in transcending the theoretical constraints of an academic curriculum and applying learnt concepts to build practical solutions with a global outlook.",
     socials: { linkedin: "https://www.linkedin.com/in/sarbosarcar/", github: "https://github.com/sarbosarcar" },
   },
-
-  // CP Team
   {
     id: "t14",
     name: "Sayan Dutta",
@@ -292,7 +284,6 @@ export const teamMembers: TeamMember[] = [
       "Global Rank 1: Clinched the absolute 1st Rank globally in GeeksforGeeks Weekly Contest 2026."
     ],
   },
-  // Logistics Team
   {
     id: "t16",
     name: "Krish Agarwal",
@@ -348,8 +339,6 @@ export const teamMembers: TeamMember[] = [
     bio: "I have quite a hand on knowledge in web dev, i made clone of some website(like amazon, only basic frontend with just html css). I have been helping seniors to manage events too during romanthan, srijan.",
     socials: { linkedin: "https://www.linkedin.com/in/syed-hasan-farhan-71b262373/", github: "https://github.com/FarhanSyed987" },
   },
-
-  // Sponsorship Team
   {
     id: "t18",
     name: "Ansh Kumar Singh",
@@ -404,8 +393,6 @@ export const teamMembers: TeamMember[] = [
     bio: "B.E. Information Technology student at Jadavpur University with good communication and interpersonal skills. I am a quick learner, hardworking, and confident in interacting with people. I am interested in sponsorship and corporate outreach activities.",
     socials: { linkedin: "https://www.linkedin.com/in/md-mirajul-seikh-undefined-325b03370?utm_source=share_via&utm_content=profile&utm_medium=member_android", github: "https://github.com/mdmirajulseikh91-oss" },
   },
-
-  //Core Team
   {
     id: "t25",
     name: "Aritra Mondal",
