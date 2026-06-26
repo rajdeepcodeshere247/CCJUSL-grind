@@ -497,15 +497,28 @@ export default function FolderCard({
         onClick={(e) => {
           if (!cardRef.current) return;
           const rect = cardRef.current.getBoundingClientRect();
-          const isKeyboard = e.clientX === 0 && e.clientY === 0;
-          const clickX = isKeyboard ? 0.5 : (e.clientX - rect.left) / rect.width;
-          const clickY = isKeyboard ? 0.5 : (e.clientY - rect.top) / rect.height;
+          const native = e.nativeEvent as any;
+          
+          let clientX = e.clientX;
+          let clientY = e.clientY;
+          
+          if ('touches' in native && native.touches.length > 0) {
+            clientX = native.touches[0].clientX;
+            clientY = native.touches[0].clientY;
+          } else if ('changedTouches' in native && native.changedTouches.length > 0) {
+            clientX = native.changedTouches[0].clientX;
+            clientY = native.changedTouches[0].clientY;
+          }
+
+          const isKeyboard = clientX === 0 && clientY === 0;
+          const clickX = isKeyboard ? 0.5 : (clientX - rect.left) / rect.width;
+          const clickY = isKeyboard ? 0.5 : (clientY - rect.top) / rect.height;
           
           x.set(clickX);
           y.set(clickY);
           setPosition({
-            x: isKeyboard ? rect.width / 2 : e.clientX - rect.left,
-            y: isKeyboard ? rect.height / 2 : e.clientY - rect.top,
+            x: isKeyboard ? rect.width / 2 : clientX - rect.left,
+            y: isKeyboard ? rect.height / 2 : clientY - rect.top,
           });
 
           if (!isActive) {
@@ -518,7 +531,7 @@ export default function FolderCard({
           }
         }}
         type="button"
-        className={`block relative mt-8 pt-1 group w-full max-w-[340px] mx-auto outline-none text-left ${
+        className={`block relative mt-8 pt-1 group w-full max-w-[310px] sm:max-w-[340px] mx-auto outline-none text-left ${
           isParent ? "h-[370px]" : "h-[310px]"
         }`}
         style={{
@@ -539,15 +552,28 @@ export default function FolderCard({
       onClick={(e) => {
         if (!cardRef.current) return;
         const rect = cardRef.current.getBoundingClientRect();
-        const isKeyboard = e.clientX === 0 && e.clientY === 0;
-        const clickX = isKeyboard ? 0.5 : (e.clientX - rect.left) / rect.width;
-        const clickY = isKeyboard ? 0.5 : (e.clientY - rect.top) / rect.height;
+        const native = e.nativeEvent as any;
+        
+        let clientX = e.clientX;
+        let clientY = e.clientY;
+        
+        if ('touches' in native && native.touches.length > 0) {
+          clientX = native.touches[0].clientX;
+          clientY = native.touches[0].clientY;
+        } else if ('changedTouches' in native && native.changedTouches.length > 0) {
+          clientX = native.changedTouches[0].clientX;
+          clientY = native.changedTouches[0].clientY;
+        }
+
+        const isKeyboard = clientX === 0 && clientY === 0;
+        const clickX = isKeyboard ? 0.5 : (clientX - rect.left) / rect.width;
+        const clickY = isKeyboard ? 0.5 : (clientY - rect.top) / rect.height;
         
         x.set(clickX);
         y.set(clickY);
         setPosition({
-          x: isKeyboard ? rect.width / 2 : e.clientX - rect.left,
-          y: isKeyboard ? rect.height / 2 : e.clientY - rect.top,
+          x: isKeyboard ? rect.width / 2 : clientX - rect.left,
+          y: isKeyboard ? rect.height / 2 : clientY - rect.top,
         });
 
         if (!isActive) {
@@ -559,7 +585,7 @@ export default function FolderCard({
           // Second click opens the PDF guide
         }
       }}
-      className={`block relative mt-8 pt-1 group w-full max-w-[340px] mx-auto outline-none ${
+      className={`block relative mt-8 pt-1 group w-full max-w-[310px] sm:max-w-[340px] mx-auto outline-none ${
         isParent ? "h-[370px]" : "h-[310px]"
       }`}
       style={{
