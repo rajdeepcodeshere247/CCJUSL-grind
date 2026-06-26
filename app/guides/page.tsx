@@ -18,6 +18,7 @@ import DecryptText from "@/components/ui/DecryptText";
 import ShinyText from "@/components/ui/ShinyText";
 import Magnet from "@/components/ui/Magnet";
 import FolderCard from "@/components/ui/FolderCard";
+import MultiPdfFolderCard from "@/components/ui/MultiPdfFolderCard";
 
 // Brand-specific metadata for dynamic, premium styling
 const companyMetadata: Record<string, {
@@ -75,6 +76,13 @@ const companyMetadata: Record<string, {
     gradientLine: "from-emerald-400/50 via-emerald-500/50 to-transparent",
     buttonClass: "border-emerald-500/30 hover:border-emerald-400 hover:bg-emerald-500/10",
     initial: "W"
+  },
+  "Goldman Sachs": {
+    color: "text-sky-400",
+    bgGlow: "rgba(56, 189, 248, 0.12)",
+    gradientLine: "from-sky-400/50 via-sky-500/50 to-transparent",
+    buttonClass: "border-sky-500/30 hover:border-sky-400 hover:bg-sky-500/10",
+    initial: "G"
   }
 };
 
@@ -220,15 +228,30 @@ export default function GuidesPage() {
 
   const companyGuidesForSelectedBatch = useMemo(() => {
     if (!selectedBatchData) return [];
-    const map = new Map<string, { pdfPath: string; count: number; contributors: string[] }>();
+    const map = new Map<string, { pdfs: { title: string; path: string; author?: string }[]; count: number; contributors: string[] }>();
     selectedBatchData.guides.forEach((guide) => {
       const existing = map.get(guide.company);
       const name = guide.candidateName;
+
+      let pdfTitle = "Interview Guide";
+      if (guide.pdfPath.includes("gyan")) {
+        pdfTitle = "Placement Gyan";
+      } else if (guide.pdfPath.includes("experience")) {
+        pdfTitle = "Interview Experience";
+      }
+
       if (existing) {
         existing.count += 1;
+        if (!existing.pdfs.some(p => p.path === guide.pdfPath)) {
+          existing.pdfs.push({ title: pdfTitle, path: guide.pdfPath, author: name });
+        }
         if (!existing.contributors.includes(name)) existing.contributors.push(name);
       } else {
-        map.set(guide.company, { pdfPath: guide.pdfPath, count: 1, contributors: [name] });
+        map.set(guide.company, { 
+          pdfs: [{ title: pdfTitle, path: guide.pdfPath, author: name }], 
+          count: 1, 
+          contributors: [name] 
+        });
       }
     });
     return Array.from(map.entries()).map(([company, data]) => ({ company, ...data }));
@@ -236,17 +259,28 @@ export default function GuidesPage() {
 
   // List of all company guides across all batches for direct search
   const allCompanyGuides = useMemo(() => {
-    const map = new Map<string, { pdfPath: string; count: number; contributors: string[]; batchName: string }>();
+    const map = new Map<string, { pdfs: { title: string; path: string; author?: string }[]; count: number; contributors: string[]; batchName: string }>();
     interviewGuides.forEach((guide) => {
       const key = `${guide.company} (${guide.yearOfGrad % 100} Batch)`;
       const name = guide.candidateName;
       const existing = map.get(key);
+
+      let pdfTitle = "Interview Guide";
+      if (guide.pdfPath.includes("gyan")) {
+        pdfTitle = "Placement Gyan";
+      } else if (guide.pdfPath.includes("experience")) {
+        pdfTitle = "Interview Experience";
+      }
+
       if (existing) {
         existing.count += 1;
+        if (!existing.pdfs.some(p => p.path === guide.pdfPath)) {
+          existing.pdfs.push({ title: pdfTitle, path: guide.pdfPath, author: name });
+        }
         if (!existing.contributors.includes(name)) existing.contributors.push(name);
       } else {
         map.set(key, { 
-          pdfPath: guide.pdfPath, 
+          pdfs: [{ title: pdfTitle, path: guide.pdfPath, author: name }], 
           count: 1, 
           contributors: [name], 
           batchName: `${guide.yearOfGrad % 100} Batch` 
@@ -420,15 +454,25 @@ export default function GuidesPage() {
                         variants={itemVariants}
                         className="z-10"
                       >
-                        <FolderCard
-                          company={guide.company}
-                          count={guide.count}
-                          contributors={guide.contributors}
-                          pdfPath={guide.pdfPath}
-                          meta={meta}
-                          badgeText={`${guide.count} ${guide.count === 1 ? "Exp" : "Exps"} (${guide.batchName})`}
-                          isParent={false}
-                        />
+                        {guide.pdfs.length > 1 ? (
+                          <MultiPdfFolderCard
+                            company={guide.company}
+                            pdfs={guide.pdfs}
+                            contributors={guide.contributors}
+                            meta={meta}
+                            badgeText={`${guide.pdfs.length} Guides (${guide.batchName})`}
+                          />
+                        ) : (
+                          <FolderCard
+                            company={guide.company}
+                            count={guide.count}
+                            contributors={guide.contributors}
+                            pdfPath={guide.pdfs[0]?.path}
+                            meta={meta}
+                            badgeText={`${guide.count} ${guide.count === 1 ? "Exp" : "Exps"} (${guide.batchName})`}
+                            isParent={false}
+                          />
+                        )}
                       </motion.div>
                     );
                   })
@@ -462,14 +506,23 @@ export default function GuidesPage() {
                       variants={itemVariants}
                       className="z-10"
                     >
-                      <FolderCard
-                        company={guide.company}
-                        count={guide.count}
-                        contributors={guide.contributors}
-                        pdfPath={guide.pdfPath}
-                        meta={meta}
-                        isParent={false}
-                      />
+                      {guide.pdfs.length > 1 ? (
+                        <MultiPdfFolderCard
+                          company={guide.company}
+                          pdfs={guide.pdfs}
+                          contributors={guide.contributors}
+                          meta={meta}
+                        />
+                      ) : (
+                        <FolderCard
+                          company={guide.company}
+                          count={guide.count}
+                          contributors={guide.contributors}
+                          pdfPath={guide.pdfs[0]?.path}
+                          meta={meta}
+                          isParent={false}
+                        />
+                      )}
                     </motion.div>
                   );
                 })}

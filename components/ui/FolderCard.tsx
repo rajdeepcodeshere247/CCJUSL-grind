@@ -104,6 +104,16 @@ const brandBorders: Record<string, {
     bgBtn: "group-hover:bg-emerald-500 group-hover:text-black group-hover:border-emerald-400",
     borderBtn: "border-emerald-500/30 text-emerald-400 bg-emerald-500/10",
     colorHex: "#10b981",
+  },
+  "Goldman Sachs": {
+    border: "border-sky-500/50",
+    borderHover: "border-sky-400/80",
+    glowDefault: "rgba(56, 189, 248, 0.22)",
+    glowHover: "rgba(56, 189, 248, 0.45)",
+    text: "text-sky-400",
+    bgBtn: "group-hover:bg-sky-500 group-hover:text-black group-hover:border-sky-400",
+    borderBtn: "border-sky-500/30 text-sky-400 bg-sky-500/10",
+    colorHex: "#38bdf8",
   }
 };
 
