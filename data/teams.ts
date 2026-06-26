@@ -12,7 +12,6 @@ export const teamCategories = [
 ] as const;
 
 export const teamMembers: TeamMember[] = [
-  // PR Team
   {
     id: "t4",
     name: "Kaustav Mondal",
@@ -75,7 +74,6 @@ export const teamMembers: TeamMember[] = [
     ],
     socials: { linkedin: "https://www.linkedin.com/in/md-arsalan-0b6315371?utm_source=share_via&utm_content=profile&utm_medium=member_android", github: "https://github.com/mdarsalanmahtab1-dotcom" },
   },
-  // Design Team
   {
     id: "t26",
     name: "Prama Ray",
@@ -137,8 +135,6 @@ export const teamMembers: TeamMember[] = [
     ],
     socials: { linkedin: "https://www.linkedin.com/in/anik-acharya-99a349399?utm_source=share_via&utm_content=profile&utm_medium=member_android", github: "https://github.com/anikacharya07" },
   },
-
-  // Development Team
   {
     id: "t9",
     name: "Somnath Chattaraj",
@@ -192,8 +188,6 @@ export const teamMembers: TeamMember[] = [
     bio: "I am passionate about coding, problem-solving, and building useful projects. I have achieved a LeetCode rating of 1845, Codeforces Specialist status, and have been a finalist in multiple national-level hackathons. I enjoy learning new technologies, working in teams, and taking on new challenges.",
     socials: { linkedin: "https://www.linkedin.com/in/saptarshi-upadhyay/", github: "https://github.com/saptarshiUpadhyay2006" },
   },
-
-  // AI/ML Team
   {
     id: "t11",
     name: "Daniyal Anis",
@@ -218,8 +212,45 @@ export const teamMembers: TeamMember[] = [
     bio: "As a research-driven science enthusiast and technology aficionado, I take a deep interest in transcending the theoretical constraints of an academic curriculum and applying learnt concepts to build practical solutions with a global outlook.",
     socials: { linkedin: "https://www.linkedin.com/in/sarbosarcar/", github: "https://github.com/sarbosarcar" },
   },
-
-  // CP Team
+  {
+    id: "t31",
+    name: "Debarun Patra",
+    position: "AI/ML Coordinator",
+    photo: "/member_photos/Me2 - Debarun Patra.jpg",  
+    team: "aiml",
+    graduationYear: 2028,
+    bio: "Endlessly curious about why things work and happiest taking an idea from rough prototype to something real. Building with ML is just fun for me.",
+    socials: { linkedin: "https://www.linkedin.com/in/debarunpatra2005/", github: "https://github.com/debarunpatra2005" },
+  },
+  {
+    id: "t32",
+    name: "Naireet Sadhukhan",
+    position: "AI/ML Coordinator",
+    photo: "/member_photos/Naireet Sadhukhan - Naireet Sadhukhan.webp",
+    team: "aiml",
+    graduationYear: 2028,
+    bio: "Love exploring new topics in AI. Curious, research-oriented, and always eager to learn and build. Enjoy reading manhwas and webnovels in free time.",
+    achievements: [
+      "First author of an NLP research paper on sentiment analysis of X (Twitter) data that received 2nd place in the \"ML to GenAI\" track at ICDMAI 2026.",
+    ],
+    socials: { linkedin: "https://www.linkedin.com/in/naireet-sadhukhan", github: "https://github.com/naireetsadhukhan117" },
+  },
+  {
+    id: "t30",
+    name: "Samriddha Banerjee",
+    position: "AI/ML Coordinator",
+    photo: "/member_photos/WhatsApp Image 2026-06-26 at 10.18.24 PM - Samriddha Banerjee.jpeg",
+    team: "aiml",
+    graduationYear: 2028,
+    bio: "I am a Computer Science and Engineering student at Jadavpur University (2024–2028) with a keen interest in artificial intelligence, machine learning, competitive programming, problem-solving, and advanced mathematics. I enjoy learning new technologies, building practical solutions, and continuously improving my technical skills. I am a quick learner, collaborative, responsible, and always eager to contribute effectively to a team. I look forward to taking on new challenges and am excited about the opportunity to contribute to the AI/ML team of JU CodeClub.",
+    achievements: [
+      "1st place in Mathemagician at Srijan 2025",
+      "Reliance Foundation Undergraduate Scholar",
+      "Cleared the ISI entrance examinations",
+    ],
+    socials: { linkedin: "https://www.linkedin.com/in/samriddha-banerjee-a077b1316/", github: "https://github.com/samriddha1bits-ship-it" },
+  },
+  // CP
   {
     id: "t14",
     name: "Sayan Dutta",
@@ -292,7 +323,6 @@ export const teamMembers: TeamMember[] = [
       "Global Rank 1: Clinched the absolute 1st Rank globally in GeeksforGeeks Weekly Contest 2026."
     ],
   },
-  // Logistics Team
   {
     id: "t16",
     name: "Krish Agarwal",
@@ -348,8 +378,6 @@ export const teamMembers: TeamMember[] = [
     bio: "I have quite a hand on knowledge in web dev, i made clone of some website(like amazon, only basic frontend with just html css). I have been helping seniors to manage events too during romanthan, srijan.",
     socials: { linkedin: "https://www.linkedin.com/in/syed-hasan-farhan-71b262373/", github: "https://github.com/FarhanSyed987" },
   },
-
-  // Sponsorship Team
   {
     id: "t18",
     name: "Ansh Kumar Singh",
@@ -404,8 +432,6 @@ export const teamMembers: TeamMember[] = [
     bio: "B.E. Information Technology student at Jadavpur University with good communication and interpersonal skills. I am a quick learner, hardworking, and confident in interacting with people. I am interested in sponsorship and corporate outreach activities.",
     socials: { linkedin: "https://www.linkedin.com/in/md-mirajul-seikh-undefined-325b03370?utm_source=share_via&utm_content=profile&utm_medium=member_android", github: "https://github.com/mdmirajulseikh91-oss" },
   },
-
-  //Core Team
   {
     id: "t25",
     name: "Aritra Mondal",
