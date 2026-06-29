@@ -48,14 +48,12 @@ export const teamMembers: TeamMember[] = [
     position: "PR Coordinator",
     photo: "/member_photos/src.jpeg", 
     team: "pr",
-    graduationYear: 2029,
+    graduationYear: 2028,
     bio: "Tech enthusiast with hands-on experience architecting highly concurrent distributed systems, AI-integrated software. Passionate about tackling complex data structures, building scalable, high-performance web applications.",
     achievements: [
       "Ranked 46 & 146 in ICPC Asia West Chennai and Amritapuri Regionals 2025 respectively.",
       "Reached Specialist in CODEFORCES with a Maximum Rating of 1448 and 3 Star on CODECHEF.",
-      "Solved over 500+ problems across all competitive programming platforms.",
-      "Finalist of Eastern India Blockchain Summit 2.0 at IIT Kharagpur.",
-      "Achieved 98%ile in JEE Mains 2024 a rank of 326 in WBJEE 2024."
+      "Finalist of Eastern India Blockchain Summit 2.0 at IIT Kharagpur."
     ],
     socials: { linkedin: "https://www.linkedin.com/in/soumyadeep-roy-chowdhury101", github: "https://github.com/soumyadeep-rc " },
   },
