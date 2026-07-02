@@ -14,7 +14,17 @@ interface RegisterButtonProps {
 export default function RegisterButton({ status, link, isCard, slug }: RegisterButtonProps) {
   const buttonStyle = isCard ? { clipPath: CLIP_PATH } : {};
 
-  if (status === "Closed") return null;
+ if (status === "Closed") {
+    return (
+      <div
+        style={buttonStyle}
+        className="font-euclid text-xs uppercase font-bold flex items-center justify-center py-2.5 gap-2 bg-[#1e293b]/60 border border-slate-700/40 text-slate-400 select-none cursor-not-allowed w-full tracking-wide transition-all duration-300 opacity-80"
+      >
+        <p>Closed</p>
+        <CircleSlash size={14} strokeWidth={2.5} className="opacity-60" />
+      </div>
+    );
+  }
 
   if (status === "Coming Soon") {
     return (

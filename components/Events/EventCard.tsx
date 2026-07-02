@@ -15,26 +15,25 @@ import {
 import ShareButton from "./ShareButton";
 import Image from "next/image";
 import DocButton from "./DocButton";
+import RegisterButton from "./RegisterButton";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// Strips common markdown syntax (bold, italic, code, links, headings, etc.)
-// so raw markdown strings render as clean plain text.
 const stripMarkdown = (text: string): string =>
   text
-    .replace(/\*\*(.+?)\*\*/g, "$1") // **bold**
-    .replace(/\*(.+?)\*/g, "$1")     // *italic*
-    .replace(/__(.+?)__/g, "$1")     // __bold__
-    .replace(/_(.+?)_/g, "$1")       // _italic_
-    .replace(/~~(.+?)~~/g, "$1")     // ~~strikethrough~~
-    .replace(/`(.+?)`/g, "$1")       // `inline code`
-    .replace(/\[(.+?)\]\(.+?\)/g, "$1") // [link](url)
-    .replace(/^#{1,6}\s+/gm, "")     // # headings
-    .replace(/^[-*+]\s+/gm, "")      // - list items
-    .replace(/^\d+\.\s+/gm, "")      // 1. ordered list
-    .replace(/^>\s+/gm, "")          // > blockquotes
+    .replace(/\*\*(.+?)\*\?/g, "$1")
+    .replace(/\*(.+?)\*/g, "$1")
+    .replace(/__(.+?)__/g, "$1")
+    .replace(/_(.+?)_/g, "$1")
+    .replace(/~~(.+?)~~/g, "$1")
+    .replace(/`(.+?)`/g, "$1")
+    .replace(/\[(.+?)\]\(.+?\)/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/^[-*+]\s+/gm, "")
+    .replace(/^\d+\.\s+/gm, "")
+    .replace(/^>\s+/gm, "")
     .trim();
 
 interface EventCardProps {
@@ -55,7 +54,6 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
 
   const { contextSafe } = useGSAP({ scope: containerRef });
 
-  // --- ANIMATION INITIALIZATION ---
   useGSAP(() => {
     hoverTl.current = gsap
       .timeline({ paused: true })
@@ -127,7 +125,6 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
     }
   }, [event.id]);
 
-  // --- OPTIMIZED EVENT HANDLERS ---
   const handleMouseEnter = contextSafe(() => {
     hoverTl.current?.play();
   });
@@ -171,7 +168,7 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
           <div className="entryLayers absolute scale-x-100 inset-0 h-full w-full origin-right z-0 bg-pink-50 will-change-transform" />
         </div>
 
-        {/* 1. BACKGROUND IMAGE LAYER */}
+        {/* BACKGROUND IMAGE LAYER */}
         <div className="absolute inset-0 z-0 w-full h-full">
           <Image
             ref={imageRef}
@@ -186,9 +183,9 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
           />
         </div>
 
-        {/* 3. CONTENT CONTAINER */}
+        {/* CONTENT CONTAINER */}
         <div className="absolute bottom-0 left-0 w-full p-6 flex flex-col justify-end z-10 pointer-events-none">
-          {/* -- ALWAYS VISIBLE PART (Title & Tags) -- */}
+          {/* ALWAYS VISIBLE PART (Title & Tags) */}
           <div
             ref={titleTagsRef}
             className="flex flex-col gap-2 relative z-20 pointer-events-auto"
@@ -212,7 +209,7 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
             </h3>
           </div>
 
-          {/* -- HIDDEN PART (Description, Meta, Buttons) -- */}
+          {/* HIDDEN PART (Description, Meta, Buttons) */}
           <div
             ref={hiddenContentRef}
             className="h-0 overflow-hidden flex flex-col gap-4 pointer-events-auto will-change-[height]"
@@ -249,6 +246,12 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
               className="flex flex-col gap-2 pb-1"
               onClickCapture={handleActionClick}
             >
+              <RegisterButton 
+                status={event.status as "Open" | "Closed" | "Coming Soon"} 
+                slug={event.slug} 
+                isCard={true} 
+              />
+
               <Link
                 href={`/events/${event.slug}`}
                 prefetch={false}
@@ -276,6 +279,7 @@ const EventCard: React.FC<EventCardProps> = memo(({ event }) => {
           </div>
         </div>
       </div>
+
       <svg
         ref={outLineRef}
         viewBox={`0 0 ${CARD_OUTLINE_DIMENSIONS.w} ${CARD_OUTLINE_DIMENSIONS.h}`}
