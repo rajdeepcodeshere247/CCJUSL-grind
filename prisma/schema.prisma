@@ -84,12 +84,24 @@ model Team {
 }
 
 model Event {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
-  slug       String @unique
-  name       String
-  minMembers Int
-  maxMembers Int
-  registrationsOpen Boolean @default(true)
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug              String   @unique
+  name              String
+  minMembers        Int
+  maxMembers        Int
+  registrationsOpen Boolean  @default(true)
+
+  // Dynamic fields for live events
+  isLive            Boolean  @default(false)
+  description       String?
+  shortDescription  String?
+  rules             String[]
+  poster            String?
+  prize             String?
+  coordinators      String[]
+  prelimsDate       String[]
+  finalsDate        String?
+  updates           String[]
 
   teams Team[]
 

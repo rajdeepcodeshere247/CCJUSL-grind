@@ -7,6 +7,16 @@ type Event = {
     minMembers: number;
     maxMembers: number;
     registrationsOpen?: boolean;
+    isLive?: boolean;
+    description?: string | null;
+    shortDescription?: string | null;
+    rules?: string[];
+    poster?: string | null;
+    prize?: string | null;
+    coordinators?: string[];
+    prelimsDate?: string[];
+    finalsDate?: string | null;
+    updates?: string[];
 };
 
 type Team = {

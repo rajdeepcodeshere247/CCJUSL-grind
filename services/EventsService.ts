@@ -104,6 +104,16 @@ const getEventFromSlug = async (slug: string) => {
       minMembers: true,
       maxMembers: true,
       registrationsOpen: true,
+      isLive: true,
+      description: true,
+      shortDescription: true,
+      rules: true,
+      poster: true,
+      prize: true,
+      coordinators: true,
+      prelimsDate: true,
+      finalsDate: true,
+      updates: true,
     },
   });
   return event;
