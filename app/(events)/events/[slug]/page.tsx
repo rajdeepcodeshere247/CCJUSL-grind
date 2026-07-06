@@ -6,11 +6,33 @@ import {
   Trophy,
   Hash,
   Phone,
+  Megaphone,
 } from "lucide-react";
 
 import Image from "next/image";
 import RegistrationButton from "@/components/Events/RegistrationButton";
 import Footer from "@/components/Footer";
+import { getEventFromSlug } from "@/services/EventsService";
+
+interface EventDetailsType {
+  name: string;
+  slug: string;
+  eventShortDescription: string;
+  eventDescription: string[];
+  eventRules: string[];
+  eventPoster: string;
+  eventHashtags: string[];
+  registrationOpen: boolean;
+  eventDate: {
+    prelims: string[];
+    finals: string;
+  };
+  minMembers: number;
+  maxMembers: number;
+  prize: string[];
+  eventCoordinators: string[];
+  updates: string[];
+}
 
 export default async function Page({
   params,
@@ -18,7 +40,42 @@ export default async function Page({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const eventDetails = eventData.find((event) => event.slug === slug);
+  
+  // 1. Fetch from Database first
+  const dbEvent = await getEventFromSlug(slug);
+  
+  let eventDetails: EventDetailsType | null = null;
+
+  if (dbEvent && dbEvent.isLive) {
+    eventDetails = {
+      name: dbEvent.name,
+      slug: dbEvent.slug,
+      eventShortDescription: dbEvent.shortDescription || "",
+      eventDescription: dbEvent.description ? [dbEvent.description] : [],
+      eventRules: dbEvent.rules || [],
+      eventPoster: dbEvent.poster || "default-poster.webp",
+      eventHashtags: ["LIVE", "EVENT"],
+      registrationOpen: dbEvent.registrationsOpen,
+      eventDate: {
+        prelims: dbEvent.prelimsDate || [],
+        finals: dbEvent.finalsDate || "TBD",
+      },
+      minMembers: dbEvent.minMembers,
+      maxMembers: dbEvent.maxMembers,
+      prize: dbEvent.prize ? [dbEvent.prize] : ["TBD"],
+      eventCoordinators: dbEvent.coordinators || [],
+      updates: dbEvent.updates || [],
+    };
+  } else {
+    // 2. Fallback to static eventData.json
+    const staticEvent = eventData.find((event) => event.slug === slug);
+    if (staticEvent) {
+      eventDetails = {
+        ...staticEvent,
+        updates: [],
+      };
+    }
+  }
 
   if (!eventDetails) redirect("/404");
 
@@ -41,7 +98,7 @@ export default async function Page({
 
                 {/* Hashtags */}
                 <div className="flex flex-wrap justify-center gap-3">
-                  {eventDetails.eventHashtags.map((tag, index) => (
+                  {eventDetails.eventHashtags.map((tag: string, index: number) => (
                     <span
                       key={index}
                       className="inline-flex items-center border border-white/20 px-4 py-2 font-mono text-sm text-white/70 transition-colors hover:border-red-400/50 hover:text-red-400"
@@ -64,7 +121,7 @@ export default async function Page({
                   <p className="mb-3 font-mono text-xs tracking-wider text-red-400">
                     PRELIMINARIES
                   </p>
-                  {eventDetails.eventDate.prelims.map((date, index) => (
+                  {eventDetails.eventDate.prelims.map((date: string, index: number) => (
                     <p
                       key={index}
                       className="border-l-2 border-white/20 py-2 pl-4 text-sm font-light text-white/70"
@@ -94,13 +151,33 @@ export default async function Page({
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
           {/* Left Column - Main Info */}
           <div className="space-y-16 lg:col-span-2">
+            {/* Updates & Announcements (if any) */}
+            {eventDetails.updates && eventDetails.updates.length > 0 && (
+              <div className="border border-red-500/20 bg-red-500/[0.02] p-6 mb-8">
+                <h3 className="mb-4 flex items-center text-lg font-bold tracking-wide text-red-400 font-mono">
+                  <Megaphone className="mr-3 h-5 w-5" />
+                  ANNOUNCEMENTS & UPDATES
+                </h3>
+                <div className="space-y-4">
+                  {eventDetails.updates.map((update: string, index: number) => (
+                    <div
+                      key={index}
+                      className="border-l-2 border-red-400 pl-4 py-2 text-sm font-light text-white/90 bg-white/[0.01]"
+                    >
+                      {update}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Event Description */}
             <div className="border-l-2 border-red-400 pl-8">
               <h2 className="mb-8 text-3xl font-bold tracking-tight text-white">
                 About the Event
               </h2>
               <div className="space-y-6 leading-relaxed text-white/70">
-                {eventDetails.eventDescription.map((paragraph, index) => (
+                {eventDetails.eventDescription.map((paragraph: string, index: number) => (
                   <p key={index} className="text-base font-light">
                     {paragraph}
                   </p>
@@ -114,7 +191,7 @@ export default async function Page({
                 Rules & Guidelines
               </h2>
               <div className="space-y-5">
-                {eventDetails.eventRules.map((rule, index) => (
+                {eventDetails.eventRules.map((rule: string, index: number) => (
                   <div key={index} className="flex items-start gap-4">
                     <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-red-400"></div>
                     <p className="text-base leading-relaxed font-light text-white/70">
@@ -155,7 +232,7 @@ export default async function Page({
                 PRIZE POOL
               </h3>
               <div className="space-y-3">
-                {eventDetails.prize.map((prize, index) => (
+                {eventDetails.prize.map((prize: string, index: number) => (
                   <div
                     key={index}
                     className="flex items-center justify-between border-l-2 border-white/20 py-3 pl-4"
@@ -178,7 +255,7 @@ export default async function Page({
                 CONTACT US
               </h3>
               <div className="space-y-3">
-                {eventDetails.eventCoordinators.map((coordinator, index) => (
+                {eventDetails.eventCoordinators.map((coordinator: string, index: number) => (
                   <div
                     key={index}
                     className="border-l-2 border-white/20 py-2 pl-4 text-sm font-light text-white/70"

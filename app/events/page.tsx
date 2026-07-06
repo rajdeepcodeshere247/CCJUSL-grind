@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { exclusiveEvents, seasonalEvents, flagshipEvents } from "@/data/events";
 import EventCard from "@/components/Events/EventCard";
@@ -9,6 +9,26 @@ import Footer from "@/components/Footer";
 import DecryptText from "@/components/ui/DecryptText";
 import ShinyText from "@/components/ui/ShinyText";
 import { Calendar } from "lucide-react";
+import { Event } from "@/components/Events/types/events";
+
+interface DbLiveEvent {
+  id: string;
+  slug: string;
+  name: string;
+  minMembers: number;
+  maxMembers: number;
+  registrationsOpen: boolean;
+  isLive: boolean;
+  description: string | null;
+  shortDescription: string | null;
+  rules: string[];
+  poster: string | null;
+  prize: string | null;
+  coordinators: string[];
+  prelimsDate: string[];
+  finalsDate: string | null;
+  updates: string[];
+}
 
 const tabs = [
   { key: "exclusive", label: "Exclusive" },
@@ -20,8 +40,34 @@ type TabKey = (typeof tabs)[number]["key"];
 
 export default function EventsPage() {
   const [activeTab, setActiveTab] = useState<TabKey>("flagship");
+  const [liveEvents, setLiveEvents] = useState<DbLiveEvent[]>([]);
   const headerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(headerRef, { once: true });
+
+  useEffect(() => {
+    import("@/services/AdminEventsService").then((mod) => {
+      mod.getLiveEventsPublic().then((data) => {
+        setLiveEvents(data);
+      });
+    });
+  }, []);
+
+  const mappedLiveEvents: Event[] = liveEvents.map((e) => ({
+    id: e.id,
+    slug: e.slug,
+    title: e.name,
+    description: e.shortDescription || e.description || "",
+    image: e.poster || "/images/events/default-poster.webp",
+    status: e.registrationsOpen ? "Open" : "Closed",
+    tags: ["LIVE", "EVENT"],
+    finalsDate: e.finalsDate || undefined,
+    lastDate: e.prelimsDate?.[0] || undefined,
+    teamSize: e.minMembers === e.maxMembers ? `${e.minMembers}` : `${e.minMembers}-${e.maxMembers}`,
+    prizePool: e.prize || "TBD",
+    format: "Onsite",
+    color: "#f87171",
+    category: "exclusive"
+  }));
 
   const tabContent: Record<TabKey, React.ReactNode> = {
     exclusive:
@@ -111,6 +157,28 @@ export default function EventsPage() {
       </div>
 
       <div className="mx-auto w-11/12 max-w-7xl pb-16 sm:pb-24">
+        {/* ── Live Events Section ────────────────────────────────────────────────── */}
+        {mappedLiveEvents.length > 0 && (
+          <div className="pb-16 border-b border-white/10 mb-12">
+            <div className="mb-10 text-center sm:text-left">
+              <h2 className="text-2xl font-bold uppercase tracking-wider text-rose-500 font-mono">
+                Live & Upcoming Events
+              </h2>
+              <p className="text-white/40 text-xs sm:text-sm mt-2">
+                Register now for our active contests and challenges.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-8 items-center justify-center w-full">
+              {mappedLiveEvents.map((event) => (
+                <React.Fragment key={event.id}>
+                  <EventCard event={event} />
+                  <EventCardTouch event={event} />
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* ── Tabs ───────────────────────────────────────────────────────────── */}
         <div className="mb-12 flex justify-center gap-1 border-b border-white/10">
           {tabs.map((tab) => (

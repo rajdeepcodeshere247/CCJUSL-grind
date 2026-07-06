@@ -12,11 +12,10 @@ async function RegistrationButton({
   registrationOpen: boolean;
   slug: string;
 }) {
-  // 2. Find the current event locally by its slug
   const localEvent = events.find((e) => e.slug === slug);
 
-  // 3. FORCE it to vanish if the local event status is "Closed"
-  if (localEvent?.status === "Closed") return null;
+  // 3. FORCE it to vanish if the local event status is "Closed" (only if found locally)
+  if (localEvent && localEvent.status === "Closed") return null;
 
   const user = await getAuthStatus();
   const registrationStatus = user

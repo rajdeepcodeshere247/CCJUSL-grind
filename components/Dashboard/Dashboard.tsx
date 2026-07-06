@@ -112,7 +112,15 @@ function Dashboard({ user }: { user: DashboardUser }) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-y-8 justify-between h-full">
+        <div className="flex flex-col gap-y-4 justify-between h-full">
+          {(user.role === UserRole.ADMIN || user.role === UserRole.SUPERADMIN) && (
+            <Link
+              href="/dashboard/admin"
+              className="cursor-pointer border border-red-400 bg-red-400 text-black text-center px-10 py-3 text-sm font-bold tracking-widest uppercase transition-all hover:bg-black hover:text-white"
+            >
+              Admin Panel
+            </Link>
+          )}
           <button
             onClick={handleLogout}
             className="cursor-pointer border border-red-400 px-10 py-3 text-sm font-bold tracking-widest uppercase transition-all hover:bg-red-400 hover:text-black"

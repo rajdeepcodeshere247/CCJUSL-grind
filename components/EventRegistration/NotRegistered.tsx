@@ -77,66 +77,99 @@ function NotRegistered({ user, event }: { user: SessionUser; event: Event }) {
         {event.name}
       </h1>
 
-      {/* Create Team Section */}
-      <div className="flex w-full max-w-lg flex-col items-center gap-6 border border-white/20 p-8 sm:p-10">
-        <h4 className="text-lg font-bold tracking-wider text-white uppercase">
-          Create New Team
-        </h4>
-        <input
-          type="text"
-          placeholder="TEAM NAME"
-          value={teamName}
-          onChange={(e) => {
-            setTeamName(e.target.value);
-          }}
-          className="w-full border border-white/20 bg-transparent px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
-        />
-        <button
-          onClick={(e) => {
-            handleCreateTeam(e);
-          }}
-          disabled={loading}
-          className="w-full border border-red-400 px-8 py-3 text-sm font-bold tracking-widest text-white uppercase transition-all hover:bg-red-400 hover:text-black disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {loading ? "CREATING..." : "CREATE TEAM"}
-        </button>
-      </div>
-
-      {event.maxMembers > 1 && (
+      {event.maxMembers === 1 ? (
+        <div className="flex w-full max-w-lg flex-col items-center gap-6 border border-white/20 p-8 sm:p-10">
+          <h4 className="text-lg font-bold tracking-wider text-white uppercase">
+            Individual Registration
+          </h4>
+          <p className="text-center text-sm font-light text-white/70 leading-relaxed">
+            This is an individual event. Click the button below to confirm your registration.
+          </p>
+          <button
+            onClick={(e) => {
+              const uniqueId = Math.random().toString(36).substring(2, 7);
+              const autoTeamName = `${user.name} (${event.slug}-${uniqueId})`.substring(0, 30);
+              e.preventDefault();
+              setLoading(true);
+              createTeam(event, user, autoTeamName)
+                .then((res) => {
+                  if (res.ok) router.refresh();
+                  else toast.error(res.message);
+                })
+                .finally(() => {
+                  setLoading(false);
+                });
+            }}
+            disabled={loading}
+            className="w-full border border-red-400 px-8 py-3 text-sm font-bold tracking-widest text-white uppercase transition-all hover:bg-red-400 hover:text-black disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {loading ? "REGISTERING..." : "CONFIRM REGISTRATION"}
+          </button>
+        </div>
+      ) : (
         <>
-          {/* Divider */}
-          <div className="flex w-full max-w-lg items-center justify-center gap-6">
-            <div className="h-px flex-1 bg-white/20"></div>
-            <p className="font-mono text-sm tracking-widest text-white/40">
-              OR
-            </p>
-            <div className="h-px flex-1 bg-white/20"></div>
-          </div>
-
-          {/* Join Team Section */}
+          {/* Create Team Section */}
           <div className="flex w-full max-w-lg flex-col items-center gap-6 border border-white/20 p-8 sm:p-10">
             <h4 className="text-lg font-bold tracking-wider text-white uppercase">
-              Join Existing Team
+              Create New Team
             </h4>
             <input
               type="text"
-              placeholder="JOINING CODE"
-              value={teamCode}
+              placeholder="TEAM NAME"
+              value={teamName}
               onChange={(e) => {
-                setTeamCode(e.target.value);
+                setTeamName(e.target.value);
               }}
               className="w-full border border-white/20 bg-transparent px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
             />
             <button
               onClick={(e) => {
-                handleJoinTeam(e);
+                handleCreateTeam(e);
               }}
               disabled={loading}
               className="w-full border border-red-400 px-8 py-3 text-sm font-bold tracking-widest text-white uppercase transition-all hover:bg-red-400 hover:text-black disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {loading ? "JOINING..." : "JOIN TEAM"}
+              {loading ? "CREATING..." : "CREATE TEAM"}
             </button>
           </div>
+
+          {event.maxMembers > 1 && (
+            <>
+              {/* Divider */}
+              <div className="flex w-full max-w-lg items-center justify-center gap-6">
+                <div className="h-px flex-1 bg-white/20"></div>
+                <p className="font-mono text-sm tracking-widest text-white/40">
+                  OR
+                </p>
+                <div className="h-px flex-1 bg-white/20"></div>
+              </div>
+
+              {/* Join Team Section */}
+              <div className="flex w-full max-w-lg flex-col items-center gap-6 border border-white/20 p-8 sm:p-10">
+                <h4 className="text-lg font-bold tracking-wider text-white uppercase">
+                  Join Existing Team
+                </h4>
+                <input
+                  type="text"
+                  placeholder="JOINING CODE"
+                  value={teamCode}
+                  onChange={(e) => {
+                    setTeamCode(e.target.value);
+                  }}
+                  className="w-full border border-white/20 bg-transparent px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
+                />
+                <button
+                  onClick={(e) => {
+                    handleJoinTeam(e);
+                  }}
+                  disabled={loading}
+                  className="w-full border border-red-400 px-8 py-3 text-sm font-bold tracking-widest text-white uppercase transition-all hover:bg-red-400 hover:text-black disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {loading ? "JOINING..." : "JOIN TEAM"}
+                </button>
+              </div>
+            </>
+          )}
         </>
       )}
     </div>
