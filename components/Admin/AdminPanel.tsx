@@ -10,7 +10,7 @@ import {
   deleteEvent,
 } from "@/services/AdminEventsService";
 import toast from "react-hot-toast";
-import { Calendar, Trophy, Users, Edit, Trash2, Megaphone, ClipboardList, PlusCircle, Download } from "lucide-react";
+import { Users, Edit, Trash2, Megaphone, ClipboardList, PlusCircle, Download } from "lucide-react";
 
 type EventType = {
   id: string;
@@ -30,6 +30,35 @@ type EventType = {
   finalsDate: string | null;
   updates: string[];
 };
+
+interface RegistrationMember {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  college: string | null;
+  department: string | null;
+  year: string | null;
+}
+
+interface RegistrationPendingMember {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+}
+
+interface RegistrationType {
+  id: string;
+  name: string;
+  eventSlug: string;
+  memberIds: string[];
+  pendingMemberIds: string[];
+  leader: string;
+  joiningCode: string;
+  members: RegistrationMember[];
+  pendingMembers: RegistrationPendingMember[];
+}
 
 export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState<"events" | "announcements" | "participants">("events");
@@ -59,11 +88,12 @@ export default function AdminPanel() {
 
   // Participants State
   const [participantEventSlug, setParticipantEventSlug] = useState("");
-  const [registrations, setRegistrations] = useState<any[]>([]);
+  const [registrations, setRegistrations] = useState<RegistrationType[]>([]);
   const [regsLoading, setRegsLoading] = useState(false);
 
   useEffect(() => {
     fetchEvents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchEvents = async () => {
@@ -223,7 +253,6 @@ export default function AdminPanel() {
       return;
     }
 
-    const activeEvent = events.find(e => e.slug === participantEventSlug);
     const headers = [
       "Team Name",
       "Joining Code",
@@ -240,7 +269,7 @@ export default function AdminPanel() {
 
     registrations.forEach(team => {
       // Add Leader
-      const leaderUser = team.members.find((m: any) => m.id === team.leader);
+      const leaderUser = team.members.find((m: RegistrationMember) => m.id === team.leader);
       if (leaderUser) {
         rows.push([
           team.name,
@@ -256,7 +285,7 @@ export default function AdminPanel() {
       }
 
       // Add other members
-      team.members.forEach((m: any) => {
+      team.members.forEach((m: RegistrationMember) => {
         if (m.id !== team.leader) {
           rows.push([
             team.name,
@@ -716,8 +745,8 @@ export default function AdminPanel() {
                       <p className="text-white/40 text-sm font-light py-8 border border-dashed border-white/10 text-center">No participants registered for this event yet.</p>
                     ) : (
                       <div className="space-y-6">
-                        {registrations.map((team, idx) => {
-                          const leader = team.members.find((m: any) => m.id === team.leader);
+                        {registrations.map((team) => {
+                          const leader = team.members.find((m: RegistrationMember) => m.id === team.leader);
                           return (
                             <div key={team.id} className="border border-white/10 p-6 bg-black/40">
                               <div className="flex justify-between items-start border-b border-white/5 pb-3 mb-4">
@@ -751,13 +780,13 @@ export default function AdminPanel() {
                                 {/* Other Members */}
                                 <div className="border border-white/5 p-4 bg-white/[0.01]">
                                   <p className="font-mono text-[10px] text-white/40 mb-2 uppercase tracking-widest">Other Members</p>
-                                  {team.members.filter((m: any) => m.id !== team.leader).length === 0 ? (
+                                  {team.members.filter((m: RegistrationMember) => m.id !== team.leader).length === 0 ? (
                                     <p className="text-xs text-white/40 font-light italic">No other members in this team.</p>
                                   ) : (
                                     <div className="space-y-3">
                                       {team.members
-                                        .filter((m: any) => m.id !== team.leader)
-                                        .map((member: any) => (
+                                        .filter((m: RegistrationMember) => m.id !== team.leader)
+                                        .map((member: RegistrationMember) => (
                                           <div key={member.id} className="border-t border-white/5 pt-2 first:border-0 first:pt-0">
                                             <p className="font-bold text-white text-xs">{member.name}</p>
                                             <p className="text-[11px] text-white/50">{member.email}</p>

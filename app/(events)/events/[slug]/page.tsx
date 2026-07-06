@@ -14,6 +14,26 @@ import RegistrationButton from "@/components/Events/RegistrationButton";
 import Footer from "@/components/Footer";
 import { getEventFromSlug } from "@/services/EventsService";
 
+interface EventDetailsType {
+  name: string;
+  slug: string;
+  eventShortDescription: string;
+  eventDescription: string[];
+  eventRules: string[];
+  eventPoster: string;
+  eventHashtags: string[];
+  registrationOpen: boolean;
+  eventDate: {
+    prelims: string[];
+    finals: string;
+  };
+  minMembers: number;
+  maxMembers: number;
+  prize: string[];
+  eventCoordinators: string[];
+  updates: string[];
+}
+
 export default async function Page({
   params,
 }: {
@@ -24,7 +44,7 @@ export default async function Page({
   // 1. Fetch from Database first
   const dbEvent = await getEventFromSlug(slug);
   
-  let eventDetails: any = null;
+  let eventDetails: EventDetailsType | null = null;
 
   if (dbEvent && dbEvent.isLive) {
     eventDetails = {

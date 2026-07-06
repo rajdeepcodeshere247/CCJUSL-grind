@@ -11,6 +11,25 @@ import ShinyText from "@/components/ui/ShinyText";
 import { Calendar } from "lucide-react";
 import { Event } from "@/components/Events/types/events";
 
+interface DbLiveEvent {
+  id: string;
+  slug: string;
+  name: string;
+  minMembers: number;
+  maxMembers: number;
+  registrationsOpen: boolean;
+  isLive: boolean;
+  description: string | null;
+  shortDescription: string | null;
+  rules: string[];
+  poster: string | null;
+  prize: string | null;
+  coordinators: string[];
+  prelimsDate: string[];
+  finalsDate: string | null;
+  updates: string[];
+}
+
 const tabs = [
   { key: "exclusive", label: "Exclusive" },
   { key: "seasonal", label: "Seasonal" },
@@ -21,7 +40,7 @@ type TabKey = (typeof tabs)[number]["key"];
 
 export default function EventsPage() {
   const [activeTab, setActiveTab] = useState<TabKey>("flagship");
-  const [liveEvents, setLiveEvents] = useState<any[]>([]);
+  const [liveEvents, setLiveEvents] = useState<DbLiveEvent[]>([]);
   const headerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(headerRef, { once: true });
 
