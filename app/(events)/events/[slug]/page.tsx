@@ -82,6 +82,17 @@ export default async function Page({
 
   if (!eventDetails) redirect("/404");
 
+  let posterUrl = eventDetails.eventPoster || "/images/events/default-poster.webp";
+  if (posterUrl.startsWith("../")) {
+    posterUrl = "/images/" + posterUrl.substring(3);
+  } else if (!posterUrl.startsWith("/") && !posterUrl.startsWith("http")) {
+    if (posterUrl.startsWith("images/")) {
+      posterUrl = "/" + posterUrl;
+    } else {
+      posterUrl = "/images/posters/" + posterUrl;
+    }
+  }
+
   return (
     <div className="min-h-screen bg-black">
       {/* Hero Section */}
@@ -94,13 +105,7 @@ export default async function Page({
 
             <div className="grid sm:grid-cols-2 place-items-center gap-8 py-8">
               <Image
-                src={
-                  eventDetails.eventPoster.startsWith("http") || eventDetails.eventPoster.startsWith("/")
-                    ? eventDetails.eventPoster
-                    : eventDetails.eventPoster.startsWith("images/")
-                    ? `/${eventDetails.eventPoster}`
-                    : `/images/posters/${eventDetails.eventPoster}`
-                }
+                src={posterUrl}
                 width={200}
                 height={200}
                 className="h-full w-auto"
