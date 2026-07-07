@@ -591,6 +591,25 @@ export default function AdminPanel() {
                     />
                   </div>
 
+                  {/* Formatting Help Guide */}
+                  <div className="col-span-2 border border-red-500/20 bg-red-500/[0.02] p-4 text-xs space-y-2 font-mono">
+                    <p className="font-bold text-red-400 uppercase tracking-widest flex items-center gap-1.5">
+                      <span>💡 Rich Formatting Guide</span>
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-white/60">
+                      <div>
+                        <p><span className="text-white font-bold">**text**</span> &rarr; <strong className="font-bold text-white">bold</strong></p>
+                        <p><span className="text-white font-bold">*text*</span> &rarr; <em className="italic text-white/95">italics</em></p>
+                        <p><span className="text-white font-bold">__text__</span> &rarr; <span className="underline decoration-red-400">underline</span></p>
+                      </div>
+                      <div>
+                        <p><span className="text-white font-bold">==text==</span> &rarr; <mark className="bg-red-400/20 text-red-300 font-semibold px-1 rounded border border-red-500/20">highlight</mark></p>
+                        <p><span className="text-white font-bold">Double Enter</span> &rarr; New Paragraph</p>
+                        <p><span className="text-white font-bold">Single Enter</span> &rarr; Line Break</p>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="space-y-2 col-span-2">
                     <label className="block text-xs font-mono tracking-wider text-white/50 uppercase">Event Description / About Paragraphs (separated by newlines)</label>
                     <textarea

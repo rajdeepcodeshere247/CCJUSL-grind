@@ -28,6 +28,7 @@ const stripMarkdown = (text: string): string =>
     .replace(/\*(.+?)\*/g, "$1")     // *italic*
     .replace(/__(.+?)__/g, "$1")     // __bold__
     .replace(/_(.+?)_/g, "$1")       // _italic_
+    .replace(/==(.+?)==/g, "$1")     // ==highlight==
     .replace(/~~(.+?)~~/g, "$1")     // ~~strikethrough~~
     .replace(/`(.+?)`/g, "$1")       // `inline code`
     .replace(/\[(.+?)\]\(.+?\)/g, "$1") // [link](url)

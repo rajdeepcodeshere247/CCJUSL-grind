@@ -16,6 +16,81 @@ import RegistrationButton from "@/components/Events/RegistrationButton";
 import ShareButton from "@/components/Events/ShareButton";
 import Footer from "@/components/Footer";
 import { getEventFromSlug } from "@/services/EventsService";
+import { Metadata } from "next";
+import FormattedText, { renderInline } from "@/components/FormattedText";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  
+  const dbEvent = await getEventFromSlug(slug);
+  
+  let eventDetails = null;
+
+  if (dbEvent && dbEvent.isLive) {
+    eventDetails = {
+      name: dbEvent.name,
+      shortDescription: dbEvent.shortDescription || "",
+      eventPoster: dbEvent.poster || "default-poster.webp",
+    };
+  } else {
+    const staticEvent = eventData.find((event) => event.slug === slug);
+    if (staticEvent) {
+      eventDetails = {
+        name: staticEvent.name,
+        shortDescription: staticEvent.eventShortDescription || "",
+        eventPoster: staticEvent.eventPoster || "default-poster.webp",
+      };
+    }
+  }
+
+  if (!eventDetails) {
+    return {
+      title: "Event Not Found | CodeClub JUSL",
+    };
+  }
+
+  let posterUrl = eventDetails.eventPoster;
+  if (posterUrl.startsWith("../")) {
+    posterUrl = "/images/" + posterUrl.substring(3);
+  } else if (!posterUrl.startsWith("/") && !posterUrl.startsWith("http")) {
+    if (posterUrl.startsWith("images/")) {
+      posterUrl = "/" + posterUrl;
+    } else {
+      posterUrl = "/images/posters/" + posterUrl;
+    }
+  }
+
+  const domain = "https://www.codeclubjusl.in";
+  const absolutePosterUrl = posterUrl.startsWith("http") ? posterUrl : `${domain}${posterUrl}`;
+
+  return {
+    title: `${eventDetails.name} | CodeClub JUSL`,
+    description: eventDetails.shortDescription,
+    openGraph: {
+      title: eventDetails.name,
+      description: eventDetails.shortDescription,
+      images: [
+        {
+          url: absolutePosterUrl,
+          width: 1200,
+          height: 630,
+          alt: eventDetails.name,
+        },
+      ],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: eventDetails.name,
+      description: eventDetails.shortDescription,
+      images: [absolutePosterUrl],
+    },
+  };
+}
 
 interface EventDetailsType {
   name: string;
@@ -203,9 +278,7 @@ export default async function Page({
               </h2>
               <div className="space-y-6 leading-relaxed text-white/70">
                 {eventDetails.eventDescription.map((paragraph: string, index: number) => (
-                  <p key={index} className="text-base font-light">
-                    {paragraph}
-                  </p>
+                  <FormattedText key={index} text={paragraph} />
                 ))}
               </div>
             </div>
@@ -220,7 +293,7 @@ export default async function Page({
                   <div key={index} className="flex items-start gap-4">
                     <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-red-400"></div>
                     <p className="text-base leading-relaxed font-light text-white/70">
-                      {rule}
+                      {renderInline(rule)}
                     </p>
                   </div>
                 ))}

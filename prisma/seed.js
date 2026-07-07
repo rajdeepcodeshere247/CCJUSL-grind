@@ -76,18 +76,21 @@ async function main() {
       registrationsOpen: true,
       isLive: true,
       shortDescription: "CodeClub JUSL ML Event: Tensor On The Turfs 2026. A two-round machine learning tournament testing conceptual screening and deep reinforcement learning.",
-      description: "Welcome to the CodeClub JUSL ML Event - Tensor On The Turfs 2026. This tournament consists of two rounds designed to test your core analytical skills and your ability to build intelligent, autonomous agents.\n\nRound 1: Conceptual Screening (Online MCQ)\nDate: July 13, 2026\nPlatform: HackerEarth (Online)\nFormat: 30 Multiple Choice Questions (MCQs)\nDuration: 30 minutes\n\nRound 2: The RL Football Showdown (Advanced Stage)\nDate: July 15, 2026\nPlatform: HackerEarth + Website (Online)\nEligibility: Open exclusively to top-performing participants from Round 1.",
+      description: "**Welcome to the CodeClub JUSL ML Event - Tensor On The Turfs 2026.**\n\nThis tournament consists of two rounds designed to test your core analytical skills and your ability to build intelligent, autonomous agents. Below are the definitive guidelines for both rounds.\n\n==Round 1: Conceptual Screening (Online MCQ)==\n* **Date**: July 13, 2026\n* **Platform**: HackerEarth (Online)\n* **Format**: 30 Multiple Choice Questions (MCQs)\n* **Duration**: 30 minutes\n\n==Round 2: The RL Football Showdown (Advanced Stage)==\n* **Date**: July 15, 2026\n* **Platform**: HackerEarth + Website (Online)\n* **Timing**: Exact schedule and platform links will be communicated directly to shortlisted candidates.\n* **Eligibility**: Open exclusively to top-performing participants from Round 1.\n\n__Participant Details Required for Registration__:\n* **Name** [String]\n* **Gender** [Options: Male / Female / Transgender]\n* **Phone Number**\n* **Email ID**\n* **College/University Name**\n* **Stream** (Engineering, Science, Arts)\n* **Department**",
       rules: [
-        "Round 1 login window opens at 19:30 IST and closes strictly at 20:00 IST on July 13, 2026.",
-        "HackerEarth automated proctoring will be active. Tab switching or browser minimization will lead to disqualification.",
-        "Copy-paste restrictions are active and monitored.",
-        "Round 2 submissions must be original code.",
-        "Plagiarism or use of external AI assistants will result in permanent blacklisting."
+        "**1. Core Topics & Syllabus:** The question set will evaluate fundamentals across: **Mathematics** (linear algebra, calculus, optimization), **Statistics** (probability, hypothesis testing), **Basic Machine Learning & Reinforcement Learning** (supervised/unsupervised, evaluation metrics, MDPs, policy/value functions), and **Data Analysis** (preprocessing, feature engineering, EDA).",
+        "**2. Timeline & Login Window:** The login window opens at **19:30 IST** and closes strictly at **20:00 IST** on July 13, 2026. Your individual 30-minute timer begins the exact moment you click \"Start Test.\" No extra time will be provided if you log in late.",
+        "**3. Test Environment & Platform Regulations:** HackerEarth’s automated proctoring will be active. **Do not switch tabs, minimize the browser, or leave the test screen**; any navigation away will result in immediate disqualification. Copy-pasting is disabled.",
+        "**4. Scoring Rules:** 30 questions in 30 minutes. Check the HackerEarth welcome screen regarding negative marking before starting.",
+        "**5. Round 2: Competition Format:** Shortlisted participants will train a **deep reinforcement learning policy** to control an 11-player football squad. Trained models will deploy head-to-head in automated matches.",
+        "**6. Round 2: Core Expectations:** Submissions must be your original code. Plagiarism, sharing questions, or using external AI assistants will result in **permanent blacklisting**."
       ],
       poster: "../events/tensor-on-the-turfs.webp",
       prize: "TBD",
       coordinators: [
-        "CodeClub JUSL ML Team Coordinators"
+        "Debarun Patra [+91-858292252]",
+        "Naireet Sadhukhan [+91-9875625835]",
+        "Samriddha Banerjee [+91-7596884368]"
       ],
       prelimsDate: [
         "13th July 2026 (Online)"
@@ -102,18 +105,21 @@ async function main() {
       registrationsOpen: true,
       isLive: true,
       shortDescription: "CodeClub JUSL ML Event: Tensor On The Turfs 2026. A two-round machine learning tournament testing conceptual screening and deep reinforcement learning.",
-      description: "Welcome to the CodeClub JUSL ML Event - Tensor On The Turfs 2026. This tournament consists of two rounds designed to test your core analytical skills and your ability to build intelligent, autonomous agents.\n\nRound 1: Conceptual Screening (Online MCQ)\nDate: July 13, 2026\nPlatform: HackerEarth (Online)\nFormat: 30 Multiple Choice Questions (MCQs)\nDuration: 30 minutes\n\nRound 2: The RL Football Showdown (Advanced Stage)\nDate: July 15, 2026\nPlatform: HackerEarth + Website (Online)\nEligibility: Open exclusively to top-performing participants from Round 1.",
+      description: "**Welcome to the CodeClub JUSL ML Event - Tensor On The Turfs 2026.**\n\nThis tournament consists of two rounds designed to test your core analytical skills and your ability to build intelligent, autonomous agents. Below are the definitive guidelines for both rounds.\n\n==Round 1: Conceptual Screening (Online MCQ)==\n* **Date**: July 13, 2026\n* **Platform**: HackerEarth (Online)\n* **Format**: 30 Multiple Choice Questions (MCQs)\n* **Duration**: 30 minutes\n\n==Round 2: The RL Football Showdown (Advanced Stage)==\n* **Date**: July 15, 2026\n* **Platform**: HackerEarth + Website (Online)\n* **Timing**: Exact schedule and platform links will be communicated directly to shortlisted candidates.\n* **Eligibility**: Open exclusively to top-performing participants from Round 1.\n\n__Participant Details Required for Registration__:\n* **Name** [String]\n* **Gender** [Options: Male / Female / Transgender]\n* **Phone Number**\n* **Email ID**\n* **College/University Name**\n* **Stream** (Engineering, Science, Arts)\n* **Department**",
       rules: [
-        "Round 1 login window opens at 19:30 IST and closes strictly at 20:00 IST on July 13, 2026.",
-        "HackerEarth automated proctoring will be active. Tab switching or browser minimization will lead to disqualification.",
-        "Copy-paste restrictions are active and monitored.",
-        "Round 2 submissions must be original code.",
-        "Plagiarism or use of external AI assistants will result in permanent blacklisting."
+        "**1. Core Topics & Syllabus:** The question set will evaluate fundamentals across: **Mathematics** (linear algebra, calculus, optimization), **Statistics** (probability, hypothesis testing), **Basic Machine Learning & Reinforcement Learning** (supervised/unsupervised, evaluation metrics, MDPs, policy/value functions), and **Data Analysis** (preprocessing, feature engineering, EDA).",
+        "**2. Timeline & Login Window:** The login window opens at **19:30 IST** and closes strictly at **20:00 IST** on July 13, 2026. Your individual 30-minute timer begins the exact moment you click \"Start Test.\" No extra time will be provided if you log in late.",
+        "**3. Test Environment & Platform Regulations:** HackerEarth’s automated proctoring will be active. **Do not switch tabs, minimize the browser, or leave the test screen**; any navigation away will result in immediate disqualification. Copy-pasting is disabled.",
+        "**4. Scoring Rules:** 30 questions in 30 minutes. Check the HackerEarth welcome screen regarding negative marking before starting.",
+        "**5. Round 2: Competition Format:** Shortlisted participants will train a **deep reinforcement learning policy** to control an 11-player football squad. Trained models will deploy head-to-head in automated matches.",
+        "**6. Round 2: Core Expectations:** Submissions must be your original code. Plagiarism, sharing questions, or using external AI assistants will result in **permanent blacklisting**."
       ],
       poster: "../events/tensor-on-the-turfs.webp",
       prize: "TBD",
       coordinators: [
-        "CodeClub JUSL ML Team Coordinators"
+        "Debarun Patra [+91-858292252]",
+        "Naireet Sadhukhan [+91-9875625835]",
+        "Samriddha Banerjee [+91-7596884368]"
       ],
       prelimsDate: [
         "13th July 2026 (Online)"
