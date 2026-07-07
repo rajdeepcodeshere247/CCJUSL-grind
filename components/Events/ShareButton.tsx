@@ -55,6 +55,37 @@ export default function ShareButton({ eventSlug, eventTitle, isCard }: ShareButt
     return `https://www.codeclubjusl.in/events/${eventSlug}`;
   };
 
+  const getShareText = () => {
+    if (eventSlug === "tensor-on-the-turf") {
+      return `Code Club JUSL
+⚽ Tensor on the Turfs
+
+Where algorithms meet the pitch and machine learning tackles the beautiful game.
+Train your models, optimize your tactics, and let your code lift the championship trophy. 
+
+📅 Date: 13th July 2026 (R1)
+⏰ Time: 7:30 p.m. (R1)
+💻 Mode: Online
+🎯 Prize Pool: 1,000/-
+
+🏆 Mood: Competitive • Strategic • Data-Driven
+
+Because this World Cup season, your best tactical formation might just be an optimized neural network.
+
+To register, scan the QR code or follow this link -`;
+    }
+
+    return `Code Club JUSL
+🏆 ${eventTitle}
+
+Check out this event at Code Club JUSL!
+
+To register, follow this link -`;
+  };
+
+  const shareUrl = getShareUrl();
+  const shareText = getShareText();
+
   const handleShareClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -65,14 +96,11 @@ export default function ShareButton({ eventSlug, eventTitle, isCard }: ShareButt
     e.preventDefault();
     e.stopPropagation();
 
-    const shareUrl = getShareUrl();
-
     if (navigator.share) {
       try {
         await navigator.share({
           title: eventTitle,
-          text: `Check out ${eventTitle} at Code Club JUSL!`,
-          url: shareUrl,
+          text: `${shareText} ${shareUrl}`,
         });
       } catch (err) {
         console.error("Error sharing:", err);
@@ -83,20 +111,16 @@ export default function ShareButton({ eventSlug, eventTitle, isCard }: ShareButt
   };
 
   const copyToClipboard = async () => {
-    const shareUrl = getShareUrl();
     try {
-      await navigator.clipboard.writeText(shareUrl);
+      await navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
       setCopied(true);
-      toast.success("Link copied to clipboard!");
+      toast.success("Details copied to clipboard!");
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error("Failed to copy URL:", err);
-      toast.error("Failed to copy link.");
+      console.error("Failed to copy details:", err);
+      toast.error("Failed to copy details.");
     }
   };
-
-  const shareUrl = getShareUrl();
-  const shareText = `Check out ${eventTitle} at Code Club JUSL!`;
 
   return (
     <>
