@@ -59,6 +59,7 @@ export async function upsertLiveEvent(data: {
   coordinators?: string[];
   prelimsDate?: string[];
   finalsDate?: string;
+  format?: string;
 }) {
   await verifyAdmin();
   try {

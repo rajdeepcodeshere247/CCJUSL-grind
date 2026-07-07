@@ -29,6 +29,7 @@ type EventType = {
   prelimsDate: string[];
   finalsDate: string | null;
   updates: string[];
+  format: string | null;
 };
 
 interface RegistrationMember {
@@ -81,6 +82,7 @@ export default function AdminPanel() {
   const [formCoordinators, setFormCoordinators] = useState("");
   const [formPrelimsDate, setFormPrelimsDate] = useState("");
   const [formFinalsDate, setFormFinalsDate] = useState("");
+  const [formFormat, setFormFormat] = useState("Onsite");
 
   // Announcements State
   const [announcementEventSlug, setAnnouncementEventSlug] = useState("");
@@ -128,6 +130,7 @@ export default function AdminPanel() {
     setFormCoordinators(event.coordinators ? event.coordinators.join("\n") : "");
     setFormPrelimsDate(event.prelimsDate ? event.prelimsDate.join("\n") : "");
     setFormFinalsDate(event.finalsDate || "");
+    setFormFormat(event.format || "Onsite");
   };
 
   const handleCreateNewClick = () => {
@@ -146,6 +149,7 @@ export default function AdminPanel() {
     setFormCoordinators("");
     setFormPrelimsDate("");
     setFormFinalsDate("");
+    setFormFormat("Onsite");
   };
 
   const handleSaveEvent = async (e: React.FormEvent) => {
@@ -174,6 +178,7 @@ export default function AdminPanel() {
       coordinators: parsedCoordinators,
       prelimsDate: parsedPrelims,
       finalsDate: formFinalsDate.trim() || undefined,
+      format: formFormat,
     };
 
     const res = await upsertLiveEvent(data);
@@ -555,6 +560,19 @@ export default function AdminPanel() {
                         placeholder="e.g. 15th July 2026 at 7:30 P.M."
                         className="w-full border border-white/20 bg-transparent px-4 py-3 font-light text-white transition-colors outline-none focus:border-red-400"
                       />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-xs font-mono tracking-wider text-white/50 uppercase">Event Format</label>
+                      <select
+                        value={formFormat}
+                        onChange={(e) => setFormFormat(e.target.value)}
+                        className="w-full border border-white/20 bg-black px-4 py-3 font-light text-white transition-colors outline-none focus:border-red-400"
+                      >
+                        <option value="Onsite">Onsite</option>
+                        <option value="Online">Online</option>
+                        <option value="Online/Onsite">Online/Onsite</option>
+                      </select>
                     </div>
 
                     <div className="space-y-2">

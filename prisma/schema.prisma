@@ -103,6 +103,7 @@ model Event {
   prelimsDate       String[]
   finalsDate        String?
   updates           String[]
+  format            String?
 
   teams Team[]
 
