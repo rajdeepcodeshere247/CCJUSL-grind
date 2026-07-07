@@ -28,6 +28,8 @@ type DashboardUser = {
   department: string | null;
   year: string | null;
   phone: string | null;
+  gender: string | null;
+  stream: string | null;
   teams: DashboardTeam[];
   pendingTeams: DashboardTeam[];
 };
@@ -134,6 +136,8 @@ function Dashboard({ user }: { user: DashboardUser }) {
               department: user.department || "",
               year: user.year || "",
               phone: user.phone || "",
+              gender: user.gender || "",
+              stream: user.stream || "",
             }}
           />
         </div>
@@ -142,7 +146,7 @@ function Dashboard({ user }: { user: DashboardUser }) {
       {/* Academic Information */}
       <div className="w-full">
         <SectionHeader title="Academic Information" />
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <div className="border border-white/20 p-6">
             <p className="mb-3 font-mono text-xs tracking-widest text-white/50 uppercase">
               College
@@ -173,6 +177,22 @@ function Dashboard({ user }: { user: DashboardUser }) {
             </p>
             <p className="text-lg font-light text-white">
               {user.phone || <EmptyState text="Not added" />}
+            </p>
+          </div>
+          <div className="border border-white/20 p-6">
+            <p className="mb-3 font-mono text-xs tracking-widest text-white/50 uppercase">
+              Gender
+            </p>
+            <p className="text-lg font-light text-white">
+              {user.gender || <EmptyState text="Not added" />}
+            </p>
+          </div>
+          <div className="border border-white/20 p-6">
+            <p className="mb-3 font-mono text-xs tracking-widest text-white/50 uppercase">
+              Stream
+            </p>
+            <p className="text-lg font-light text-white">
+              {user.stream || <EmptyState text="Not added" />}
             </p>
           </div>
         </div>

@@ -21,7 +21,13 @@ const RegistrationSchema = z.object({
     ),
   college: z.string().min(1, "College is required"),
   year: z.string().min(1, "Year of Study is required"),
-  department: z.string().min(1, "Department is required")
+  department: z.string().min(1, "Department is required"),
+  gender: z.string().refine((val) => ["Male", "Female", "Transgender"].includes(val), {
+    message: "Gender is required",
+  }),
+  stream: z.string().refine((val) => ["Engineering", "Science", "Arts"].includes(val), {
+    message: "Stream is required",
+  }),
 });
 
 function CompleteRegistration({ id }: { id: string }) {
@@ -37,13 +43,17 @@ function RegistrationForm({ id }: { id: string }) {
     phone: "",
     college: "",
     year: "",
-    department: ""
+    department: "",
+    gender: "",
+    stream: ""
   });
   const [errors, setErrors] = useState({
     phone: "",
     college: "",
     year: "",
-    department: ""
+    department: "",
+    gender: "",
+    stream: ""
   });
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
@@ -76,7 +86,9 @@ function RegistrationForm({ id }: { id: string }) {
       phone: "",
       college: "",
       department: "",
-      year: ""
+      year: "",
+      gender: "",
+      stream: ""
     });
     const isValid = RegistrationSchema.safeParse(data);
     if (!isValid.success) {
@@ -178,6 +190,38 @@ function RegistrationForm({ id }: { id: string }) {
           className="w-full border border-white/20 bg-transparent px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
         />
         {errors.year && <p className="text-sm text-red-500">{errors.year}</p>}
+      </div>
+      <div className="flex w-full flex-col items-center gap-2 sm:w-1/3 2xl:w-1/4">
+        <select
+          name="gender"
+          value={data.gender}
+          onChange={(e) => {
+            handleChange("gender", e.target.value);
+          }}
+          className="w-full border border-white/20 bg-black px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
+        >
+          <option value="" disabled className="text-white/40">Select Gender</option>
+          <option value="Male" className="bg-black text-white">Male</option>
+          <option value="Female" className="bg-black text-white">Female</option>
+          <option value="Transgender" className="bg-black text-white">Transgender</option>
+        </select>
+        {errors.gender && <p className="text-sm text-red-500">{errors.gender}</p>}
+      </div>
+      <div className="flex w-full flex-col items-center gap-2 sm:w-1/3 2xl:w-1/4">
+        <select
+          name="stream"
+          value={data.stream}
+          onChange={(e) => {
+            handleChange("stream", e.target.value);
+          }}
+          className="w-full border border-white/20 bg-black px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
+        >
+          <option value="" disabled className="text-white/40">Select Stream</option>
+          <option value="Engineering" className="bg-black text-white">Engineering</option>
+          <option value="Science" className="bg-black text-white">Science</option>
+          <option value="Arts" className="bg-black text-white">Arts</option>
+        </select>
+        {errors.stream && <p className="text-sm text-red-500">{errors.stream}</p>}
       </div>
       <button
         type="submit"

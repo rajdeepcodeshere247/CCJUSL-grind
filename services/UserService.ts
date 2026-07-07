@@ -14,6 +14,8 @@ type RegistrationData = {
   college: string;
   year: string;
   department: string;
+  gender: string;
+  stream: string;
 };
 
 const completeUserRegistration = withAuth(
@@ -36,7 +38,9 @@ const completeUserRegistration = withAuth(
           ),
         college: z.string().min(1, "College is required"),
         year: z.string().min(1, "Year of Study is required"),
-        department: z.string().min(1, "Department is required")
+        department: z.string().min(1, "Department is required"),
+        gender: z.enum(["Male", "Female", "Transgender"]),
+        stream: z.enum(["Engineering", "Science", "Arts"]),
       });
 
       const isValid = RegistrationSchema.safeParse(data);
@@ -53,6 +57,8 @@ const completeUserRegistration = withAuth(
           year: data.year,
           college: data.college,
           department: data.department,
+          gender: data.gender,
+          stream: data.stream,
           registrationComplete: true,
           emailVerified: new Date(),
         },
@@ -199,10 +205,13 @@ const editUserDetails = withAuth(
       department: string;
       year: string;
       phone: string;
+      gender: string;
+      stream: string;
     },
   ) => {
     try {
       const RegistrationSchema = z.object({
+        name: z.string().min(1, "Name is required"),
         phone: z
           .string()
           .length(10, "Phone number must be 10 digits long")
@@ -212,7 +221,9 @@ const editUserDetails = withAuth(
           ),
         college: z.string().min(1, "College is required"),
         year: z.string().min(1, "Year of Study is required"),
-        department: z.string().min(1, "Department is required")
+        department: z.string().min(1, "Department is required"),
+        gender: z.enum(["Male", "Female", "Transgender"]),
+        stream: z.enum(["Engineering", "Science", "Arts"]),
       });
 
       const isValid = RegistrationSchema.safeParse(newDetails);

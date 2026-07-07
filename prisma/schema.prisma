@@ -31,6 +31,7 @@ model User {
   department String?
   image      String?
   gender     String?
+  stream     String?
 
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @updatedAt
