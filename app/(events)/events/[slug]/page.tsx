@@ -64,10 +64,16 @@ export async function generateMetadata({
     }
   }
 
+  // Use the -qr version of the webp poster for social preview QR purposes
+  if (slug === "tensor-on-the-turf" || posterUrl.includes("tensor-on-the-turfs")) {
+    posterUrl = posterUrl.replace(/\.webp$/, "-qr.webp");
+  }
+
   const domain = "https://www.codeclubjusl.in";
   const absolutePosterUrl = posterUrl.startsWith("http") ? posterUrl : `${domain}${posterUrl}`;
 
   return {
+    metadataBase: new URL("https://www.codeclubjusl.in"),
     title: `${eventDetails.name} | CodeClub JUSL`,
     description: eventDetails.shortDescription,
     openGraph: {
@@ -166,6 +172,11 @@ export default async function Page({
     } else {
       posterUrl = "/images/posters/" + posterUrl;
     }
+  }
+
+  // Use the -qr version of the webp poster for QR purposes on page too
+  if (slug === "tensor-on-the-turf" || posterUrl.includes("tensor-on-the-turfs")) {
+    posterUrl = posterUrl.replace(/\.webp$/, "-qr.webp");
   }
 
   return (
