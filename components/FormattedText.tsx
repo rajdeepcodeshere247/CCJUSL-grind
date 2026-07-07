@@ -8,17 +8,100 @@ interface FormattedTextProps {
 export default function FormattedText({ text, className = "" }: FormattedTextProps) {
   if (!text) return null;
 
-  // Split by double newlines to get paragraphs
-  const paragraphs = text.split(/\r?\n\r?\n/);
+  // Split by double newlines to get paragraphs/blocks
+  const blocks = text.split(/\r?\n\r?\n/);
 
   return (
     <div className={`space-y-4 ${className}`}>
-      {paragraphs.map((p, index) => {
-        if (!p.trim()) return null;
+      {blocks.map((block, blockIdx) => {
+        if (!block.trim()) return null;
+
+        const lines = block.split(/\r?\n/);
+        const renderedElements: React.ReactNode[] = [];
+        
+        let currentList: { type: "bullet" | "number"; items: string[] } | null = null;
+
+        const flushList = (key: string) => {
+          if (!currentList) return;
+          
+          if (currentList.type === "bullet") {
+            renderedElements.push(
+              <ul key={key} className="list-disc pl-6 space-y-2 text-base font-light text-white/70">
+                {currentList.items.map((item, itemIdx) => (
+                  <li key={itemIdx} className="leading-relaxed">
+                    {renderInline(item)}
+                  </li>
+                ))}
+              </ul>
+            );
+          } else {
+            renderedElements.push(
+              <ol key={key} className="list-decimal pl-6 space-y-2 text-base font-light text-white/70">
+                {currentList.items.map((item, itemIdx) => (
+                  <li key={itemIdx} className="leading-relaxed">
+                    {renderInline(item)}
+                  </li>
+                ))}
+              </ol>
+            );
+          }
+          currentList = null;
+        };
+
+        lines.forEach((line, lineIdx) => {
+          const trimmedLine = line.trim();
+          
+          // Check if bulleted list item (matches leading * or - followed by spaces)
+          const bulletMatch = line.match(/^(\s*)[\*\-]\s+(.*)$/);
+          // Check if numbered list item (matches leading digit. followed by spaces)
+          const numberMatch = line.match(/^(\s*)\d+\.\s+(.*)$/);
+
+          if (bulletMatch) {
+            // If we were building a numbered list, flush it first
+            if (currentList && currentList.type !== "bullet") {
+              flushList(`list-flush-${blockIdx}-${lineIdx}`);
+            }
+            // Start or append to bullet list
+            if (!currentList) {
+              currentList = { type: "bullet", items: [] };
+            }
+            currentList.items.push(bulletMatch[2]);
+          } else if (numberMatch) {
+            // If we were building a bullet list, flush it first
+            if (currentList && currentList.type !== "number") {
+              flushList(`list-flush-${blockIdx}-${lineIdx}`);
+            }
+            // Start or append to numbered list
+            if (!currentList) {
+              currentList = { type: "number", items: [] };
+            }
+            currentList.items.push(numberMatch[2]);
+          } else {
+            // Flush any active list before rendering a paragraph
+            if (currentList) {
+              flushList(`list-flush-${blockIdx}-${lineIdx}`);
+            }
+            if (trimmedLine) {
+              renderedElements.push(
+                <p key={`p-${blockIdx}-${lineIdx}`} className="text-base font-light leading-relaxed">
+                  {renderInline(line)}
+                </p>
+              );
+            } else {
+              renderedElements.push(<div key={`br-${blockIdx}-${lineIdx}`} className="h-2" />);
+            }
+          }
+        });
+
+        // Flush any remaining list at the end of the block
+        if (currentList) {
+          flushList(`list-end-${blockIdx}`);
+        }
+
         return (
-          <p key={index} className="text-base font-light leading-relaxed">
-            {renderInline(p)}
-          </p>
+          <div key={blockIdx} className="space-y-4">
+            {renderedElements}
+          </div>
         );
       })}
     </div>
@@ -41,7 +124,6 @@ export function renderInline(text: string): React.ReactNode[] {
     // __underline__
     // *italics*
     // ==highlight==
-    // Regex matches any of the inline tags in a single capture group
     const regex = /(\*\*.*?\*\*|__.*?__|\*.*?\*|==.*?==)/g;
     const parts = line.split(regex);
 

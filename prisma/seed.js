@@ -88,7 +88,9 @@ async function main() {
       poster: "../events/tensor-on-the-turfs.webp",
       prize: "TBD",
       coordinators: [
-        "CodeClub JUSL ML Team Coordinators"
+        "Debarun Patra [+91-858292252]",
+        "Naireet Sadhukhan [+91-9875625835]",
+        "Samriddha Banerjee [+91-7596884368]"
       ],
       prelimsDate: [
         "13th July 2026 (Online)"
@@ -115,7 +117,9 @@ async function main() {
       poster: "../events/tensor-on-the-turfs.webp",
       prize: "TBD",
       coordinators: [
-        "CodeClub JUSL ML Team Coordinators"
+        "Debarun Patra [+91-858292252]",
+        "Naireet Sadhukhan [+91-9875625835]",
+        "Samriddha Banerjee [+91-7596884368]"
       ],
       prelimsDate: [
         "13th July 2026 (Online)"
