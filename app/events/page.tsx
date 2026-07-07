@@ -52,22 +52,31 @@ export default function EventsPage() {
     });
   }, []);
 
-  const mappedLiveEvents: Event[] = liveEvents.map((e) => ({
-    id: e.id,
-    slug: e.slug,
-    title: e.name,
-    description: e.shortDescription || e.description || "",
-    image: e.poster || "/images/events/default-poster.webp",
-    status: e.registrationsOpen ? "Open" : "Closed",
-    tags: ["LIVE", "EVENT"],
-    finalsDate: e.finalsDate || undefined,
-    lastDate: e.prelimsDate?.[0] || undefined,
-    teamSize: e.minMembers === e.maxMembers ? `${e.minMembers}` : `${e.minMembers}-${e.maxMembers}`,
-    prizePool: e.prize || "TBD",
-    format: "Onsite",
-    color: "#f87171",
-    category: "exclusive"
-  }));
+  const mappedLiveEvents: Event[] = liveEvents.map((e) => {
+    let posterUrl = e.poster || "/images/events/default-poster.webp";
+    if (posterUrl.startsWith("../")) {
+      posterUrl = "/images/" + posterUrl.substring(3);
+    } else if (!posterUrl.startsWith("/")) {
+      posterUrl = "/images/posters/" + posterUrl;
+    }
+
+    return {
+      id: e.id,
+      slug: e.slug,
+      title: e.name,
+      description: e.shortDescription || e.description || "",
+      image: posterUrl,
+      status: e.registrationsOpen ? "Open" : "Closed",
+      tags: ["LIVE", "EVENT"],
+      finalsDate: e.finalsDate || undefined,
+      lastDate: e.prelimsDate?.[0] || undefined,
+      teamSize: e.minMembers === e.maxMembers ? `${e.minMembers}` : `${e.minMembers}-${e.maxMembers}`,
+      prizePool: e.prize || "TBD",
+      format: "Onsite",
+      color: "#f87171",
+      category: "exclusive"
+    };
+  });
 
   const tabContent: Record<TabKey, React.ReactNode> = {
     exclusive:

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import eventData from "@/eventData.json";
 import { redirect } from "next/navigation";
 import {
@@ -11,6 +13,7 @@ import {
 
 import Image from "next/image";
 import RegistrationButton from "@/components/Events/RegistrationButton";
+import ShareButton from "@/components/Events/ShareButton";
 import Footer from "@/components/Footer";
 import { getEventFromSlug } from "@/services/EventsService";
 
@@ -90,7 +93,19 @@ export default async function Page({
             </h1>
 
             <div className="grid sm:grid-cols-2 place-items-center gap-8 py-8">
-              <Image src={`/images/posters/${eventDetails.eventPoster}`} width={200} height={200} className="h-full w-auto" alt={eventDetails.name} />
+              <Image
+                src={
+                  eventDetails.eventPoster.startsWith("http") || eventDetails.eventPoster.startsWith("/")
+                    ? eventDetails.eventPoster
+                    : eventDetails.eventPoster.startsWith("images/")
+                    ? `/${eventDetails.eventPoster}`
+                    : `/images/posters/${eventDetails.eventPoster}`
+                }
+                width={200}
+                height={200}
+                className="h-full w-auto"
+                alt={eventDetails.name}
+              />
               <div className="flex flex-col items-center gap-10">
                 <p className="mx-auto max-w-4xl text-lg leading-relaxed font-light text-white/80 md:text-xl">
                   {eventDetails.eventShortDescription}
@@ -109,7 +124,12 @@ export default async function Page({
                   ))}
                 </div>
 
-                <RegistrationButton registrationOpen={eventDetails.registrationOpen} slug={slug} />
+                <div className="flex flex-col sm:flex-row gap-4 items-center justify-center w-full max-w-md px-4">
+                  <RegistrationButton registrationOpen={eventDetails.registrationOpen} slug={slug} />
+                  <div className="w-40 shrink-0">
+                    <ShareButton eventSlug={slug} eventTitle={eventDetails.name} />
+                  </div>
+                </div>
 
             <div className="border border-white/10 p-6 w-4/5">
               <h3 className="mb-6 flex items-center text-lg font-bold tracking-wide text-white">
@@ -232,19 +252,39 @@ export default async function Page({
                 PRIZE POOL
               </h3>
               <div className="space-y-3">
-                {eventDetails.prize.map((prize: string, index: number) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between border-l-2 border-white/20 py-3 pl-4"
-                  >
-                    <span className="font-mono text-sm tracking-wide text-white/70">
-                      {prize.split(":")[0].trim()}
-                    </span>
-                    <span className="text-xl font-bold text-white">
-                      ₹{prize.split(":")[1].trim()}
-                    </span>
-                  </div>
-                ))}
+                {eventDetails.prize.map((prize: string, index: number) => {
+                  const parts = prize.split(":");
+                  if (parts.length < 2) {
+                    return (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between border-l-2 border-white/20 py-3 pl-4"
+                      >
+                        <span className="font-mono text-sm tracking-wide text-white/70">
+                          Prize Pool
+                        </span>
+                        <span className="text-xl font-bold text-white">
+                          {prize}
+                        </span>
+                      </div>
+                    );
+                  }
+                  const label = parts[0].trim();
+                  const value = parts[1].trim();
+                  return (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between border-l-2 border-white/20 py-3 pl-4"
+                    >
+                      <span className="font-mono text-sm tracking-wide text-white/70">
+                        {label}
+                      </span>
+                      <span className="text-xl font-bold text-white">
+                        ₹{value}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 

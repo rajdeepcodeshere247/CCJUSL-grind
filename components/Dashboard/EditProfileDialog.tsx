@@ -12,6 +12,8 @@ type EditProfileData = {
   department: string;
   year: string;
   phone: string;
+  gender: string;
+  stream: string;
 };
 
 type EditProfileDialogProps = {
@@ -30,6 +32,12 @@ const RegistrationSchema = z.object({
   college: z.string().min(1, "College is required"),
   year: z.string().min(1, "Year of Study is required"),
   department: z.string().min(1, "Department is required"),
+  gender: z.string().refine((val) => ["Male", "Female", "Transgender"].includes(val), {
+    message: "Gender is required",
+  }),
+  stream: z.string().refine((val) => ["Engineering", "Science", "Arts"].includes(val), {
+    message: "Stream is required",
+  }),
 });
 
 function EditProfileDialog({ initialData }: EditProfileDialogProps) {
@@ -41,6 +49,8 @@ function EditProfileDialog({ initialData }: EditProfileDialogProps) {
     college: "",
     department: "",
     year: "",
+    gender: "",
+    stream: "",
   });
   const dialogRef = useRef<HTMLDialogElement>(null);
   const router = useRouter();
@@ -70,6 +80,8 @@ function EditProfileDialog({ initialData }: EditProfileDialogProps) {
       college: "",
       department: "",
       year: "",
+      gender: "",
+      stream: "",
     });
     const isValid = RegistrationSchema.safeParse(formData);
     if (!isValid.success) {
@@ -132,6 +144,18 @@ function EditProfileDialog({ initialData }: EditProfileDialogProps) {
       type: "tel",
       placeholder: "ENTER PHONE NUMBER",
     },
+    {
+      id: "gender",
+      label: "Gender",
+      type: "text",
+      placeholder: "SELECT GENDER",
+    },
+    {
+      id: "stream",
+      label: "Stream",
+      type: "text",
+      placeholder: "SELECT STREAM",
+    },
   ];
 
   return (
@@ -174,15 +198,43 @@ function EditProfileDialog({ initialData }: EditProfileDialogProps) {
                   >
                     {label}
                   </label>
-                  <input
-                    type={type}
-                    id={id}
-                    name={id}
-                    value={formData[id]}
-                    onChange={handleInputChange}
-                    className="w-full border border-white/20 bg-transparent px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
-                    placeholder={placeholder}
-                  />
+                  {id === "gender" ? (
+                    <select
+                      id={id}
+                      name={id}
+                      value={formData[id]}
+                      onChange={(e) => setFormData((prev) => ({ ...prev, [id]: e.target.value }))}
+                      className="w-full border border-white/20 bg-black px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
+                    >
+                      <option value="" disabled className="text-white/40">Select Gender</option>
+                      <option value="Male" className="bg-black text-white">Male</option>
+                      <option value="Female" className="bg-black text-white">Female</option>
+                      <option value="Transgender" className="bg-black text-white">Transgender</option>
+                    </select>
+                  ) : id === "stream" ? (
+                    <select
+                      id={id}
+                      name={id}
+                      value={formData[id]}
+                      onChange={(e) => setFormData((prev) => ({ ...prev, [id]: e.target.value }))}
+                      className="w-full border border-white/20 bg-black px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
+                    >
+                      <option value="" disabled className="text-white/40">Select Stream</option>
+                      <option value="Engineering" className="bg-black text-white">Engineering</option>
+                      <option value="Science" className="bg-black text-white">Science</option>
+                      <option value="Arts" className="bg-black text-white">Arts</option>
+                    </select>
+                  ) : (
+                    <input
+                      type={type}
+                      id={id}
+                      name={id}
+                      value={formData[id]}
+                      onChange={handleInputChange}
+                      className="w-full border border-white/20 bg-transparent px-6 py-4 font-light text-white transition-colors outline-none placeholder:text-white/40 focus:border-red-400"
+                      placeholder={placeholder}
+                    />
+                  )}
                   <p className="text-red-500 text-sm mt-1">{errors[id]}</p>
                 </div>
               ))}
