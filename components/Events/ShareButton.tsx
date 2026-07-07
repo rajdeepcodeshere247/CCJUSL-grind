@@ -47,9 +47,12 @@ export default function ShareButton({ eventSlug, eventTitle, isCard }: ShareButt
 
   const getShareUrl = () => {
     if (typeof window !== "undefined") {
-      return `${window.location.origin}/events/${eventSlug}`;
+      const origin = window.location.origin.includes("localhost")
+        ? "https://www.codeclubjusl.in"
+        : window.location.origin;
+      return `${origin}/events/${eventSlug}`;
     }
-    return "";
+    return `https://www.codeclubjusl.in/events/${eventSlug}`;
   };
 
   const handleShareClick = (e: React.MouseEvent) => {
