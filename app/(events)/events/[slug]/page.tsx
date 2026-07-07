@@ -65,7 +65,7 @@ export async function generateMetadata({
   }
 
   // Use the -qr version of the webp poster for social preview QR purposes
-  if (slug === "tensor-on-the-turf" || posterUrl.includes("tensor-on-the-turfs")) {
+  if ((slug === "tensor-on-the-turf" || posterUrl.includes("tensor-on-the-turfs")) && !posterUrl.endsWith("-qr.webp")) {
     posterUrl = posterUrl.replace(/\.webp$/, "-qr.webp");
   }
 
@@ -175,7 +175,7 @@ export default async function Page({
   }
 
   // Use the -qr version of the webp poster for QR purposes on page too
-  if (slug === "tensor-on-the-turf" || posterUrl.includes("tensor-on-the-turfs")) {
+  if ((slug === "tensor-on-the-turf" || posterUrl.includes("tensor-on-the-turfs")) && !posterUrl.endsWith("-qr.webp")) {
     posterUrl = posterUrl.replace(/\.webp$/, "-qr.webp");
   }
 

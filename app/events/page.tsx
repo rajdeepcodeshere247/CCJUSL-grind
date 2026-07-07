@@ -62,7 +62,7 @@ export default function EventsPage() {
     }
 
     // Use the -qr version of the webp poster for QR purposes
-    if (e.slug === "tensor-on-the-turf" || posterUrl.includes("tensor-on-the-turfs")) {
+    if ((e.slug === "tensor-on-the-turf" || posterUrl.includes("tensor-on-the-turfs")) && !posterUrl.endsWith("-qr.webp")) {
       posterUrl = posterUrl.replace(/\.webp$/, "-qr.webp");
     }
 
