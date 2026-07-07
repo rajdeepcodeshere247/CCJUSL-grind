@@ -85,7 +85,7 @@ async function main() {
         "**5. Round 2: Competition Format:** Shortlisted participants will train a **deep reinforcement learning policy** to control an 11-player football squad. Trained models will deploy head-to-head in automated matches.",
         "**6. Round 2: Core Expectations:** Submissions must be your original code. Plagiarism, sharing questions, or using external AI assistants will result in **permanent blacklisting**."
       ],
-      poster: "../events/tensor-on-the-turfs.webp",
+      poster: "../events/tensor-on-the-turfs-qr.webp",
       prize: "TBD",
       coordinators: [
         "Debarun Patra [+91-858292252]",
@@ -95,7 +95,8 @@ async function main() {
       prelimsDate: [
         "13th July 2026 (Online)"
       ],
-      finalsDate: "15th July 2026 (Online)"
+      finalsDate: "15th July 2026 (Online)",
+      format: "Online"
     },
     create: {
       slug: "tensor-on-the-turf",
@@ -114,7 +115,7 @@ async function main() {
         "**5. Round 2: Competition Format:** Shortlisted participants will train a **deep reinforcement learning policy** to control an 11-player football squad. Trained models will deploy head-to-head in automated matches.",
         "**6. Round 2: Core Expectations:** Submissions must be your original code. Plagiarism, sharing questions, or using external AI assistants will result in **permanent blacklisting**."
       ],
-      poster: "../events/tensor-on-the-turfs.webp",
+      poster: "../events/tensor-on-the-turfs-qr.webp",
       prize: "TBD",
       coordinators: [
         "Debarun Patra [+91-858292252]",
@@ -124,7 +125,8 @@ async function main() {
       prelimsDate: [
         "13th July 2026 (Online)"
       ],
-      finalsDate: "15th July 2026 (Online)"
+      finalsDate: "15th July 2026 (Online)",
+      format: "Online"
     }
   });
 

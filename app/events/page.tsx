@@ -28,6 +28,7 @@ interface DbLiveEvent {
   prelimsDate: string[];
   finalsDate: string | null;
   updates: string[];
+  format?: string | null;
 }
 
 const tabs = [
@@ -60,6 +61,11 @@ export default function EventsPage() {
       posterUrl = "/images/posters/" + posterUrl;
     }
 
+    // Use the -qr version of the webp poster for QR purposes
+    if ((e.slug === "tensor-on-the-turf" || posterUrl.includes("tensor-on-the-turfs")) && !posterUrl.endsWith("-qr.webp")) {
+      posterUrl = posterUrl.replace(/\.webp$/, "-qr.webp");
+    }
+
     return {
       id: e.id,
       slug: e.slug,
@@ -72,7 +78,7 @@ export default function EventsPage() {
       lastDate: e.prelimsDate?.[0] || undefined,
       teamSize: e.minMembers === e.maxMembers ? `${e.minMembers}` : `${e.minMembers}-${e.maxMembers}`,
       prizePool: e.prize || "TBD",
-      format: "Onsite",
+      format: e.format || "Onsite",
       color: "#f87171",
       category: "exclusive"
     };
@@ -140,7 +146,7 @@ export default function EventsPage() {
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] mb-6 backdrop-blur-md cursor-default transition-all duration-300"
         >
           <Calendar size={13} className="text-rose-500" />
-          <ShinyText text="Relive the competition" className="text-[10px] font-mono font-medium uppercase tracking-[0.15em] text-white/80" />
+          <ShinyText text="Explore the competition" className="text-[10px] font-mono font-medium uppercase tracking-[0.15em] text-white/80" />
         </motion.div>
 
         <motion.h1
@@ -149,9 +155,8 @@ export default function EventsPage() {
           transition={{ duration: 0.5 }}
           className="text-4xl font-semibold uppercase tracking-tight text-white sm:text-5xl md:text-6xl cursor-default"
         >
-          <DecryptText text="Past" animateOnHover speed={40} />{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-rose-300">
-            <DecryptText text="Events" animateOnHover speed={40} delay={150} />
+            <DecryptText text="Events" animateOnHover speed={40} />
           </span>
         </motion.h1>
 
@@ -161,7 +166,7 @@ export default function EventsPage() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mx-auto mt-6 max-w-2xl text-xs sm:text-sm leading-relaxed text-white/50"
         >
-          Explore our history of flagships, hackathons, coding contests, and guest sessions.
+          Explore our flagships, hackathons, coding contests, and live events.
         </motion.div>
       </div>
 
