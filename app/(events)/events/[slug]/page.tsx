@@ -13,6 +13,7 @@ import {
 
 import Image from "next/image";
 import RegistrationButton from "@/components/Events/RegistrationButton";
+import ShareButton from "@/components/Events/ShareButton";
 import Footer from "@/components/Footer";
 import { getEventFromSlug } from "@/services/EventsService";
 
@@ -123,7 +124,12 @@ export default async function Page({
                   ))}
                 </div>
 
-                <RegistrationButton registrationOpen={eventDetails.registrationOpen} slug={slug} />
+                <div className="flex flex-col sm:flex-row gap-4 items-center justify-center w-full max-w-md px-4">
+                  <RegistrationButton registrationOpen={eventDetails.registrationOpen} slug={slug} />
+                  <div className="w-40 shrink-0">
+                    <ShareButton eventSlug={slug} eventTitle={eventDetails.name} />
+                  </div>
+                </div>
 
             <div className="border border-white/10 p-6 w-4/5">
               <h3 className="mb-6 flex items-center text-lg font-bold tracking-wide text-white">

@@ -84,7 +84,7 @@ async function main() {
         "Round 2 submissions must be original code.",
         "Plagiarism or use of external AI assistants will result in permanent blacklisting."
       ],
-      poster: "../events/tensor on the turfs.png",
+      poster: "../events/tensor-on-the-turfs.webp",
       prize: "TBD",
       coordinators: [
         "CodeClub JUSL ML Team Coordinators"
@@ -110,7 +110,7 @@ async function main() {
         "Round 2 submissions must be original code.",
         "Plagiarism or use of external AI assistants will result in permanent blacklisting."
       ],
-      poster: "../events/tensor on the turfs.png",
+      poster: "../events/tensor-on-the-turfs.webp",
       prize: "TBD",
       coordinators: [
         "CodeClub JUSL ML Team Coordinators"
