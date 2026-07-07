@@ -540,10 +540,10 @@ export default function AdminPanel() {
                         type="text"
                         value={formPoster}
                         onChange={(e) => setFormPoster(e.target.value)}
-                        placeholder="e.g. ../events/tensor on the turfs.png"
+                        placeholder="e.g. ../events/tensor-on-the-turfs.webp"
                         className="w-full border border-white/20 bg-transparent px-4 py-3 font-light text-white transition-colors outline-none focus:border-red-400"
                       />
-                      <p className="text-[10px] text-white/30 font-mono">Place posters in public/images/events/ and use path syntax: ../events/filename.png</p>
+                      <p className="text-[10px] text-white/30 font-mono">Place posters in public/images/events/ and use path syntax: ../events/filename.webp</p>
                     </div>
 
                     <div className="space-y-2">
