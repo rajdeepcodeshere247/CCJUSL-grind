@@ -6,6 +6,47 @@ import NotRegistered from "./NotRegistered";
 import MemberControls from "./MemberControls";
 import LeaveTeam from "./LeaveTeam";
 import PendingMemberControls from "./PendingMemberControls";
+import { Megaphone } from "lucide-react";
+
+function linkify(text: string) {
+  const urlRegex = /(https?:\/\/[^\s\n\r]+)/g;
+  const parts = text.split(urlRegex);
+  return parts.map((part, index) => {
+    if (part.match(urlRegex)) {
+      return (
+        <a
+          key={index}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-red-400 underline hover:text-red-300 break-all transition-colors"
+        >
+          {part}
+        </a>
+      );
+    }
+    return part;
+  });
+}
+
+function renderRegisteredMessage(message: string) {
+  const lines = message.split(/\r?\n/);
+  return lines.map((line, idx) => {
+    const bulletMatch = line.match(/^(\s*)[\*\-]\s+(.*)$/);
+    if (bulletMatch) {
+      return (
+        <ul key={idx} className="list-disc pl-6 text-sm font-light text-white/80">
+          <li className="leading-relaxed">{linkify(bulletMatch[2])}</li>
+        </ul>
+      );
+    }
+    return (
+      <p key={idx} className="text-sm font-light leading-relaxed min-h-[1.5rem]">
+        {linkify(line)}
+      </p>
+    );
+  });
+}
 
 function Registered({
   user,
@@ -33,6 +74,20 @@ function Registered({
       <div className="flex w-full max-w-7xl flex-col gap-8 lg:flex-row">
         {/* Left Column - Team Members */}
         <div className="flex flex-1 flex-col">
+          {/* Announcements Card for Registered Users */}
+          {event.registeredMessage && (
+            <div className="mb-6 border border-red-500/30 bg-red-500/[0.02] p-6 shadow-lg relative overflow-hidden">
+              <div className="absolute top-0 left-0 h-0.5 w-full bg-red-400"></div>
+              <h3 className="mb-4 flex items-center text-lg font-bold tracking-wide text-red-400 font-mono">
+                <Megaphone className="mr-3 h-5 w-5 animate-pulse" />
+                CONTEST DETAILS & LINKS
+              </h3>
+              <div className="space-y-3 text-white/95">
+                {renderRegisteredMessage(event.registeredMessage)}
+              </div>
+            </div>
+          )}
+
           {/* Team Name Header */}
           <div className="mb-3 border border-white/20 px-2 py-6 flex justify-between items-center gap-3">
             <h4 className="text-2xl font-bold tracking-tight text-white">

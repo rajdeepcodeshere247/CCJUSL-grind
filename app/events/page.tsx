@@ -29,6 +29,7 @@ interface DbLiveEvent {
   finalsDate: string | null;
   updates: string[];
   format?: string | null;
+  registrationCloseTime?: Date | string | null;
 }
 
 const tabs = [
@@ -72,7 +73,7 @@ export default function EventsPage() {
       title: e.name,
       description: e.shortDescription || e.description || "",
       image: posterUrl,
-      status: e.registrationsOpen ? "Open" : "Closed",
+      status: (e.registrationsOpen && (!e.registrationCloseTime || new Date() < new Date(e.registrationCloseTime))) ? "Open" : "Closed",
       tags: ["LIVE", "EVENT"],
       finalsDate: e.finalsDate || undefined,
       lastDate: e.prelimsDate?.[0] || undefined,

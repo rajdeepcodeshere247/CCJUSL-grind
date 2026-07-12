@@ -30,6 +30,16 @@ type EventType = {
   finalsDate: string | null;
   updates: string[];
   format: string | null;
+  registrationCloseTime?: Date | string | null;
+  registeredMessage?: string | null;
+};
+
+const formatDateTimeLocal = (dateInput: Date | string | null | undefined): string => {
+  if (!dateInput) return "";
+  const d = new Date(dateInput);
+  if (isNaN(d.getTime())) return "";
+  const pad = (num: number) => String(num).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 };
 
 interface RegistrationMember {
@@ -83,6 +93,8 @@ export default function AdminPanel() {
   const [formPrelimsDate, setFormPrelimsDate] = useState("");
   const [formFinalsDate, setFormFinalsDate] = useState("");
   const [formFormat, setFormFormat] = useState("Onsite");
+  const [formRegistrationCloseTime, setFormRegistrationCloseTime] = useState("");
+  const [formRegisteredMessage, setFormRegisteredMessage] = useState("");
 
   // Announcements State
   const [announcementEventSlug, setAnnouncementEventSlug] = useState("");
@@ -131,6 +143,8 @@ export default function AdminPanel() {
     setFormPrelimsDate(event.prelimsDate ? event.prelimsDate.join("\n") : "");
     setFormFinalsDate(event.finalsDate || "");
     setFormFormat(event.format || "Onsite");
+    setFormRegistrationCloseTime(event.registrationCloseTime ? formatDateTimeLocal(event.registrationCloseTime) : "");
+    setFormRegisteredMessage(event.registeredMessage || "");
   };
 
   const handleCreateNewClick = () => {
@@ -150,6 +164,8 @@ export default function AdminPanel() {
     setFormPrelimsDate("");
     setFormFinalsDate("");
     setFormFormat("Onsite");
+    setFormRegistrationCloseTime("");
+    setFormRegisteredMessage("");
   };
 
   const handleSaveEvent = async (e: React.FormEvent) => {
@@ -179,6 +195,8 @@ export default function AdminPanel() {
       prelimsDate: parsedPrelims,
       finalsDate: formFinalsDate.trim() || undefined,
       format: formFormat,
+      registrationCloseTime: formRegistrationCloseTime ? new Date(formRegistrationCloseTime) : null,
+      registeredMessage: formRegisteredMessage.trim() || null,
     };
 
     const res = await upsertLiveEvent(data);
@@ -576,6 +594,17 @@ export default function AdminPanel() {
                     </div>
 
                     <div className="space-y-2">
+                      <label className="block text-xs font-mono tracking-wider text-white/50 uppercase">Registration Close Time (Deadline)</label>
+                      <input
+                        type="datetime-local"
+                        value={formRegistrationCloseTime}
+                        onChange={(e) => setFormRegistrationCloseTime(e.target.value)}
+                        className="w-full border border-white/20 bg-black px-4 py-3 font-light text-white transition-colors outline-none focus:border-red-400"
+                      />
+                      <p className="text-[10px] text-white/30 font-mono">Optional. Automatically closes registration when this time is reached.</p>
+                    </div>
+
+                    <div className="space-y-2">
                       <label className="block text-xs font-mono tracking-wider text-white/50 uppercase">Preliminaries Schedule Dates (one per line)</label>
                       <textarea
                         rows={3}
@@ -648,6 +677,18 @@ export default function AdminPanel() {
                       placeholder="e.g. Respect other contestants. All decisions are final."
                       className="w-full border border-white/20 bg-transparent px-4 py-3 font-light text-white transition-colors outline-none focus:border-red-400"
                     />
+                  </div>
+
+                  <div className="space-y-2 col-span-2">
+                    <label className="block text-xs font-mono tracking-wider text-white/50 uppercase">Registered Candidates Message & Links (only visible on registration panel)</label>
+                    <textarea
+                      rows={4}
+                      value={formRegisteredMessage}
+                      onChange={(e) => setFormRegisteredMessage(e.target.value)}
+                      placeholder="e.g. HackerEarth Contest Link: https://hackerearth.com/tensor-on-the-turfs-prelims"
+                      className="w-full border border-white/20 bg-transparent px-4 py-3 font-light text-white transition-colors outline-none focus:border-red-400"
+                    />
+                    <p className="text-[10px] text-white/30 font-mono">Only shown to registered candidates on their registration panel. URLs will automatically become clickable links.</p>
                   </div>
 
                   <div className="pt-4 border-t border-white/10 flex gap-4">

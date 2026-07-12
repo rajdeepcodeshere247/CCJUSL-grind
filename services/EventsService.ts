@@ -114,8 +114,16 @@ const getEventFromSlug = async (slug: string) => {
       prelimsDate: true,
       finalsDate: true,
       updates: true,
+      registrationCloseTime: true,
+      registeredMessage: true,
     },
   });
+  if (event) {
+    const isClosedByDeadline = event.registrationCloseTime && new Date() >= new Date(event.registrationCloseTime);
+    if (isClosedByDeadline) {
+      event.registrationsOpen = false;
+    }
+  }
   return event;
 };
 
@@ -141,9 +149,13 @@ const createTeam = withAuth(
         },
         select: {
           registrationsOpen: true,
+          registrationCloseTime: true,
         },
       });
       if(!eventData?.registrationsOpen) return {ok: false, message: "Registrations closed"};
+      if (eventData?.registrationCloseTime && new Date() >= new Date(eventData.registrationCloseTime)) {
+        return {ok: false, message: "Registrations closed"};
+      }
 
       const existingTeam = await prisma.team.findFirst({
         where: {
@@ -226,8 +238,17 @@ const joinTeam = withAuth(
       if(!event.registrationsOpen) return {ok: false, message: "Registrations closed"};
 
       // check db to make sure
-      const eventData = await prisma.event.findUnique({where: {id: event.id}, select: {registrationsOpen: true}});
+      const eventData = await prisma.event.findUnique({
+        where: {id: event.id},
+        select: {
+          registrationsOpen: true,
+          registrationCloseTime: true,
+        }
+      });
       if(!eventData?.registrationsOpen) return {ok: false, message: "Registrations closed"};
+      if (eventData?.registrationCloseTime && new Date() >= new Date(eventData.registrationCloseTime)) {
+        return {ok: false, message: "Registrations closed"};
+      }
 
       const existingTeam = await prisma.team.findFirst({
         where: {

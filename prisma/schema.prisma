@@ -105,6 +105,9 @@ model Event {
   updates           String[]
   format            String?
 
+  registrationCloseTime DateTime?
+  registeredMessage     String?
+
   teams Team[]
 
   @@map("event")

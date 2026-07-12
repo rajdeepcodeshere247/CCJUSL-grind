@@ -17,6 +17,8 @@ type Event = {
     prelimsDate?: string[];
     finalsDate?: string | null;
     updates?: string[];
+    registrationCloseTime?: Date | string | null;
+    registeredMessage?: string | null;
 };
 
 type Team = {

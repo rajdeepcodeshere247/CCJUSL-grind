@@ -96,7 +96,9 @@ async function main() {
         "13th July 2026 (Online)"
       ],
       finalsDate: "15th July 2026 (Online)",
-      format: "Online"
+      format: "Online",
+      registrationCloseTime: new Date("2026-07-13T19:30:00+05:30"),
+      registeredMessage: "**HackerEarth Round 1 Link**: https://hackerearth.com/challenges/competitive/tensor-on-the-turfs-2026/\n* Please make sure you are logged in to your HackerEarth account.\n* The test window will open exactly at 19:30 IST."
     },
     create: {
       slug: "tensor-on-the-turf",
@@ -126,7 +128,9 @@ async function main() {
         "13th July 2026 (Online)"
       ],
       finalsDate: "15th July 2026 (Online)",
-      format: "Online"
+      format: "Online",
+      registrationCloseTime: new Date("2026-07-13T19:30:00+05:30"),
+      registeredMessage: "**HackerEarth Round 1 Link**: https://hackerearth.com/challenges/competitive/tensor-on-the-turfs-2026/\n* Please make sure you are logged in to your HackerEarth account.\n* The test window will open exactly at 19:30 IST."
     }
   });
 

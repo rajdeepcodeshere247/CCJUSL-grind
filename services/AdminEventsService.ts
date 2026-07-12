@@ -60,6 +60,8 @@ export async function upsertLiveEvent(data: {
   prelimsDate?: string[];
   finalsDate?: string;
   format?: string;
+  registrationCloseTime?: Date | null;
+  registeredMessage?: string | null;
 }) {
   await verifyAdmin();
   try {
