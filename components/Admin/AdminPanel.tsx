@@ -10,7 +10,7 @@ import {
   deleteEvent,
 } from "@/services/AdminEventsService";
 import toast from "react-hot-toast";
-import { Users, Edit, Trash2, Megaphone, ClipboardList, PlusCircle, Download } from "lucide-react";
+import { Users, Edit, Trash2, Megaphone, ClipboardList, PlusCircle, Download, RefreshCw } from "lucide-react";
 
 type EventType = {
   id: string;
@@ -270,8 +270,21 @@ export default function AdminPanel() {
     }
   }, [participantEventSlug, activeTab]);
 
-  const handleExportCSV = () => {
-    if (registrations.length === 0) {
+  const handleExportCSV = async () => {
+    if (!participantEventSlug) return;
+    
+    setRegsLoading(true);
+    const res = await getEventRegistrations(participantEventSlug);
+    let latestRegistrations = registrations;
+    if (res.ok && res.teams) {
+      latestRegistrations = res.teams;
+      setRegistrations(res.teams);
+    } else {
+      toast.error(res.message || "Failed to load latest registrations");
+    }
+    setRegsLoading(false);
+
+    if (latestRegistrations.length === 0) {
       toast.error("No registrations to export");
       return;
     }
@@ -290,7 +303,7 @@ export default function AdminPanel() {
 
     const rows: string[][] = [];
 
-    registrations.forEach(team => {
+    latestRegistrations.forEach(team => {
       // Add Leader
       const leaderUser = team.members.find((m: RegistrationMember) => m.id === team.leader);
       if (leaderUser) {
@@ -325,17 +338,20 @@ export default function AdminPanel() {
       });
     });
 
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      [headers.join(","), ...rows.map(e => e.map(val => `"${val.replace(/"/g, '""')}"`).join(","))].join("\n");
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(e => e.map(val => `"${val.replace(/"/g, '""')}"`).join(","))
+    ].join("\n");
 
-    const encodedUri = encodeURI(csvContent);
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
+    link.setAttribute("href", url);
     link.setAttribute("download", `registrations_${participantEventSlug}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const selectedEventAnnouncements = events.find(e => e.slug === announcementEventSlug);
@@ -799,13 +815,25 @@ export default function AdminPanel() {
                 </select>
               </div>
 
-              {participantEventSlug && registrations.length > 0 && (
-                <button
-                  onClick={handleExportCSV}
-                  className="flex items-center gap-2 border border-emerald-500 px-6 py-3 text-sm font-bold tracking-widest uppercase transition-all bg-emerald-500 text-black hover:bg-black hover:text-white self-end sm:self-center"
-                >
-                  <Download size={14} /> Export to CSV
-                </button>
+              {participantEventSlug && (
+                <div className="flex gap-3 self-end sm:self-center">
+                  <button
+                    onClick={() => loadRegistrations(participantEventSlug)}
+                    disabled={regsLoading}
+                    className="flex items-center gap-2 border border-white/20 px-4 py-3 text-sm font-bold tracking-widest uppercase transition-all bg-transparent text-white hover:bg-white hover:text-black disabled:opacity-50"
+                  >
+                    <RefreshCw size={14} className={regsLoading ? "animate-spin" : ""} /> Refresh
+                  </button>
+                  {registrations.length > 0 && (
+                    <button
+                      onClick={handleExportCSV}
+                      disabled={regsLoading}
+                      className="flex items-center gap-2 border border-emerald-500 px-6 py-3 text-sm font-bold tracking-widest uppercase transition-all bg-emerald-500 text-black hover:bg-black hover:text-white disabled:opacity-50"
+                    >
+                      <Download size={14} /> Export to CSV
+                    </button>
+                  )}
+                </div>
               )}
             </div>
 
